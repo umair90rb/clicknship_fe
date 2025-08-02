@@ -1,10 +1,8 @@
-import { Link } from '@tanstack/react-router';
-
 export default function NotFound() {
   return (
-    <div>
-      <p>Page you are looking not found!</p>
-      <Link to="/">Go home</Link>
-    </div>
+    <p>
+      Either page you are looking not found or you enter wrong url without you
+      company id, correct url should look like company.example.com
+    </p>
   );
 }
