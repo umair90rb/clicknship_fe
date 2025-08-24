@@ -5,7 +5,7 @@ export default function Login() {
   const { isAuthenticated, login } = useAuth();
 
   if (isAuthenticated) {
-    return <Navigate to={'/dashboard'} replace />;
+    return <Navigate to={'/'} replace />;
   }
 
   return (

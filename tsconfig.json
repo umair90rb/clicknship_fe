@@ -6,6 +6,10 @@
   ],
   "compilerOptions": {
     "verbatimModuleSyntax": false,
-    "erasableSyntaxOnly": false
+    "erasableSyntaxOnly": false,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   }
 }
