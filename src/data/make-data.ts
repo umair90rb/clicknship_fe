@@ -1,4 +1,4 @@
-import type { Employee } from './react-table';
+import type { Employee } from '@/components/react-table';
 
 export const data: Employee[] = [
   {

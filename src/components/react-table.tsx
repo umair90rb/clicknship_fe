@@ -23,7 +23,7 @@ import {
 import { AccountCircle, Send } from '@mui/icons-material';
 
 //Mock Data
-import { data } from './make-data';
+import { data } from '@/data/make-data';
 
 export type Employee = {
   firstName: string;
