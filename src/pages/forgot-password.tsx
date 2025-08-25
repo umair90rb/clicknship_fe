@@ -1,17 +1,40 @@
 import PrimaryButton from '@/components/Button';
 import Card from '@/components/Card';
 import CheckboxInput from '@/components/Checkbox';
-import Container from '@/components/Container';
-import HDivider from '@/components/Divider';
-import FormBox from '@/components/FormBox';
 import Input from '@/components/Input';
 import LinkButton from '@/components/LinkButton';
 import Text from '@/components/Text';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import Stack from '@mui/material/Stack';
+import { styled } from '@mui/material/styles';
 import * as React from 'react';
 import { Navigate } from 'react-router';
 import useAuth from '../hooks/useAuth';
+
+const SignInContainer = styled(Stack)(({ theme }) => ({
+  height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
+  minHeight: '100%',
+  padding: theme.spacing(2),
+  [theme.breakpoints.up('sm')]: {
+    padding: theme.spacing(4),
+  },
+  '&::before': {
+    content: '""',
+    display: 'block',
+    position: 'absolute',
+    zIndex: -1,
+    inset: 0,
+    backgroundImage:
+      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
+    backgroundRepeat: 'no-repeat',
+    ...theme.applyStyles('dark', {
+      backgroundImage:
+        'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
+    }),
+  },
+}));
 
 export default function SignIn() {
   const { isAuthenticated, login } = useAuth();
@@ -68,24 +91,34 @@ export default function SignIn() {
   return (
     <>
       <CssBaseline enableColorScheme />
-      <Container direction="column" justifyContent="space-between">
+      <SignInContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
           <Text variant='h4' text='Sign in' />
-          <FormBox>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100%',
+              gap: 2,
+            }}
+          >
             <Input type='email' label='Email' name='email' placeholder='your@email.com' error={emailErrorMessage} />
             <Input type='password' label='Password' name='password' placeholder='••••••' error={passwordErrorMessage} />
             <CheckboxInput label='Remember me' value='remember' />
             <PrimaryButton type='submit' onClick={validateInputs} label='Sign In' />
             <LinkButton label='Forgot your password?' onClick={()=> {}} />
-          </FormBox>
-          <HDivider text='or' />
+          </Box>
+          <Divider>or</Divider>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Text>
               Don&apos;t have an account? <LinkButton label='Sign up' onClick={() => {}} />
             </Text>
           </Box>
         </Card>
-      </Container>
+      </SignInContainer>
     </>
   );
 }
