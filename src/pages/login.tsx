@@ -29,6 +29,7 @@ export default function Login() {
           <Text variant="h4" textAlign='center' text="Log into your account" />
           <FormInputText name="email" control={form.control} label="Email" />
           <FormInputText
+            type='password'
             name="password"
             control={form.control}
             label="Password"
@@ -38,7 +39,7 @@ export default function Login() {
             name={'rememberMe'}
             label='Remember Me'
           />
-          <PrimaryButton type="button" onClick={onSubmit} label="Sign In" />
+          <PrimaryButton type="button" onClick={onSubmit}  label={form.formState.isSubmitting ? "Logging In..." : "Sign In"} disabled={form.formState.isSubmitting} />
           <LinkButton label="Forgot your password?" onClick={() => navigate('/reset-password')} />
           <HDivider text="or" />
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>

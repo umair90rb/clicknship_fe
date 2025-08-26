@@ -14,7 +14,7 @@ interface AuthContextProps {
   isAuthenticated: boolean;
   isLoadingAuth: boolean;
   token: null | string;
-  login: () => void;
+  login: (token: string) => void;
   logout: () => void;
 }
 
@@ -23,8 +23,8 @@ export const AuthContext = createContext<AuthContextProps>({
   isAuthenticated: false,
   isLoadingAuth: true,
   token: null,
-  login() {},
-  logout() {},
+  login: (token: string) => {},
+  logout: () => {},
 });
 
 export default function AuthProvider({ children }: PropsWithChildren) {
@@ -32,11 +32,11 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [token, setToken] = useState<null | string>(null);
 
-  const login = () => {
-    console.log('login');
-    localStorage.setItem(AUTH_TOKEN_KEY, 'fake_token');
-    setToken('fake_token');
+  const login = async (token: string) => {
+    localStorage.setItem(AUTH_TOKEN_KEY, token);
+    setToken(token);
     setIsAuthenticated(true);
+    
   };
 
   const logout = () => {
@@ -50,12 +50,14 @@ export default function AuthProvider({ children }: PropsWithChildren) {
     if (token) {
       setIsAuthenticated(true);
       setToken(token);
-      setIsLoadingAuth(false)
+      setIsLoadingAuth(false);
     }
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isLoadingAuth, isAuthenticated, token, login, logout }}>
+    <AuthContext.Provider
+      value={{ isLoadingAuth, isAuthenticated, token, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
