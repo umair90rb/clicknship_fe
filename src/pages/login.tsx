@@ -1,87 +1,49 @@
 import PrimaryButton from '@/components/Button';
 import Card from '@/components/Card';
-import CheckboxInput from '@/components/Checkbox';
 import Container from '@/components/Container';
 import HDivider from '@/components/Divider';
-import FormBox from '@/components/FormBox';
-import Input from '@/components/Input';
+import { FormInputText } from '@/components/form/FormInput';
+import FormInputSingleCheckbox from '@/components/form/FormSingleCheckbox';
 import LinkButton from '@/components/LinkButton';
 import Text from '@/components/Text';
+import useLoginForm from '@/forms/login';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
-import * as React from 'react';
 import { Navigate } from 'react-router';
 import useAuth from '../hooks/useAuth';
 
 export default function SignIn() {
-  const { isAuthenticated, login } = useAuth();
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+  const { isAuthenticated } = useAuth();
+  const { form, onSubmit } = useLoginForm();
 
-
-  if(isAuthenticated) {
-    return <Navigate to="/" />
+  if (isAuthenticated) {
+    return <Navigate to="/" />;
   }
-
-  const handleSubmit = (event) => {
-    if (emailError || passwordError) {
-      event.preventDefault();
-      return;
-    }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-    login();
-  };
-
-  const validateInputs = () => {
-    const email = document.getElementById('email');
-    const password = document.getElementById('password');
-
-    let isValid = true;
-
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage('Please enter a valid email address.');
-      isValid = false;
-    } else {
-      setEmailError(false);
-      setEmailErrorMessage('');
-    }
-
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage('');
-    }
-
-    return isValid;
-  };
 
   return (
     <>
       <CssBaseline enableColorScheme />
       <Container direction="column" justifyContent="space-between">
         <Card variant="outlined">
-          <Text variant='h4' text='Sign in' />
-          <FormBox>
-            <Input type='email' label='Email' name='email' placeholder='your@email.com' error={emailErrorMessage} />
-            <Input type='password' label='Password' name='password' placeholder='••••••' error={passwordErrorMessage} />
-            <CheckboxInput label='Remember me' value='remember' />
-            <PrimaryButton type='submit' onClick={validateInputs} label='Sign In' />
-            <LinkButton label='Forgot your password?' onClick={()=> {}} />
-          </FormBox>
-          <HDivider text='or' />
+          <Text variant="h4" text="Sign in" />
+          <FormInputText name="email" control={form.control} label="Email" />
+          <FormInputText
+            name="password"
+            control={form.control}
+            label="Password"
+          />
+          <FormInputSingleCheckbox
+            control={form.control}
+            name={'rememberMe'}
+            label='Remember Me'
+          />
+          <PrimaryButton type="button" onClick={onSubmit} label="Sign In" />
+          <LinkButton label="Forgot your password?" onClick={() => {}} />
+          <HDivider text="or" />
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Text>
-              Don&apos;t have an account? <LinkButton label='Sign up' onClick={() => {}} />
+              Don&apos;t have an account?{' '}
+              <LinkButton label="Sign up" onClick={() => {}} />
             </Text>
           </Box>
         </Card>
