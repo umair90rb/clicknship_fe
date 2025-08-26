@@ -1,6 +1,6 @@
 import useAuth from '../hooks/useAuth';
 
-export default function Index() {
+export default function Dashboard() {
   const { logout } = useAuth();
   return (
     <div>

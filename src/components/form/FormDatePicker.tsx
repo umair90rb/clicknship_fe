@@ -4,7 +4,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { Controller } from "react-hook-form";
 
-export const FormInputDate = ({ name, control, label }: FormInputProps) => {
+export const FormInputDate = ({ name, control }: FormInputProps) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Controller

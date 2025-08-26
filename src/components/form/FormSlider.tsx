@@ -15,6 +15,7 @@ export const FormInputSlider = ({
     if (sliderValue) setValue(name, sliderValue);
   }, [name, setValue, sliderValue]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (event: any, newValue: number | number[]) => {
     setSliderValue(newValue as number);
   };
