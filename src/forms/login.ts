@@ -1,5 +1,5 @@
+import { useLoginMutation } from '@/api/auth';
 import useAuth from '@/hooks/useAuth';
-import type { LoginRequestResponse } from '@/types/auth';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
@@ -24,29 +24,28 @@ const defaultValues = {
 
 export default function useLoginForm() {
   const { login } = useAuth();
+  const [fetchLogin] = useLoginMutation();
   const form = useForm<ILoginForm>({
     defaultValues,
     resolver: yupResolver(schema),
   });
 
   const onSubmit = form.handleSubmit(async (credentials: ILoginForm) => {
-    const response = await fetch(
-      `http://${window.location.hostname}/api/v1/auth/login`,
-      {
-        method: 'POST',
-        body: JSON.stringify(credentials),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    const {access_token, message}: LoginRequestResponse = await response.json();
-    if(response.status === 201) {
-      login(access_token);
-    } else {
-      form.setError('email', {});
-      form.setError('password', {message});
-    }
+    return fetchLogin(credentials)
+      .unwrap()
+      .then((response) => login(response.access_token))
+      .catch((err) => {
+        let message = 'Something went wrong! Please try again later.';
+        if (err.status === 'FETCH_ERROR') {
+          message = 'Network Error! Please check your internet connection.';
+        } else if (err.status === 401) {
+          message = 'Invalid credentials. Please check your email and password.';
+        } else if (err.data && err.data.message) {
+          message = err.data.message;
+        }
+        form.setError('email', {});
+        form.setError('password', { message });
+      });
   });
 
   return { form, onSubmit };

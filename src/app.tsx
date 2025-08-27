@@ -2,7 +2,9 @@ import PrivateRoute from '@/components/PrivateRoute';
 import AuthProvider from '@/context/auth';
 import useTenant from '@/hooks/useTenant';
 import DashboardLayout from '@/layouts/dashboard';
+import { store } from '@/store';
 import React, { Suspense } from 'react'; // Import Suspense from React
+import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router';
 
 // Use React.lazy() to dynamically import page components.
@@ -26,6 +28,7 @@ export default function App() {
   }
 
   return (
+    <Provider store={store}>
     <BrowserRouter>
       <AuthProvider>
         <Suspense fallback={<div>Loading...</div>}>
@@ -49,5 +52,6 @@ export default function App() {
         </Suspense>
       </AuthProvider>
     </BrowserRouter>
+    </Provider>
   );
 }
