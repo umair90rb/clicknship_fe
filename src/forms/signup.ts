@@ -1,8 +1,10 @@
+import { useOnboardMutation } from '@/api/onboard';
+import type { OnboardRequestResponse } from '@/types/onboard';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 
-interface ISignupForm {
+interface IOnboardForm {
   companyName: string;
   name: string;
   phone: string;
@@ -20,20 +22,40 @@ const schema = Yup.object({
 
 const defaultValues = {
   companyName: '',
-  name: '',
-  phone: '',
-  email: '',
-  password: '',
+  name: 'umair',
+  phone: '03001234567',
+  email: 'mail@gmail.com',
+  password: 'Palsa@123',
 };
 
 export default function useSignupForm() {
-  const form = useForm<ISignupForm>({
+  const [fetchOnboard] = useOnboardMutation();
+  const form = useForm<IOnboardForm>({
     defaultValues,
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = form.handleSubmit((data: ISignupForm) => {
+  const onSubmit = form.handleSubmit(async (data: IOnboardForm) => {
     console.log(data);
+    return fetchOnboard(data)
+      .unwrap()
+      .then((response: OnboardRequestResponse) => {
+        const tenantId = response.tenantId;
+        window.location.replace(`http://${tenantId}.${import.meta.env.VITE_BASE_URL}/login`)
+      })
+      .catch((err) => {
+        let message = 'Something went wrong! Please try again later.';
+        if (err.status === 'FETCH_ERROR') {
+          message = 'Network Error! Please check your internet connection.';
+        } else if (err.status === 400) {
+          message = err.data.message;
+          form.setError('companyName', { message });
+          return
+        } else if (err.data && err.data.message) {
+          message = err.data.message;
+        }
+        form.setError('password', { message });
+      });
   });
 
   return { form, onSubmit };

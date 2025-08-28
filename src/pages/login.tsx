@@ -45,7 +45,7 @@ export default function Login() {
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Text>
               Don&apos;t have an account?{' '}
-              <LinkButton label="Sign up" onClick={() => navigate('/signup')} />
+              <LinkButton label="Sign up" onClick={() => window.location.replace(`http://${import.meta.env.VITE_BASE_URL}/signup`)} />
             </Text>
           </Box>
         </Card>
