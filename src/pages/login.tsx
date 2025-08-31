@@ -9,10 +9,12 @@ import Text from '@/components/Text';
 import useLoginForm from '@/forms/login';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Navigate, useNavigate } from 'react-router';
+import { Navigate, useNavigate, useSearchParams } from 'react-router';
 import useAuth from '../hooks/useAuth';
 
 export default function Login() {
+  const [searchParams] = useSearchParams();
+  const signup = searchParams.get('signup');
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const { form, onSubmit } = useLoginForm();
@@ -26,7 +28,8 @@ export default function Login() {
       <CssBaseline enableColorScheme />
       <Container direction="column" justifyContent="space-between">
         <Card variant="outlined">
-          <Text variant="h4" textAlign='center' text="Log into your account" />
+          <Text variant="h4" text="Log into your account" />
+          {signup && <Text variant="body1" color='success' text="Signup successful, please login using email and password you entered during signup." />}
           <FormInputText name="email" control={form.control} label="Email" />
           <FormInputText
             type='password'

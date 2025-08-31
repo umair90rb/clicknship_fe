@@ -5,10 +5,8 @@ import { FormInputText } from '@/components/form/FormInput';
 import Text from '@/components/Text';
 import useSignupForm from '@/forms/signup';
 import CssBaseline from '@mui/material/CssBaseline';
-import { useNavigate } from 'react-router';
 
 export default function SignUp() {
-  const navigate = useNavigate();
   const { form, onSubmit } = useSignupForm();
 
   return (

@@ -1,6 +1,7 @@
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import AssessmentIcon from '@mui/icons-material/Assessment';
+import AssignmentReturnIcon from '@mui/icons-material/AssignmentReturn';
 import CategoryIcon from '@mui/icons-material/Category';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
@@ -54,9 +55,14 @@ const menus: MenuWithChildren[] = [
         Icon: ShoppingCartIcon,
       },
       {
-        title: 'Add New Order',
-        url: '/orders/add',
+        title: 'Create Order',
+        url: '/orders/create',
         Icon: AddBoxIcon,
+      },
+      {
+        title: 'Order Returns',
+        url: '/orders/return',
+        Icon: AssignmentReturnIcon,
       },
       {
         title: 'Customers',

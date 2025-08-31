@@ -19,16 +19,18 @@ interface TextProps {
     | 'subtitle1'
     | 'subtitle2';
   textAlign?: 'center' | 'start' | 'end';
+  color?: 'error' | 'info' | 'primary' | 'secondary' | 'success' | ''
 }
 
 export default function Text({
   text,
   variant = 'body1',
   textAlign = 'start',
+  color = '',
   children,
 }: PropsWithChildren<TextProps>) {
   return (
-    <Typography component="p" variant={variant} sx={{ textAlign }}>
+    <Typography component="p" color={color} variant={variant} sx={{ textAlign }}>
       {text || children}
     </Typography>
   );

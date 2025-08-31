@@ -41,7 +41,7 @@ export default function useSignupForm() {
       .unwrap()
       .then((response: OnboardRequestResponse) => {
         const tenantId = response.tenantId;
-        window.location.replace(`http://${tenantId}.${import.meta.env.VITE_BASE_URL}/login`)
+        window.location.replace(`http://${tenantId}.${import.meta.env.VITE_BASE_URL}/login?signup=true`)
       })
       .catch((err) => {
         let message = 'Something went wrong! Please try again later.';
