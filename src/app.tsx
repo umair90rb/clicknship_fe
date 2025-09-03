@@ -13,7 +13,7 @@ const ResetPassword = React.lazy(() => import("@/pages/reset-password"));
 const NotFound = React.lazy(() => import("@/pages/not-found"));
 
 const Dashboard = React.lazy(() => import("@/pages/dashboard"));
-const Orders = React.lazy(() => import("@/pages/orders"));
+const Orders = React.lazy(() => import("@/pages/orders/index/"));
 const CreateOrder = React.lazy(() => import("@/pages/orders/create"));
 const UpdateOrder = React.lazy(() => import("@/pages/orders/update"));
 const ViewOrder = React.lazy(() => import("@/pages/orders/view"));

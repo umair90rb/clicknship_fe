@@ -10,9 +10,9 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   width?: number;
   open?: boolean;
 }>(({ theme, width }) => ({
-  height: "100vh",
-  display: "flex",
-  flexDirection: "column",
+  // height: "100vh",
+  // display: "flex",
+  // flexDirection: "column",
   flexGrow: 1,
   padding: theme.spacing(0),
   transition: theme.transitions.create("margin", {
