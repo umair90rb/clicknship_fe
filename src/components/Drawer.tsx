@@ -1,29 +1,29 @@
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import AssessmentIcon from '@mui/icons-material/Assessment';
-import AssignmentReturnIcon from '@mui/icons-material/AssignmentReturn';
-import CategoryIcon from '@mui/icons-material/Category';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import GroupIcon from '@mui/icons-material/Group';
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
-import StoreIcon from '@mui/icons-material/Store';
-import WidgetsIcon from '@mui/icons-material/Widgets';
-import Box from '@mui/material/Box';
-import Collapse from '@mui/material/Collapse';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Toolbar from '@mui/material/Toolbar';
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import AssessmentIcon from "@mui/icons-material/Assessment";
+import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";
+import CategoryIcon from "@mui/icons-material/Category";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import GroupIcon from "@mui/icons-material/Group";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+import StoreIcon from "@mui/icons-material/Store";
+import WidgetsIcon from "@mui/icons-material/Widgets";
+import Box from "@mui/material/Box";
+import Collapse from "@mui/material/Collapse";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Toolbar from "@mui/material/Toolbar";
 
-import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router";
 
 interface MenuItem {
   title: string;
@@ -37,67 +37,67 @@ interface MenuWithChildren extends MenuItem {
 
 const menus: MenuWithChildren[] = [
   {
-    title: 'Dashboard',
-    url: '/',
+    title: "Dashboard",
+    url: "/",
     Icon: SpaceDashboardIcon,
   },
   {
-    title: 'Reports',
-    url: '/reports',
+    title: "Reports",
+    url: "/reports",
     Icon: AssessmentIcon,
   },
   {
-    title: 'Orders',
+    title: "Orders",
     children: [
       {
-        title: 'All Orders',
-        url: '/orders',
+        title: "All Orders",
+        url: "/orders",
         Icon: ShoppingCartIcon,
       },
       {
-        title: 'Create Order',
-        url: '/orders/create',
+        title: "Create Order",
+        url: "/orders/create",
         Icon: AddBoxIcon,
       },
       {
-        title: 'Order Returns',
-        url: '/orders/return',
+        title: "Order Returns",
+        url: "/orders/return",
         Icon: AssignmentReturnIcon,
       },
       {
-        title: 'Customers',
-        url: '/customers',
+        title: "Customers",
+        url: "/customers",
         Icon: AccountBoxIcon,
       },
       {
-        title: 'Products',
-        url: '/products',
+        title: "Products",
+        url: "/products",
         Icon: WidgetsIcon,
       },
     ],
   },
   {
-    title: 'Setting',
-    url: '/setting',
+    title: "Setting",
+    url: "/setting",
     children: [
       {
-        title: 'Categories & Brands',
-        url: '/categories-and-brands',
+        title: "Categories & Brands",
+        url: "/categories-and-brands",
         Icon: CategoryIcon,
       },
       {
-        title: 'Staff',
-        url: '/staff',
+        title: "Staff",
+        url: "/staff",
         Icon: GroupIcon,
       },
       {
-        title: 'Sales Channel',
-        url: '/sales-channel',
+        title: "Sales Channel",
+        url: "/sales-channel",
         Icon: StoreIcon,
       },
       {
-        title: 'Delivery Services Accounts',
-        url: '/delivery-services-accounts',
+        title: "Delivery Services Accounts",
+        url: "/delivery-services-accounts",
         Icon: LocalShippingIcon,
       },
     ],
@@ -111,7 +111,7 @@ interface MenuListItemProps {
 function MenuListItem({ menu }: MenuListItemProps) {
   const { url, title, Icon } = menu;
   const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
 
   return (
     <ListItem disablePadding dense>
@@ -151,7 +151,12 @@ function ExpandableMenuList({ menu }: ExpandableMenuListProps) {
         <ListItemText primary={title} />
       </ListItemButton>
 
-      <Collapse in={open[title]} timeout="auto" unmountOnExit>
+      <Collapse
+        sx={{ paddingLeft: 1 }}
+        in={open[title]}
+        timeout="auto"
+        unmountOnExit
+      >
         <List component="div" disablePadding dense>
           {children?.map((child, index) => (
             <MenuListItem key={index} menu={child} />
@@ -166,12 +171,12 @@ function ExpandableMenuList({ menu }: ExpandableMenuListProps) {
 function renderMenu(menus: MenuWithChildren[]) {
   return (
     <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+      sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
       component="nav"
       dense
     >
       {menus.map((menu, index) =>
-        'children' in menu ? (
+        "children" in menu ? (
           <ExpandableMenuList key={index} menu={menu} />
         ) : (
           <MenuListItem key={index} menu={menu} />
@@ -201,11 +206,11 @@ export default function ClippedDrawer({
       sx={{
         width: drawerWidth,
         flexShrink: 0,
-        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: "border-box" },
       }}
     >
       <Toolbar />
-      <Box sx={{ overflow: 'auto' }}>{renderMenu(menus)}</Box>
+      <Box sx={{ overflow: "auto" }}>{renderMenu(menus)}</Box>
     </Drawer>
   );
 }
