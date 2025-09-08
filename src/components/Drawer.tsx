@@ -96,8 +96,8 @@ const menus: MenuWithChildren[] = [
         Icon: StoreIcon,
       },
       {
-        title: "Delivery Services Accounts",
-        url: "/delivery-services-accounts",
+        title: "Delivery Services",
+        url: "/delivery-services",
         Icon: LocalShippingIcon,
       },
     ],
