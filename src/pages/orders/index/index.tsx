@@ -17,73 +17,143 @@ import {
   MRT_ActionMenuItem,
   type MRT_ColumnDef,
 } from "material-react-table";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Text from "@/components/Text";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 // import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { data, type Employee } from "@/data/make-data";
+import { useLazyListOrdersQuery } from "@/api/orders";
 
 export default function Orders() {
-  const columns = useMemo<MRT_ColumnDef<Employee>[]>(
+  const columns = useMemo<MRT_ColumnDef<{}>[]>(
     () => [
       {
-        accessorKey: "firstName", //access nested data with dot notation
-        header: "First Name",
+        id: "id",
+        accessorKey: "id",
+        header: "Order Id",
       },
       {
-        accessorKey: "lastName",
-        header: "Last Name",
+        accessorKey: "orderNumber",
+        header: "Order #",
       },
       {
-        accessorKey: "email", //normal accessorKey
-        header: "Email Address",
+        id: "name",
+        accessorKey: "customer.name",
+        header: "Customer Name",
       },
       {
-        accessorKey: "jobTitle",
-        header: "Job Title",
+        id: "phone",
+        accessorKey: "customer.phone",
+        header: "Phone #",
       },
       {
-        accessorKey: "salary",
-        header: "Salary",
+        id: "address",
+        accessorKey: "address.address",
+        header: "Address",
       },
       {
-        accessorKey: "signatureCatchPhrase",
-        header: "Signature",
+        id: "city",
+        accessorKey: "address.city",
+        header: "City",
+        filterVariant: "autocomplete",
+        filterSelectOptions: ["lahore", "faisalabad"],
       },
       {
-        accessorKey: "startDate",
-        header: "Start Data",
+        id: "province",
+        accessorKey: "address.province",
+        header: "Province",
       },
       {
-        accessorKey: "avatar",
-        header: "Avatar",
+        accessorKey: "createdAt",
+        header: "Date",
+        filterVariant: "datetime-range",
+      },
+      {
+        accessorKey: "status",
+        header: "Status",
+        filterVariant: "multi-select",
+        filterSelectOptions: ["confirmed", "received"],
+      },
+      {
+        id: "channel",
+        accessorKey: "channel.name",
+        header: "Channel",
+        filterVariant: "select",
+        filterSelectOptions: ["channel 1", "channle 2"],
+      },
+      {
+        accessorKey: "totalAmount",
+        header: "Total Amount",
+        Cell: ({ cell }) =>
+          cell.getValue<number>()?.toLocaleString("en-US", {
+            style: "currency",
+            currency: "PKR",
+          }),
+        filterVariant: "range",
+        filterFn: "betweenInclusive",
+      },
+      {
+        accessorKey: "tags",
+        header: "Tags",
       },
     ],
     []
   );
+
+  const [fetchOrdersList, { data, isFetching }] = useLazyListOrdersQuery();
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 15,
+  });
 
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
     []
   );
 
   useEffect(() => {
-    //fetch data
-    console.log(columnFilters);
+    fetchOrdersList({
+      skip: pagination.pageIndex * pagination.pageSize,
+      take: pagination.pageSize,
+    });
+  }, [pagination.pageIndex, pagination.pageSize]);
+
+  useEffect(() => {
+    const filters = columnFilters
+      .filter(
+        (f) =>
+          f.value !== undefined &&
+          f.value !== null &&
+          f.value !== "" &&
+          Array.isArray(f.value) &&
+          f.value.length &&
+          !f.value.every((e) => e === undefined)
+      )
+      .reduce((pv, cv) => {
+        if (Array.isArray(cv.value)) {
+          const [min, max] = cv.value;
+          return { ...pv, [cv.id]: { min, max } };
+        } else {
+          return { ...pv, [cv.id]: cv.value };
+        }
+      }, {});
+
+    console.log(filters);
+    if (Object.keys(filters).length) {
+      fetchOrdersList({
+        skip: pagination.pageIndex * pagination.pageSize,
+        take: pagination.pageSize,
+        ...filters,
+      });
+    }
   }, [columnFilters]);
 
   const table = useMaterialReactTable({
-    columns,
-    data,
-    manualFiltering: true,
     // enableClickToCopy: true,
     // muiCopyButtonProps: {
     //   startIcon: <ContentCopyIcon />,
     // },
-    // enableEditing: true,
-    // editDisplayMode: "cell",
-    // enableSelectAll: false,
-    // onColumnFiltersChange: setColumnFilters,
-    // state: { columnFilters },
+    enableSelectAll: false,
     paginationDisplayMode: "pages",
     enableStickyHeader: true,
     enableRowSelection: true,
@@ -92,6 +162,31 @@ export default function Orders() {
     enableRowActions: true,
     enableKeyboardShortcuts: true,
     layoutMode: "semantic",
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: "none",
+        height: "auto",
+      },
+    },
+    initialState: {
+      density: "compact",
+      columnFilters: [],
+      showColumnFilters: true,
+      columnVisibility: {
+        id: false,
+        province: false,
+      },
+    },
+    enableExpandAll: false,
+    columns,
+    data: data?.data || [],
+    manualFiltering: true,
+    manualPagination: true,
+    autoResetPageIndex: false,
+    rowCount: data?.meta?.total || 0,
+    state: { isLoading: isFetching, columnFilters, pagination },
+    onPaginationChange: setPagination,
+    onColumnFiltersChange: setColumnFilters,
     renderTopToolbar: ({ table }) => (
       <Box
         sx={{
@@ -130,10 +225,6 @@ export default function Orders() {
         <MRT_ToolbarAlertBanner table={table} />
       </>
     ),
-    enableExpandAll: true,
-    // muiExpandButtonProps: ({ row, table }) => ({
-    //   onClick: () => table.setExpanded({ [row.id]: !row.getIsExpanded() }),
-    // }),
     renderDetailPanel: () => (
       <>
         <br></br>
@@ -141,17 +232,11 @@ export default function Orders() {
         <br></br>
       </>
     ),
-    initialState: {
-      density: "compact",
-      showColumnFilters: true,
-    },
-    muiTableContainerProps: {
-      sx: {
-        maxHeight: "none",
-        height: "auto",
-      },
-    },
   });
 
-  return <MaterialReactTable table={table} />;
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <MaterialReactTable table={table} />;
+    </LocalizationProvider>
+  );
 }
