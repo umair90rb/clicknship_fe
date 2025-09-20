@@ -1,17 +1,8 @@
 import {
   MaterialReactTable,
-  MRT_GlobalFilterTextField,
-  MRT_ToggleFullScreenButton,
-  MRT_ShowHideColumnsButton,
-  MRT_ToggleGlobalFilterButton,
-  MRT_TablePagination,
-  MRT_ToggleDensePaddingButton,
-  MRT_ToggleFiltersButton,
-  MRT_ToolbarAlertBanner,
   type MRT_ColumnFiltersState,
 } from "material-react-table";
-import { Box } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   useMaterialReactTable,
   MRT_ActionMenuItem,
@@ -19,14 +10,19 @@ import {
 } from "material-react-table";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import Text from "@/components/Text";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 // import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { useLazyListOrdersQuery } from "@/api/orders";
+import { useListOrdersMutation } from "@/api/orders";
+import type { Order } from "@/types/order";
+import BottomToolbar from "@/components/table/BottomToolbar";
+import TopToolbar from "@/components/table/TopToolbar";
+import ExpandRow from "./components/ExpandedRow";
+import { buildFilters } from "./utils";
+import dayjs from "dayjs";
 
 export default function Orders() {
-  const columns = useMemo<MRT_ColumnDef<{}>[]>(
+  const columns = useMemo<MRT_ColumnDef<Order>[]>(
     () => [
       {
         id: "id",
@@ -68,6 +64,10 @@ export default function Orders() {
         accessorKey: "createdAt",
         header: "Date",
         filterVariant: "datetime-range",
+        Cell: ({ cell }) => {
+          const date = cell.getValue<string>();
+          return date ? dayjs(date).format("YYYY-MM-DD hh:mm A") : "-";
+        },
       },
       {
         accessorKey: "status",
@@ -90,18 +90,20 @@ export default function Orders() {
             style: "currency",
             currency: "PKR",
           }),
+        columnDefType: "data",
         filterVariant: "range",
-        filterFn: "betweenInclusive",
       },
       {
         accessorKey: "tags",
         header: "Tags",
+        filterVariant: "multi-select",
+        filterSelectOptions: ["new", "updated", "duplicate"],
       },
     ],
     []
   );
 
-  const [fetchOrdersList, { data, isFetching }] = useLazyListOrdersQuery();
+  const [fetchOrdersList, { data, isLoading }] = useListOrdersMutation();
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15,
@@ -110,43 +112,31 @@ export default function Orders() {
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
     []
   );
+  const firstRender = useRef(true);
 
   useEffect(() => {
-    fetchOrdersList({
-      skip: pagination.pageIndex * pagination.pageSize,
-      take: pagination.pageSize,
-    });
-  }, [pagination.pageIndex, pagination.pageSize]);
+    if (firstRender.current) {
+      firstRender.current = false;
+      fetchOrdersList({
+        skip: pagination.pageIndex * pagination.pageSize,
+        take: pagination.pageSize,
+        ...buildFilters(columnFilters),
+      });
+      return;
+    }
 
-  useEffect(() => {
-    const filters = columnFilters
-      .filter(
-        (f) =>
-          f.value !== undefined &&
-          f.value !== null &&
-          f.value !== "" &&
-          Array.isArray(f.value) &&
-          f.value.length &&
-          !f.value.every((e) => e === undefined)
-      )
-      .reduce((pv, cv) => {
-        if (Array.isArray(cv.value)) {
-          const [min, max] = cv.value;
-          return { ...pv, [cv.id]: { min, max } };
-        } else {
-          return { ...pv, [cv.id]: cv.value };
-        }
-      }, {});
-
-    console.log(filters);
-    if (Object.keys(filters).length) {
+    const handler = setTimeout(() => {
+      const filters = buildFilters(columnFilters);
+      console.log(filters);
       fetchOrdersList({
         skip: pagination.pageIndex * pagination.pageSize,
         take: pagination.pageSize,
         ...filters,
       });
-    }
-  }, [columnFilters]);
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [pagination.pageIndex, pagination.pageSize, columnFilters]);
 
   const table = useMaterialReactTable({
     // enableClickToCopy: true,
@@ -168,6 +158,7 @@ export default function Orders() {
         height: "auto",
       },
     },
+
     initialState: {
       density: "compact",
       columnFilters: [],
@@ -184,59 +175,21 @@ export default function Orders() {
     manualPagination: true,
     autoResetPageIndex: false,
     rowCount: data?.meta?.total || 0,
-    state: { isLoading: isFetching, columnFilters, pagination },
+    state: { isLoading, columnFilters, pagination },
     onPaginationChange: setPagination,
     onColumnFiltersChange: setColumnFilters,
-    renderTopToolbar: ({ table }) => (
-      <Box
-        sx={{
-          padding: 1,
-          gap: "1px",
-          display: "flex",
-          // justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Text variant="body1" bold text="Orders" />
-        <MRT_ToggleFiltersButton table={table} />
-        <MRT_ShowHideColumnsButton table={table} />
-        <MRT_ToggleDensePaddingButton table={table} />
-        <MRT_ToggleFullScreenButton table={table} />
-        <MRT_ToggleGlobalFilterButton table={table} />
-        <MRT_GlobalFilterTextField table={table} />
-      </Box>
-    ),
+    renderTopToolbar: (props) => <TopToolbar title="Orders" {...props} />,
     renderRowActionMenuItems: ({ table }) => [
       <MRT_ActionMenuItem table={table} icon={<DeleteIcon />} label="Delete" />,
       <MRT_ActionMenuItem table={table} icon={<EditIcon />} label="Edit" />,
     ],
-    renderBottomToolbar: ({ table }) => (
-      <>
-        <Box
-          sx={{
-            padding: 0,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <MRT_TablePagination table={table} />
-        </Box>
-        <MRT_ToolbarAlertBanner table={table} />
-      </>
-    ),
-    renderDetailPanel: () => (
-      <>
-        <br></br>
-        <br></br>
-        <br></br>
-      </>
-    ),
+    renderBottomToolbar: (props) => <BottomToolbar {...props} />,
+    renderDetailPanel: (props) => <ExpandRow {...props} />,
   });
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <MaterialReactTable table={table} />;
+      <MaterialReactTable table={table} />
     </LocalizationProvider>
   );
 }
