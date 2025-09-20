@@ -1,4 +1,4 @@
-export interface ListApiResponse {
+export interface OrderListApiResponse {
   data: Order[];
   meta: Meta;
 }

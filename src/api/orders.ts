@@ -1,22 +1,24 @@
 import { api } from "@/api/index";
-import type { Order } from "@/types/order";
+import type { OrderListApiResponse } from "@/types/order";
+import type { GetOrderApiResponse } from "@/types/orders/detail";
 
 export const ordersApi = api.injectEndpoints({
   // tagTypes: ["Order"],
   endpoints: (build) => ({
-    listOrders: build.mutation({
+    listOrders: build.query<OrderListApiResponse, {}>({
       query: (body) => ({
         url: "orders",
         method: "POST",
         body,
       }),
+      providesTags: (result, error, id) => [{ type: "Orders" }],
     }),
-    getOrder: build.query<Order, string | number>({
+    getOrder: build.query<GetOrderApiResponse, string | number>({
       query: (id) => ({
         url: `orders/${id}`,
         method: "GET",
       }),
-      // providesTags: (result, error, id) => [{ type: "Post", id }],
+      providesTags: (result, error, id) => [{ type: "Orders", id }],
     }),
     createOrder: build.mutation({
       query: (body: any) => ({
@@ -29,7 +31,7 @@ export const ordersApi = api.injectEndpoints({
 });
 
 export const {
-  useListOrdersMutation,
+  useLazyListOrdersQuery,
   useGetOrderQuery,
   useCreateOrderMutation,
 } = ordersApi;

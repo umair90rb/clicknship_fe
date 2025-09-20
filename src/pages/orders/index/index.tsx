@@ -13,7 +13,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 // import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { useListOrdersMutation } from "@/api/orders";
+import { useLazyListOrdersQuery } from "@/api/orders";
 import type { Order } from "@/types/order";
 import BottomToolbar from "@/components/table/BottomToolbar";
 import TopToolbar from "@/components/table/TopToolbar";
@@ -28,6 +28,7 @@ export default function Orders() {
         id: "id",
         accessorKey: "id",
         header: "Order Id",
+        enableColumnFilter: false,
       },
       {
         accessorKey: "orderNumber",
@@ -53,12 +54,14 @@ export default function Orders() {
         accessorKey: "address.city",
         header: "City",
         filterVariant: "autocomplete",
-        filterSelectOptions: ["lahore", "faisalabad"],
+        enableFacetedValues: true,
+        // filterSelectOptions: ["lahore", "faisalabad"],
       },
       {
         id: "province",
         accessorKey: "address.province",
         header: "Province",
+        enableColumnFilter: false,
       },
       {
         accessorKey: "createdAt",
@@ -73,7 +76,8 @@ export default function Orders() {
         accessorKey: "status",
         header: "Status",
         filterVariant: "multi-select",
-        filterSelectOptions: ["confirmed", "received"],
+        // filterSelectOptions: ["confirmed", "received"],
+        enableFacetedValues: true,
       },
       {
         id: "channel",
@@ -84,13 +88,12 @@ export default function Orders() {
       },
       {
         accessorKey: "totalAmount",
-        header: "Total Amount",
+        header: "T. Amount",
         Cell: ({ cell }) =>
           cell.getValue<number>()?.toLocaleString("en-US", {
             style: "currency",
             currency: "PKR",
           }),
-        columnDefType: "data",
         filterVariant: "range",
       },
       {
@@ -103,7 +106,8 @@ export default function Orders() {
     []
   );
 
-  const [fetchOrdersList, { data, isLoading }] = useListOrdersMutation();
+  const [fetchOrdersList, { data, isFetching: isLoading }] =
+    useLazyListOrdersQuery();
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15,
@@ -143,6 +147,9 @@ export default function Orders() {
     // muiCopyButtonProps: {
     //   startIcon: <ContentCopyIcon />,
     // },
+    enableFilterMatchHighlighting: false,
+    enableFacetedValues: true,
+    enableColumnFilters: true,
     enableSelectAll: false,
     paginationDisplayMode: "pages",
     enableStickyHeader: true,
