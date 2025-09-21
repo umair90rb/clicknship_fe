@@ -104,13 +104,13 @@ export interface Brand {
 export interface User {
   name: string;
   id: number;
-  phone: string;
-  email: string;
+  phone?: string;
+  email?: string;
 }
 
 export interface Log {
   id: number;
   event: string;
-  userId?: number;
-  orderId: number;
+  createdAt: string;
+  user?: User;
 }

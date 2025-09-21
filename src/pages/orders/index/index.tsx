@@ -14,12 +14,13 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 // import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useLazyListOrdersQuery } from "@/api/orders";
-import type { Order } from "@/types/order";
 import BottomToolbar from "@/components/table/BottomToolbar";
 import TopToolbar from "@/components/table/TopToolbar";
-import ExpandRow from "./components/ExpandedRow";
 import { buildFilters } from "./utils";
 import dayjs from "dayjs";
+import OrderDetailPanel from "./components/OrderDetailPanel";
+import type { Order } from "@/types/orders/list";
+import { DATE_FORMAT } from "@/constants/keys";
 
 export default function Orders() {
   const columns = useMemo<MRT_ColumnDef<Order>[]>(
@@ -69,7 +70,7 @@ export default function Orders() {
         filterVariant: "datetime-range",
         Cell: ({ cell }) => {
           const date = cell.getValue<string>();
-          return date ? dayjs(date).format("YYYY-MM-DD hh:mm A") : "-";
+          return date ? dayjs(date).format(DATE_FORMAT) : "-";
         },
       },
       {
@@ -171,7 +172,6 @@ export default function Orders() {
       columnFilters: [],
       showColumnFilters: true,
       columnVisibility: {
-        id: false,
         province: false,
       },
     },
@@ -191,7 +191,7 @@ export default function Orders() {
       <MRT_ActionMenuItem table={table} icon={<EditIcon />} label="Edit" />,
     ],
     renderBottomToolbar: (props) => <BottomToolbar {...props} />,
-    renderDetailPanel: (props) => <ExpandRow {...props} />,
+    renderDetailPanel: (props) => <OrderDetailPanel {...props} />,
   });
 
   return (
