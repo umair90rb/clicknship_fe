@@ -19,7 +19,17 @@ interface TextProps {
     | "subtitle1"
     | "subtitle2";
   textAlign?: "center" | "start" | "end";
-  color?: "error" | "info" | "primary" | "secondary" | "success" | "";
+  color?:
+    | "success"
+    | "error"
+    | "info"
+    | "primary"
+    | "secondary"
+    | "warning"
+    | "textDisabled"
+    | "textPrimary"
+    | "textSecondary"
+    | "";
   bold?: boolean;
 }
 

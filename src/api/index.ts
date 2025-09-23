@@ -2,10 +2,15 @@ import { AUTH_TOKEN_KEY } from "@/constants/keys";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
-  validateStatus(response) {
+  validateStatus(response, body) {
     if (response.status === 401) {
-      localStorage.removeItem(AUTH_TOKEN_KEY);
-      window.location.replace("/login");
+      if (body?.message === "jwt expired") {
+        localStorage.removeItem(AUTH_TOKEN_KEY);
+        window.location.replace(
+          "/login?message=Login token expired, please login again to continue&success=false"
+        );
+        return false;
+      }
       return false;
     }
     return true;

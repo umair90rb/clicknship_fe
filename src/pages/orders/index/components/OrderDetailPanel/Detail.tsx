@@ -56,6 +56,7 @@ export default function Detail({
             Tags:{" "}
             {tags?.map((t) => (
               <Chip
+                component={"p"}
                 key={t}
                 variant="outlined"
                 label={t}

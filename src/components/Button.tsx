@@ -23,7 +23,7 @@ export default function PrimaryButton({
   onClick = () => {},
   disabled = false,
   variant = "contained",
-  color = "inherit",
+  color = "primary",
   fullWidth = true,
 }: PrimaryButtonProps) {
   return (

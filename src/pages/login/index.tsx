@@ -14,7 +14,8 @@ import useAuth from "../../hooks/useAuth";
 
 export default function Login() {
   const [searchParams] = useSearchParams();
-  const signup = searchParams.get("signup");
+  const message = searchParams.get("message");
+  const isSuccess = searchParams.get("success");
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const { form, onSubmit } = useLoginForm();
@@ -29,11 +30,11 @@ export default function Login() {
       <Container direction="column" justifyContent="space-between">
         <Card variant="outlined">
           <Text variant="h4" text="Log into your account" />
-          {signup && (
+          {message && (
             <Text
               variant="body1"
-              color="success"
-              text="Signup successful, please login using email and password you entered during signup."
+              color={isSuccess === "true" ? "success" : "error"}
+              text={message}
             />
           )}
           <FormInputText name="email" control={form.control} label="Email" />
@@ -49,7 +50,6 @@ export default function Login() {
             label="Remember Me"
           />
           <PrimaryButton
-            color="primary"
             type="button"
             onClick={onSubmit}
             label={form.formState.isSubmitting ? "Logging In..." : "Sign In"}

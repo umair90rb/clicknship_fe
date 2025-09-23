@@ -20,9 +20,17 @@ export interface Order {
   delivery: Delivery;
   customer: Customer;
   channel: Channel;
+  comments: Comment[];
   brand: Brand;
   user: User;
   logs: Log[];
+}
+
+export interface Comment {
+  id: number;
+  comment: string;
+  createdAt: string;
+  user: User;
 }
 
 export interface CourierService {

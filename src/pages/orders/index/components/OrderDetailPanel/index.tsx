@@ -7,6 +7,7 @@ import type {
   Item,
   Log,
   Payment,
+  Comment,
 } from "@/types/orders/detail";
 import type { MRT_Row, MRT_TableInstance } from "material-react-table";
 import { Box, Grid } from "@mui/material";
@@ -49,6 +50,7 @@ export default function OrderDetailPanel({
     customer,
     address,
     channel,
+    comments,
     items,
     delivery,
     logs,
@@ -95,6 +97,8 @@ export default function OrderDetailPanel({
             items={items as Item[]}
             payments={payments as Payment[]}
             logs={logs as Log[]}
+            comments={comments as Comment[]}
+            note={remarks as string}
           />
 
           <Grid
@@ -121,11 +125,7 @@ export default function OrderDetailPanel({
                 gap: 1,
               }}
             >
-              <PrimaryButton
-                color="primary"
-                label="Capture Amount"
-                onClick={() => {}}
-              />
+              <PrimaryButton label="Capture Amount" onClick={() => {}} />
               <PrimaryButton
                 color="info"
                 label="Edit Items"

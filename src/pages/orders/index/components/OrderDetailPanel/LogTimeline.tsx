@@ -1,47 +1,18 @@
-import {
-  Timeline,
-  TimelineItem,
-  TimelineSeparator,
-  TimelineConnector,
-  TimelineContent,
-  TimelineDot,
-  TimelineOppositeContent,
-  timelineOppositeContentClasses,
-} from "@mui/lab";
+// components/LogTimeline.tsx
 import type { Log } from "@/types/orders/detail";
-import Text from "@/components/Text";
 import dayjs from "dayjs";
 import { SHORT_DATE_FORMAT } from "@/constants/keys";
-import { Box } from "@mui/material";
+import { CustomTimeline } from "@/components/CustomTimeline";
 
-interface LogTimelineProps {
-  logs: Log[];
-}
-
-export default function LogTimeline({ logs }: LogTimelineProps) {
+export default function LogTimeline({ logs }: { logs: Log[] }) {
   return (
-    <Timeline
-      sx={{
-        [`& .${timelineOppositeContentClasses.root}`]: {
-          flex: 0.2,
-        },
-      }}
-      position="right"
-    >
-      {[...logs].reverse().map((log, index) => (
-        <TimelineItem>
-          <TimelineOppositeContent color="text.secondary">
-            {log.createdAt
-              ? dayjs(log.createdAt).format(SHORT_DATE_FORMAT)
-              : "-"}
-          </TimelineOppositeContent>
-          <TimelineSeparator>
-            <TimelineDot />
-            {index < logs.length - 1 && <TimelineConnector />}
-          </TimelineSeparator>
-          <TimelineContent>{log.event}</TimelineContent>
-        </TimelineItem>
-      ))}
-    </Timeline>
+    <CustomTimeline
+      items={logs}
+      reverse
+      getDate={(log) =>
+        log.createdAt ? dayjs(log.createdAt).format(SHORT_DATE_FORMAT) : "-"
+      }
+      getContent={(log) => log.event}
+    />
   );
 }

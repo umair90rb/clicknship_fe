@@ -36,11 +36,7 @@ export default function CustomerDetail({
         ))}
       </Stack>
       <Box mt={2} />
-      <PrimaryButton
-        color="primary"
-        label="Update Customer Info"
-        onClick={() => {}}
-      />
+      <PrimaryButton label="Update Customer Info" onClick={() => {}} />
     </>
   );
 }
