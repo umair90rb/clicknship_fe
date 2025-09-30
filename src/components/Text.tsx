@@ -2,7 +2,7 @@ import Typography from "@mui/material/Typography";
 import type { PropsWithChildren } from "react";
 
 interface TextProps {
-  text?: string;
+  text?: string | number;
   variant?:
     | "body1"
     | "body2"

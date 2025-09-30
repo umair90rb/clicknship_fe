@@ -1,7 +1,10 @@
 import PrimaryButton from "@/components/Button";
 import Text from "@/components/Text";
 import type { Address, Customer } from "@/types/orders/detail";
-import { Box, Button, Stack } from "@mui/material";
+import { Box } from "@mui/material";
+import useAddressForm from "./useAddressForm";
+import { FormInputTextArea } from "@/components/form/FormTextArea";
+import FormAutocomplete from "@/components/form/FormAutocomplete";
 
 export default function CustomerDetail({
   customer,
@@ -10,33 +13,35 @@ export default function CustomerDetail({
   customer: Customer;
   address: Address;
 }) {
+  const { form, onSubmit } = useAddressForm(address);
   return (
     <>
-      <Text bold>Customer Detail</Text>
-      <Stack spacing={1}>
-        {[
-          <Text>Name: {customer?.name}</Text>,
-          <Text>Email: {customer?.email}</Text>,
-          <Text>Phone: {customer?.phone}</Text>,
-          <Text>City: {address?.city}</Text>,
-          <Text>Country: {address?.country}</Text>,
-          <Text>Zip: {address?.zip}</Text>,
-          <Text>Address: {address?.address}</Text>,
-          <Text>Note: {address?.note}</Text>,
-        ].map((row, i) => (
-          <Box
-            key={i}
-            sx={{
-              p: 1,
-              bgcolor: "grey.300",
-            }}
-          >
-            {row}
-          </Box>
-        ))}
-      </Stack>
+      <Text bold>
+        Name: {customer?.name}
+        {customer?.email ? `(${customer?.email})` : ""}
+      </Text>
+      <Text bold>Phone: {customer?.phone}</Text>
+      <FormInputTextArea
+        name="address"
+        control={form.control}
+        label="Address"
+        minRows={3}
+      />
+      <FormInputTextArea
+        name="note"
+        control={form.control}
+        label="Note (This note will print in parcel slip)"
+      />
+      <FormAutocomplete
+        name="city"
+        control={form.control}
+        label="City"
+        options={["faisalabad", "lahore", "karachi"]}
+      />
+      {/* <Box mt={2} />
+      <Text>Country: {address?.country}</Text> */}
       <Box mt={2} />
-      <PrimaryButton label="Update Customer Info" onClick={() => {}} />
+      <PrimaryButton label="Update Address Info" onClick={onSubmit} />
     </>
   );
 }

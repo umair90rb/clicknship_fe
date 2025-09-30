@@ -61,23 +61,25 @@ export default function OrderDetailPanel({
 
   return (
     <Box sx={{ maxWidth: `calc(98vw - ${drawerWidth}px)` }}>
+      {/* Order Detail */}
+      <Grid
+        sx={{ backgroundColor: "#F5F5F5", p: 1, mb: 1, flexDirection: "row" }}
+      >
+        <Detail
+          orderId={orderId as number}
+          orderNumber={orderNumber}
+          channel={channel?.name}
+          brand={brand?.name}
+          createdAt={createdAt}
+          user={user}
+          assignedAt={assignedAt}
+          status={status}
+          tags={tags}
+        />
+      </Grid>
       <Grid container spacing={1}>
-        {/* Order Detail */}
-        <Grid sx={{ flex: 0.5, backgroundColor: "#F5F5F5", p: 2 }}>
-          <Detail
-            orderId={orderId as number}
-            orderNumber={orderNumber}
-            channel={channel?.name}
-            brand={brand?.name}
-            createdAt={createdAt}
-            user={user}
-            assignedAt={assignedAt}
-            status={status}
-            tags={tags}
-          />
-        </Grid>
         {/* Customer Detail */}
-        <Grid sx={{ flex: 0.75, backgroundColor: "#F5F5F5", p: 2 }}>
+        <Grid sx={{ flex: 1, backgroundColor: "#F5F5F5", p: 2 }}>
           <CustomerDetail
             customer={customer as Customer}
             address={address as Address}
@@ -107,7 +109,7 @@ export default function OrderDetailPanel({
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              gap: 1,
+              gap: 0.5,
             }}
           >
             <Summary
@@ -122,13 +124,13 @@ export default function OrderDetailPanel({
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                gap: 1,
+                gap: 0.5,
               }}
             >
-              <PrimaryButton label="Capture Amount" onClick={() => {}} />
+              <PrimaryButton label="Add Shipping" onClick={() => {}} />
               <PrimaryButton
                 color="info"
-                label="Edit Items"
+                label="Payment Pending"
                 onClick={() => {}}
               />
               <PrimaryButton

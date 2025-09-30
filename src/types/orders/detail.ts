@@ -56,7 +56,7 @@ export interface Address {
   address: string;
   note: string;
   city: string;
-  phone?: string;
+  phone?: string | undefined;
   zip: number;
   province: string;
   country: string;

@@ -24,59 +24,61 @@ export default function Detail({
   status?: string;
 }) {
   return (
-    <>
-      <Text bold>Order Detail</Text>
-      <Stack spacing={1}>
-        {[
-          <Text>Order Id: {orderId}</Text>,
-          <Text>Order Number: {orderNumber}</Text>,
-          <Text>
-            Order Date: <br />
-            {createdAt ? new Date(createdAt).toLocaleString() : ""}
-          </Text>,
-          <Text>
-            Assigned To: {user?.name} {user?.email}
-          </Text>,
-          <Text>
-            Assigned At:
-            <br />
-            {assignedAt ? new Date(assignedAt).toLocaleString() : ""}
-          </Text>,
-          <Text>Channel: {channel}</Text>,
-          <Text>Brand: {brand}</Text>,
-          <Text>
-            Status:{" "}
+    <Stack justifyContent={"space-evenly"} direction={"row"}>
+      {[
+        <>
+          <Text text="Order Id" />
+          <Text text={orderId} />
+        </>,
+        <>
+          <Text text="Order Number" />
+          <Text text={orderNumber} />
+        </>,
+        <>
+          <Text text="Order Date" />
+          <Text text={createdAt ? new Date(createdAt).toLocaleString() : ""} />
+        </>,
+        <>
+          <Text text="Assigned Date" />
+          <Text
+            text={assignedAt ? new Date(assignedAt).toLocaleString() : ""}
+          />
+        </>,
+        <>
+          <Text text="Assigned To" />
+          <Text text={`${user?.name || ""} ${user?.email || ""}`} />
+        </>,
+        <>
+          <Text text="Channel" />
+          <Text text={channel} />
+        </>,
+        <>
+          <Text text="Brand" />
+          <Text text={brand} />
+        </>,
+        <>
+          <Text text="Status" />
+          <Chip
+            size="small"
+            color={status?.toLowerCase() === "confirmed" ? "success" : "info"}
+            label={status}
+          />
+        </>,
+        <>
+          <Text text="Tags" />
+          {tags?.map((t) => (
             <Chip
+              component={"p"}
+              key={t}
+              variant="outlined"
+              label={t}
               size="small"
-              color={status?.toLowerCase() === "confirmed" ? "success" : "info"}
-              label={status}
             />
-          </Text>,
-          <Text>
-            Tags:{" "}
-            {tags?.map((t) => (
-              <Chip
-                component={"p"}
-                key={t}
-                variant="outlined"
-                label={t}
-                size="small"
-                sx={{ mr: 0.5 }}
-              />
-            ))}
-          </Text>,
-        ].map((row, i) => (
-          <Box
-            key={i}
-            sx={{
-              p: 1,
-              bgcolor: "grey.300",
-            }}
-          >
-            {row}
-          </Box>
-        ))}
-      </Stack>
-    </>
+          ))}
+        </>,
+      ].map((row, i) => (
+        <Box key={i}>{row}</Box>
+      ))}
+    </Stack>
   );
 }
