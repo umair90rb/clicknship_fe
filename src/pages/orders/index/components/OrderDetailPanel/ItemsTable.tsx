@@ -1,8 +1,8 @@
-import PrimaryButton from "@/components/Button";
 import CustomTable from "@/components/CustomTable";
 import FormAutocomplete from "@/components/form/FormAutocomplete";
 import { FormInputText } from "@/components/form/FormInput";
 import CustomIconButton from "@/components/IconButton";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 import type { Item } from "@/types/orders/detail";
 import { Box } from "@mui/material";
 import { useForm } from "react-hook-form";
@@ -77,7 +77,7 @@ export default function ItemsTable({ items }: { items: Item[] }) {
           control={control}
           placeholer="Total"
         />
-        <CustomIconButton icon="add_circle" size="large" onClick={() => {}} />
+        <CustomIconButton Icon={AddBoxIcon} size="large" onClick={() => {}} />
       </Box>
     </Box>
   );

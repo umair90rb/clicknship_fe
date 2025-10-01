@@ -7,6 +7,7 @@ import { Box } from "@mui/material";
 import { FormInputText } from "@/components/form/FormInput";
 import { useForm } from "react-hook-form";
 import CustomIconButton from "@/components/IconButton";
+import SendIcon from "@mui/icons-material/Send";
 
 export default function Comments({ comments }: { comments: Comment[] }) {
   const { control } = useForm();
@@ -45,7 +46,7 @@ export default function Comments({ comments }: { comments: Comment[] }) {
             placeholer="Comment"
           />
         </Box>
-        <CustomIconButton icon="send" size="large" onClick={() => {}} />
+        <CustomIconButton Icon={SendIcon} size="large" onClick={() => {}} />
       </Box>
     </Box>
   );

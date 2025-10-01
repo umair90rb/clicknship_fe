@@ -11,6 +11,7 @@ import { Controller } from "react-hook-form";
 interface FormAutoselectProps extends FormInputProps {
   options: any[];
   multiple?: boolean;
+  disableCloseOnSelect?: boolean;
 }
 
 export default function FormAutocomplete({
@@ -20,6 +21,7 @@ export default function FormAutocomplete({
   placeholer,
   options,
   multiple = false,
+  disableCloseOnSelect = multiple,
 }: FormAutoselectProps) {
   return (
     <Controller
@@ -32,6 +34,9 @@ export default function FormAutocomplete({
             disablePortal
             autoHighlight
             clearOnEscape
+            handleHomeEndKeys
+            autoComplete
+            disableCloseOnSelect={disableCloseOnSelect}
             freeSolo
             size="small"
             multiple={multiple}

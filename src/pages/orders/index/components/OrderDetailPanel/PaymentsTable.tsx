@@ -4,6 +4,7 @@ import CustomIconButton from "@/components/IconButton";
 import type { Payment } from "@/types/orders/detail";
 import { Box } from "@mui/material";
 import { useForm } from "react-hook-form";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 
 const columns = [
   { id: "tId", label: "Tid#" },
@@ -46,7 +47,7 @@ export default function PaymentsTable({ payments }: { payments: Payment[] }) {
         <Box sx={{ flexBasis: "300%" }}>
           <FormInputText name="note" control={control} placeholer="Note" />
         </Box>
-        <CustomIconButton icon="add_circle" size="large" onClick={() => {}} />
+        <CustomIconButton Icon={AddBoxIcon} size="large" onClick={() => {}} />
       </Box>
     </Box>
   );

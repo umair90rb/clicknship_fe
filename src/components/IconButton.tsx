@@ -2,7 +2,6 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
 import Badge, { badgeClasses } from "@mui/material/Badge";
-import Icon from "@mui/material/Icon";
 
 const CustomBadge = styled(Badge)`
   & .${badgeClasses.badge} {
@@ -12,7 +11,7 @@ const CustomBadge = styled(Badge)`
 `;
 
 interface IconButtonProps {
-  icon: string;
+  Icon: any;
   onClick: () => void;
   type?: "submit" | "button" | "reset";
   size?: "small" | "medium" | "large";
@@ -31,7 +30,7 @@ interface IconButtonProps {
 }
 
 export default function CustomIconButton({
-  icon,
+  Icon,
   type = "button",
   size = "medium",
   onClick = () => {},
@@ -51,7 +50,7 @@ export default function CustomIconButton({
         size={size}
         loading={loading}
       >
-        <Icon fontSize={size}>{icon}</Icon>
+        <Icon fontSize={size} />
         {badge && (
           <CustomBadge
             badgeContent={badge}

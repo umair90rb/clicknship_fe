@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import {
   MRT_TablePagination,
-  MRT_ToolbarAlertBanner,
   type MRT_TableInstance,
 } from "material-react-table";
 
@@ -22,7 +21,7 @@ export default function BottomToolbar({
       >
         <MRT_TablePagination table={table} />
       </Box>
-      <MRT_ToolbarAlertBanner table={table} />
+      {/* <MRT_ToolbarAlertBanner table={table} /> */}
     </>
   );
 }
