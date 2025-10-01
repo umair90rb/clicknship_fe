@@ -1,5 +1,8 @@
+import PrimaryButton from "@/components/Button";
 import CustomTable from "@/components/CustomTable";
 import FormAutocomplete from "@/components/form/FormAutocomplete";
+import { FormInputText } from "@/components/form/FormInput";
+import CustomIconButton from "@/components/IconButton";
 import type { Item } from "@/types/orders/detail";
 import { Box } from "@mui/material";
 import { useForm } from "react-hook-form";
@@ -26,8 +29,9 @@ export default function ItemsTable({ items }: { items: Item[] }) {
   return (
     <Box
       sx={{
-        minHeight: 200,
+        minHeight: 250,
         display: "flex",
+        flex: 1,
         flexDirection: "column",
         justifyContent: "space-between",
       }}
@@ -37,16 +41,43 @@ export default function ItemsTable({ items }: { items: Item[] }) {
         sx={{
           display: "flex",
           flexDirection: "row",
-          alignItems: "speace-between",
-          border: "1px solid",
+          alignItems: "center",
+          gap: 1,
         }}
       >
-        <FormAutocomplete
-          placeholer="Select Item"
-          name="item"
-          options={[]}
+        <Box sx={{ flexBasis: "300%" }}>
+          <FormAutocomplete
+            placeholer="Select Item"
+            name="item"
+            options={["item 1", "item 2"]}
+            control={control}
+          />
+        </Box>
+        <FormInputText
+          name="quantity"
+          type="number"
           control={control}
+          placeholer="Quantity"
         />
+        <FormInputText
+          name="discount"
+          type="number"
+          control={control}
+          placeholer="Discount"
+        />
+        <FormInputText
+          name="price"
+          type="number"
+          control={control}
+          placeholer="Price"
+        />
+        <FormInputText
+          name="total"
+          type="number"
+          control={control}
+          placeholer="Total"
+        />
+        <CustomIconButton icon="add_circle" size="large" onClick={() => {}} />
       </Box>
     </Box>
   );

@@ -1,5 +1,11 @@
 import { type FormInputProps } from "@/types/form";
-import { InputLabel, Autocomplete, TextField } from "@mui/material";
+import {
+  InputLabel,
+  Autocomplete,
+  TextField,
+  Box,
+  Checkbox,
+} from "@mui/material";
 import { Controller } from "react-hook-form";
 
 interface FormAutoselectProps extends FormInputProps {
@@ -20,7 +26,7 @@ export default function FormAutocomplete({
       name={name}
       control={control}
       render={({ field: { onChange, value }, fieldState: { error } }) => (
-        <>
+        <Box sx={{ width: "100%" }}>
           {label && <InputLabel color={error && "error"}>{label}</InputLabel>}
           <Autocomplete
             disablePortal
@@ -32,6 +38,22 @@ export default function FormAutocomplete({
             options={options}
             value={value}
             onChange={(_e, value) => onChange(value)}
+            renderOption={
+              multiple
+                ? (props, option, { selected }) => {
+                    const { key, ...optionProps } = props;
+                    return (
+                      <li key={key} {...optionProps}>
+                        <Checkbox
+                          style={{ marginRight: 8 }}
+                          checked={selected}
+                        />
+                        {option}
+                      </li>
+                    );
+                  }
+                : undefined
+            }
             renderInput={(params) => (
               <TextField
                 error={!!error}
@@ -41,7 +63,7 @@ export default function FormAutocomplete({
               />
             )}
           />
-        </>
+        </Box>
       )}
     />
   );

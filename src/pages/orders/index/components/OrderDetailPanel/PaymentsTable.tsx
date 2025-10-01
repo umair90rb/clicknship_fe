@@ -1,26 +1,9 @@
 import CustomTable from "@/components/CustomTable";
-import type { Item, Payment } from "@/types/orders/detail";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  styled,
-  tableCellClasses,
-} from "@mui/material";
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
+import { FormInputText } from "@/components/form/FormInput";
+import CustomIconButton from "@/components/IconButton";
+import type { Payment } from "@/types/orders/detail";
+import { Box } from "@mui/material";
+import { useForm } from "react-hook-form";
 
 const columns = [
   { id: "tId", label: "Tid#" },
@@ -31,5 +14,40 @@ const columns = [
 ];
 
 export default function PaymentsTable({ payments }: { payments: Payment[] }) {
-  return <CustomTable columns={columns} rows={payments} />;
+  const { control } = useForm();
+  return (
+    <Box
+      sx={{
+        minHeight: 250,
+        display: "flex",
+        flex: 1,
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
+    >
+      <CustomTable columns={columns} rows={payments} />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 1,
+        }}
+      >
+        <FormInputText name="tid" control={control} placeholer="Tid" />
+        <FormInputText name="bank" control={control} placeholer="Bank" />
+        <FormInputText
+          name="amount"
+          type="number"
+          control={control}
+          placeholer="Amount"
+        />
+        <FormInputText name="type" control={control} placeholer="Type" />
+        <Box sx={{ flexBasis: "300%" }}>
+          <FormInputText name="note" control={control} placeholer="Note" />
+        </Box>
+        <CustomIconButton icon="add_circle" size="large" onClick={() => {}} />
+      </Box>
+    </Box>
+  );
 }

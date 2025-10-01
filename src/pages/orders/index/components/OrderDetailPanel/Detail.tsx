@@ -64,18 +64,6 @@ export default function Detail({
             label={status}
           />
         </>,
-        <>
-          <Text text="Tags" />
-          {tags?.map((t) => (
-            <Chip
-              component={"p"}
-              key={t}
-              variant="outlined"
-              label={t}
-              size="small"
-            />
-          ))}
-        </>,
       ].map((row, i) => (
         <Box key={i}>{row}</Box>
       ))}

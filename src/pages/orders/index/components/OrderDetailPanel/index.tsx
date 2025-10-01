@@ -60,10 +60,18 @@ export default function OrderDetailPanel({
   } = data?.data || {};
 
   return (
-    <Box sx={{ maxWidth: `calc(98vw - ${drawerWidth}px)` }}>
+    <Box
+      sx={{ border: "0px solid", maxWidth: `calc(98vw - ${drawerWidth}px)` }}
+    >
       {/* Order Detail */}
       <Grid
-        sx={{ backgroundColor: "#F5F5F5", p: 1, mb: 1, flexDirection: "row" }}
+        sx={{
+          backgroundColor: "#F5F5F5",
+          p: 1,
+          mb: 1,
+          flexDirection: "row",
+          border: "0px solid",
+        }}
       >
         <Detail
           orderId={orderId as number}
@@ -77,9 +85,16 @@ export default function OrderDetailPanel({
           tags={tags}
         />
       </Grid>
-      <Grid container spacing={1}>
+      <Grid container spacing={1} border="0px solid">
         {/* Customer Detail */}
-        <Grid sx={{ flex: 1, backgroundColor: "#F5F5F5", p: 2 }}>
+        <Grid
+          sx={{
+            flex: 1,
+            backgroundColor: "#F5F5F5",
+            p: 2,
+            border: "0px solid",
+          }}
+        >
           <CustomerDetail
             customer={customer as Customer}
             address={address as Address}
@@ -89,10 +104,11 @@ export default function OrderDetailPanel({
         {/* Actions */}
         <Grid
           sx={{
-            flexGrow: 1,
+            flex: 3,
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
+            border: "0px solid",
           }}
         >
           <Tabs
@@ -101,15 +117,15 @@ export default function OrderDetailPanel({
             logs={logs as Log[]}
             comments={comments as Comment[]}
             note={remarks as string}
+            tags={tags as string[]}
           />
 
           <Grid
             sx={{
-              mt: 2,
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              gap: 0.5,
+              gap: 1,
             }}
           >
             <Summary

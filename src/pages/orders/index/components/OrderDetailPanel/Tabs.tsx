@@ -1,5 +1,4 @@
 import type { Comment, Item, Log, Payment } from "@/types/orders/detail";
-
 import { Box, Tabs, Tab, AppBar } from "@mui/material";
 import * as React from "react";
 import { useTheme } from "@mui/material/styles";
@@ -7,7 +6,7 @@ import ItemsTable from "./ItemsTable";
 import PaymentsTable from "./PaymentsTable";
 import LogTimeline from "./LogTimeline";
 import Comments from "./Comments";
-import Note from "./Note";
+import NoteAndTags from "./NoteAndTags";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -45,6 +44,7 @@ interface OrderTabsProps {
   logs: Log[];
   comments: Comment[];
   note: string;
+  tags: string[];
 }
 
 export default function OrderTabs({
@@ -53,6 +53,7 @@ export default function OrderTabs({
   logs,
   comments,
   note,
+  tags,
 }: OrderTabsProps) {
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
@@ -74,9 +75,9 @@ export default function OrderTabs({
         >
           <Tab label="Items" {...a11yProps(0)} />
           <Tab label="Payments" {...a11yProps(1)} />
-          <Tab label="Comments" {...a11yProps(2)} />
-          <Tab label="Order Logs" {...a11yProps(3)} />
-          <Tab label="Note" {...a11yProps(4)} />
+          <Tab label="Note & Tags" {...a11yProps(2)} />
+          <Tab label="Comments" {...a11yProps(3)} />
+          <Tab label="Order Logs" {...a11yProps(4)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0} dir={theme.direction}>
@@ -86,13 +87,13 @@ export default function OrderTabs({
         <PaymentsTable payments={payments as Payment[]} />
       </TabPanel>
       <TabPanel value={value} index={2} dir={theme.direction}>
-        <Comments comments={comments} />
+        <NoteAndTags note={note} tags={tags} />
       </TabPanel>
       <TabPanel value={value} index={3} dir={theme.direction}>
-        <LogTimeline logs={logs} />
+        <Comments comments={comments} />
       </TabPanel>
       <TabPanel value={value} index={4} dir={theme.direction}>
-        <Note note={note} />
+        <LogTimeline logs={logs} />
       </TabPanel>
     </Box>
   );
