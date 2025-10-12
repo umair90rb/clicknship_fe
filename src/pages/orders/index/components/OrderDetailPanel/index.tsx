@@ -28,7 +28,7 @@ export default function OrderDetailPanel({
   const { data, error, isError, isFetching } = useGetOrderQuery(
     row.getValue("id"),
     {
-      refetchOnMountOrArgChange: true,
+      refetchOnMountOrArgChange: false,
     }
   );
 
@@ -53,6 +53,7 @@ export default function OrderDetailPanel({
     comments,
     items,
     delivery,
+    shippingCharges,
     logs,
     payments,
     user,
@@ -96,8 +97,10 @@ export default function OrderDetailPanel({
           }}
         >
           <CustomerDetail
+            orderId={orderId as number}
             customer={customer as Customer}
             address={address as Address}
+            shippingCharges={shippingCharges as number}
           />
         </Grid>
 
@@ -112,6 +115,7 @@ export default function OrderDetailPanel({
           }}
         >
           <Tabs
+            orderId={orderId as number}
             items={items as Item[]}
             payments={payments as Payment[]}
             logs={logs as Log[]}
@@ -132,7 +136,7 @@ export default function OrderDetailPanel({
               subtotal={0}
               tax={totalTax || 0}
               shipping={0}
-              discount={totalDiscount}
+              discount={totalDiscount || 0}
               total={totalAmount || 0}
             />
             <Grid
@@ -143,7 +147,6 @@ export default function OrderDetailPanel({
                 gap: 0.5,
               }}
             >
-              <PrimaryButton label="Add Shipping" onClick={() => {}} />
               <PrimaryButton
                 color="info"
                 label="Payment Pending"

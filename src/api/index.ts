@@ -13,13 +13,12 @@ const baseQuery = fetchBaseQuery({
       }
       return false;
     }
-    return true;
+    return response.status >= 200 && response.status < 300;
   },
   baseUrl: `http://${window.location.hostname}/api/v1/`,
   prepareHeaders: (headers) => {
     const token = localStorage.getItem(AUTH_TOKEN_KEY);
 
-    console.log(token, "here is the token");
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }
@@ -30,7 +29,7 @@ const baseQuery = fetchBaseQuery({
 
 export const api = createApi({
   baseQuery,
-  tagTypes: ["Orders"],
+  tagTypes: ["orders", "order"],
   endpoints: (build) => ({
     health: build.query({
       query: () => "health",

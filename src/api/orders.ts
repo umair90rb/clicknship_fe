@@ -1,9 +1,8 @@
 import { api } from "@/api/index";
-import type { OrderListApiResponse } from "@/types/order";
+import type { OrderListApiResponse } from "@/types/orders/list";
 import type { GetOrderApiResponse } from "@/types/orders/detail";
 
 export const ordersApi = api.injectEndpoints({
-  // tagTypes: ["Order"],
   endpoints: (build) => ({
     listOrders: build.query<OrderListApiResponse, {}>({
       query: (body) => ({
@@ -11,14 +10,13 @@ export const ordersApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
-      providesTags: (result, error, id) => [{ type: "Orders" }],
     }),
     getOrder: build.query<GetOrderApiResponse, string | number>({
       query: (id) => ({
         url: `orders/${id}`,
         method: "GET",
       }),
-      providesTags: (result, error, id) => [{ type: "Orders", id }],
+      providesTags: (result, error, id) => [{ type: "order", id }],
     }),
     createOrder: build.mutation({
       query: (body: any) => ({
@@ -27,6 +25,33 @@ export const ordersApi = api.injectEndpoints({
         method: "POST",
       }),
     }),
+    updateOrder: build.mutation({
+      query: ({ id, body }) => ({
+        url: `orders/${id}`,
+        body,
+        method: "PATCH",
+      }),
+    }),
+
+    postOrderComment: build.mutation({
+      query: ({ orderId, data }) => ({
+        url: `orders/${orderId}/comment`,
+        body: data,
+        method: "POST",
+      }),
+      onQueryStarted({ orderId }, { dispatch, queryFulfilled }) {
+        queryFulfilled
+          .then((response) => {
+            response.meta?.response?.ok &&
+              dispatch(
+                ordersApi.util.updateQueryData("getOrder", orderId, (draft) => {
+                  draft.data.comments.push(response?.data);
+                })
+              );
+          })
+          .catch();
+      },
+    }),
   }),
 });
 
@@ -34,4 +59,6 @@ export const {
   useLazyListOrdersQuery,
   useGetOrderQuery,
   useCreateOrderMutation,
+  useUpdateOrderMutation,
+  usePostOrderCommentMutation,
 } = ordersApi;

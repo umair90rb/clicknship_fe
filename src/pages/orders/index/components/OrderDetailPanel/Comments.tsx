@@ -2,15 +2,40 @@
 import type { Comment } from "@/types/orders/detail";
 import dayjs from "dayjs";
 import { SHORT_DATE_FORMAT } from "@/constants/keys";
-import { CustomTimeline } from "@/components/CustomTimeline";
-import { Box } from "@mui/material";
+import { Box, Divider } from "@mui/material";
 import { FormInputText } from "@/components/form/FormInput";
 import { useForm } from "react-hook-form";
 import CustomIconButton from "@/components/IconButton";
 import SendIcon from "@mui/icons-material/Send";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { usePostOrderCommentMutation } from "@/api/orders";
+import { getErrorMessage } from "@/utils";
 
-export default function Comments({ comments }: { comments: Comment[] }) {
-  const { control } = useForm();
+const schema = Yup.object({
+  comment: Yup.string().required("Comment is required"),
+});
+
+export default function Comments({
+  orderId,
+  comments,
+}: {
+  orderId: number;
+  comments: Comment[];
+}) {
+  const { control, setValue, setError, handleSubmit } = useForm({
+    resolver: yupResolver(schema),
+  });
+  const [postComment, { isLoading }] = usePostOrderCommentMutation();
+
+  const onSubmit = async (data: { comment: string }) =>
+    postComment({ orderId, data })
+      .unwrap()
+      .then(() => setValue("comment", ""))
+      .catch((error) =>
+        setError("comment", { message: getErrorMessage(error) })
+      );
+
   return (
     <Box
       sx={{
@@ -21,16 +46,18 @@ export default function Comments({ comments }: { comments: Comment[] }) {
         justifyContent: "space-between",
       }}
     >
-      <CustomTimeline
-        items={comments}
-        getDate={(comments) =>
-          comments.createdAt
-            ? dayjs(comments.createdAt).format(SHORT_DATE_FORMAT)
-            : "-"
-        }
-        getContent={(comment) => comment.comment}
-        getDotText={(comment) => comment?.user?.name?.slice(0, 2)}
-      />
+      <div>
+        {comments?.map((c) => (
+          <div key={c?.id}>
+            <strong>
+              {c?.user?.name || "You"}(
+              {dayjs(c?.createdAt).format(SHORT_DATE_FORMAT)})
+            </strong>
+            : {c?.comment}
+            <Divider />
+          </div>
+        ))}
+      </div>
       <Box
         sx={{
           display: "flex",
@@ -46,7 +73,12 @@ export default function Comments({ comments }: { comments: Comment[] }) {
             placeholer="Comment"
           />
         </Box>
-        <CustomIconButton Icon={SendIcon} size="large" onClick={() => {}} />
+        <CustomIconButton
+          loading={isLoading}
+          Icon={SendIcon}
+          size="large"
+          onClick={handleSubmit(onSubmit)}
+        />
       </Box>
     </Box>
   );

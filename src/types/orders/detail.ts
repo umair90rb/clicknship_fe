@@ -9,8 +9,9 @@ export interface Order {
   remarks: string;
   tags: string[];
   totalAmount: number;
-  totalDiscount: any;
+  totalDiscount: number | null;
   totalTax: number;
+  shippingCharges: number;
   assignedAt: string;
   createdAt: string;
   courerService: CourierService;
@@ -54,7 +55,7 @@ export interface Item {
 export interface Address {
   id: number;
   address: string;
-  note: string;
+  note?: string | undefined;
   city: string;
   phone?: string | undefined;
   zip: number;

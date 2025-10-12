@@ -33,7 +33,11 @@ export default function useLoginForm() {
   const onSubmit = form.handleSubmit(async (credentials: ILoginForm) => {
     return fetchLogin(credentials)
       .unwrap()
-      .then((response) => login(response.access_token))
+      .then((response) => {
+        if ("access_token" in response) {
+          login(response.access_token);
+        }
+      })
       .catch((err) => {
         let message = "Something went wrong! Please try again later.";
         if (err.status === "FETCH_ERROR") {

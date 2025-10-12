@@ -132,7 +132,6 @@ export default function Orders() {
 
     const handler = setTimeout(() => {
       const filters = buildFilters(columnFilters);
-      console.log(filters);
       fetchOrdersList({
         skip: pagination.pageIndex * pagination.pageSize,
         take: pagination.pageSize,

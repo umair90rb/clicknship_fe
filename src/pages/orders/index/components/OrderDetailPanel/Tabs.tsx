@@ -39,6 +39,7 @@ function a11yProps(index: number) {
 }
 
 interface OrderTabsProps {
+  orderId: number;
   items: Item[];
   payments: Payment[];
   logs: Log[];
@@ -48,6 +49,7 @@ interface OrderTabsProps {
 }
 
 export default function OrderTabs({
+  orderId,
   items,
   payments,
   logs,
@@ -90,7 +92,7 @@ export default function OrderTabs({
         <NoteAndTags note={note} tags={tags} />
       </TabPanel>
       <TabPanel value={value} index={3} dir={theme.direction}>
-        <Comments comments={comments} />
+        <Comments orderId={orderId} comments={comments} />
       </TabPanel>
       <TabPanel value={value} index={4} dir={theme.direction}>
         <LogTimeline logs={logs} />

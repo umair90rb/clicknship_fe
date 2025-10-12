@@ -15,6 +15,7 @@ interface PrimaryButtonProps {
     | "info"
     | "warning";
   fullWidth?: boolean;
+  loading?: boolean;
 }
 
 export default function PrimaryButton({
@@ -25,15 +26,17 @@ export default function PrimaryButton({
   variant = "contained",
   color = "primary",
   fullWidth = true,
+  loading = false,
 }: PrimaryButtonProps) {
   return (
     <Button
-      disabled={disabled}
+      disabled={disabled || loading}
       type={type}
       fullWidth={fullWidth}
       variant={variant}
       color={color}
       onClick={onClick}
+      loading={loading}
     >
       {label}
     </Button>
