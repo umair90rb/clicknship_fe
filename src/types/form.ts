@@ -4,4 +4,5 @@ export interface FormInputProps {
   label?: string;
   placeholer?: string;
   setValue?: any;
+  disabled?: boolean;
 }

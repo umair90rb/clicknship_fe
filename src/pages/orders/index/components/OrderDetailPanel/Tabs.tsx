@@ -6,7 +6,7 @@ import ItemsTable from "./ItemsTable";
 import PaymentsTable from "./PaymentsTable";
 import LogTimeline from "./LogTimeline";
 import Comments from "./Comments";
-import NoteAndTags from "./NoteAndTags";
+import RemarksAndTags from "./RemarksAndTags";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -44,7 +44,7 @@ interface OrderTabsProps {
   payments: Payment[];
   logs: Log[];
   comments: Comment[];
-  note: string;
+  remarks: string;
   tags: string[];
 }
 
@@ -54,7 +54,7 @@ export default function OrderTabs({
   payments,
   logs,
   comments,
-  note,
+  remarks,
   tags,
 }: OrderTabsProps) {
   const theme = useTheme();
@@ -77,7 +77,7 @@ export default function OrderTabs({
         >
           <Tab label="Items" {...a11yProps(0)} />
           <Tab label="Payments" {...a11yProps(1)} />
-          <Tab label="Note & Tags" {...a11yProps(2)} />
+          <Tab label="Tags & Remarks" {...a11yProps(2)} />
           <Tab label="Comments" {...a11yProps(3)} />
           <Tab label="Order Logs" {...a11yProps(4)} />
         </Tabs>
@@ -89,7 +89,7 @@ export default function OrderTabs({
         <PaymentsTable orderId={orderId} payments={payments as Payment[]} />
       </TabPanel>
       <TabPanel value={value} index={2} dir={theme.direction}>
-        <NoteAndTags orderId={orderId} note={note} tags={tags} />
+        <RemarksAndTags orderId={orderId} remarks={remarks} tags={tags} />
       </TabPanel>
       <TabPanel value={value} index={3} dir={theme.direction}>
         <Comments orderId={orderId} comments={comments} />

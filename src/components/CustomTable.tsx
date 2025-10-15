@@ -30,12 +30,14 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 type CustomTableProps<T> = {
+  rowIdKey: string;
   columns: Column<T>[];
   rows: T[];
   size?: "small" | "medium";
 };
 
 export default function CustomTable<T extends { id: string | number }>({
+  rowIdKey,
   columns,
   rows,
   size = "small",
@@ -50,7 +52,8 @@ export default function CustomTable<T extends { id: string | number }>({
           <TableRow>
             {columns.map((col, index) => (
               <StyledTableCell
-                key={col?.id?.toString() || index}
+                // key={col?.id?.toString() || index}
+                key={`col-${index}`}
                 align={col.align ?? "left"}
                 sx={{ width: col.width }}
               >
@@ -71,7 +74,9 @@ export default function CustomTable<T extends { id: string | number }>({
             <TableRow key={row.id}>
               {columns.map((col) => (
                 <TableCell
-                  key={col?.id?.toString() || index}
+                  // key={col?.id?.toString() || index}
+                  // key={`row-${rowIdKey ? row[rowIdKey] : index}`}
+                  key={Math.random()}
                   align={col.align ?? "left"}
                   sx={{ width: col.width }}
                 >

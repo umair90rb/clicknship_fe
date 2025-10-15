@@ -12,6 +12,8 @@ export const FormInputText = ({
   label,
   type = "text",
   placeholer,
+  disabled = false,
+  setValue,
 }: FormInputPropsWithType) => {
   return (
     <Controller
@@ -19,15 +21,19 @@ export const FormInputText = ({
       control={control}
       render={({ field: { onChange, value }, fieldState: { error } }) => (
         <TextField
+          disabled={disabled}
           helperText={error ? error.message : null}
           size="small"
           error={!!error}
-          onChange={onChange}
+          onChange={setValue ? (e) => setValue(e) : onChange}
           value={value}
           fullWidth
           label={label}
           type={type}
           placeholder={placeholer}
+          slotProps={{
+            inputLabel: { shrink: value || value === 0 },
+          }}
           variant="outlined"
           sx={{
             "& input[type=number]": {

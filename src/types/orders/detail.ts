@@ -47,8 +47,8 @@ export interface Item {
   quantity: number;
   discount: number;
   sku: string;
-  productId: any;
-  variantId: any;
+  productId: string | number;
+  variantId: string | number;
   orderId: number;
 }
 

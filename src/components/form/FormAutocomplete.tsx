@@ -22,6 +22,7 @@ export default function FormAutocomplete({
   options,
   multiple = false,
   disableCloseOnSelect = multiple,
+  ...props
 }: FormAutoselectProps) {
   return (
     <Controller
@@ -67,6 +68,7 @@ export default function FormAutocomplete({
                 {...params}
               />
             )}
+            {...props}
           />
         </Box>
       )}

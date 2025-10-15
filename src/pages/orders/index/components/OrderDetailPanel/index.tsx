@@ -120,7 +120,7 @@ export default function OrderDetailPanel({
             payments={payments as Payment[]}
             logs={logs as Log[]}
             comments={comments as Comment[]}
-            note={remarks as string}
+            remarks={remarks as string}
             tags={tags as string[]}
           />
 
