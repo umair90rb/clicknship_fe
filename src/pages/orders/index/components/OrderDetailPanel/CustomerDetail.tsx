@@ -37,7 +37,7 @@ export default function CustomerDetail({
   address: Address;
   shippingCharges: number;
 }) {
-  const [updateOrder, { isLoading, error }] = useUpdateOrderMutation();
+  const [updateOrder, { isLoading }] = useUpdateOrderMutation();
 
   const {
     control,
@@ -54,8 +54,8 @@ export default function CustomerDetail({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = async (data: any) => {
-    updateOrder({ id: orderId, body: data })
+  const onSubmit = async ({ shippingCharges, ...address }: any) => {
+    updateOrder({ id: orderId, body: { address, shippingCharges } })
       .unwrap()
       .then(() => {})
       .catch((error) => setError("root", { message: getErrorMessage(error) }));
@@ -95,6 +95,7 @@ export default function CustomerDetail({
       {/* <Box mt={2} />
       <Text>Country: {address?.country}</Text> */}
       <FormRootError errors={errors} />
+      <Box mt={2} />
       <PrimaryButton
         loading={isLoading}
         label="Update Address Info"

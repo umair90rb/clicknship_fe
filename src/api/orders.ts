@@ -31,6 +31,18 @@ export const ordersApi = api.injectEndpoints({
         body,
         method: "PATCH",
       }),
+      onQueryStarted({ id }, { dispatch, queryFulfilled }) {
+        queryFulfilled
+          .then((response) => {
+            response.meta?.response?.ok &&
+              dispatch(
+                ordersApi.util.updateQueryData("getOrder", id, (draft) => {
+                  Object.assign(draft.data, response.data);
+                })
+              );
+          })
+          .catch();
+      },
     }),
 
     postOrderComment: build.mutation({
@@ -52,6 +64,46 @@ export const ordersApi = api.injectEndpoints({
           .catch();
       },
     }),
+
+    postOrderItem: build.mutation({
+      query: ({ orderId, data }) => ({
+        url: `orders/${orderId}/item`,
+        body: data,
+        method: "POST",
+      }),
+      onQueryStarted({ orderId }, { dispatch, queryFulfilled }) {
+        queryFulfilled
+          .then((response) => {
+            response.meta?.response?.ok &&
+              dispatch(
+                ordersApi.util.updateQueryData("getOrder", orderId, (draft) => {
+                  draft.data.items.push(response?.data);
+                })
+              );
+          })
+          .catch();
+      },
+    }),
+
+    postOrderPayment: build.mutation({
+      query: ({ orderId, data }) => ({
+        url: `orders/${orderId}/payment`,
+        body: data,
+        method: "POST",
+      }),
+      onQueryStarted({ orderId }, { dispatch, queryFulfilled }) {
+        queryFulfilled
+          .then((response) => {
+            response.meta?.response?.ok &&
+              dispatch(
+                ordersApi.util.updateQueryData("getOrder", orderId, (draft) => {
+                  draft.data.payments.push(response?.data);
+                })
+              );
+          })
+          .catch();
+      },
+    }),
   }),
 });
 
@@ -61,4 +113,6 @@ export const {
   useCreateOrderMutation,
   useUpdateOrderMutation,
   usePostOrderCommentMutation,
+  usePostOrderItemMutation,
+  usePostOrderPaymentMutation,
 } = ordersApi;

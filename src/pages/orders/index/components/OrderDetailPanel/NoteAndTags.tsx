@@ -5,9 +5,11 @@ import { Box } from "@mui/material";
 import { useForm } from "react-hook-form";
 
 export default function NoteAndTags({
+  orderId,
   note,
   tags,
 }: {
+  orderId: number;
   note: string;
   tags: string[];
 }) {

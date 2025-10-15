@@ -24,7 +24,13 @@ const columns = [
   },
 ];
 
-export default function ItemsTable({ items }: { items: Item[] }) {
+export default function ItemsTable({
+  orderId,
+  items,
+}: {
+  orderId: number;
+  items: Item[];
+}) {
   const { control } = useForm();
   return (
     <Box

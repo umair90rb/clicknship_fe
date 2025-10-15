@@ -83,13 +83,13 @@ export default function OrderTabs({
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0} dir={theme.direction}>
-        <ItemsTable items={items as Item[]} />
+        <ItemsTable orderId={orderId} items={items as Item[]} />
       </TabPanel>
       <TabPanel value={value} index={1} dir={theme.direction}>
-        <PaymentsTable payments={payments as Payment[]} />
+        <PaymentsTable orderId={orderId} payments={payments as Payment[]} />
       </TabPanel>
       <TabPanel value={value} index={2} dir={theme.direction}>
-        <NoteAndTags note={note} tags={tags} />
+        <NoteAndTags orderId={orderId} note={note} tags={tags} />
       </TabPanel>
       <TabPanel value={value} index={3} dir={theme.direction}>
         <Comments orderId={orderId} comments={comments} />

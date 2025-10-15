@@ -14,7 +14,13 @@ const columns = [
   { id: "note", label: "Note" },
 ];
 
-export default function PaymentsTable({ payments }: { payments: Payment[] }) {
+export default function PaymentsTable({
+  orderId,
+  payments,
+}: {
+  orderId: number;
+  payments: Payment[];
+}) {
   const { control } = useForm();
   return (
     <Box

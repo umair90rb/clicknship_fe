@@ -10,7 +10,7 @@ export default function FormRootError({ errors }: FormRootErrorProps) {
   const { root } = errors || {};
   return (
     root && (
-      <Box my={1}>
+      <Box mt={1}>
         {" "}
         <Text color="error">{root?.message}</Text>
       </Box>
