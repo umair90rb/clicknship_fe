@@ -16,12 +16,12 @@ import { useEffect } from "react";
 const schema = Yup.object({
   name: Yup.string(),
   sku: Yup.string(),
-  productId: Yup.string(),
-  variantId: Yup.string(),
+  productId: Yup.string().nullable(),
+  variantId: Yup.string().nullable(),
   grams: Yup.number()
     .transform((v, ov) => (ov === "" ? null : v))
     .nullable()
-    .positive("Must be greater than 0"),
+    .min(0, "Must be greater than 0"),
   quantity: Yup.number()
     .transform((v, ov) => (ov === "" ? null : v))
     .nullable()
@@ -61,7 +61,7 @@ const columns = [
     label: "Total",
     width: 50,
     align: "right",
-    render: (row: Item) => row.unitPrice * row.quantity,
+    render: (row: Item) => row.unitPrice * row.quantity - row.discount,
   },
 ];
 
@@ -70,7 +70,7 @@ const items = [
     id: 1,
     name: "JOINT ON 50 ML",
     unitPrice: 2000,
-    grams: 0,
+    grams: 10,
     sku: "JNT-50",
     productId: null,
     variantId: null,
@@ -79,7 +79,7 @@ const items = [
     id: 2,
     name: "JOINT ON 20 ML",
     unitPrice: 1500,
-    grams: 0,
+    grams: 20,
     sku: "JNT-20",
     productId: null,
     variantId: null,
@@ -88,7 +88,7 @@ const items = [
     id: 3,
     name: "FLEX ON 20 ML",
     unitPrice: 2500,
-    grams: 0,
+    grams: 30,
     sku: "FLX-50",
     productId: null,
     variantId: null,
@@ -111,24 +111,14 @@ export default function ItemsTable({
 
   const {
     control,
+    reset,
     handleSubmit,
     setValue,
     watch,
     clearErrors,
+    setError,
     formState: { errors },
   } = useForm<TItemForm>({
-    // defaultValues: {
-    //   total: 0,
-    //   discount: 0,
-    //   id: undefined,
-    //   name: undefined,
-    //   unitPrice: undefined,
-    //   grams: undefined,
-    //   quantity: 1,
-    //   sku: undefined,
-    //   productId: undefined,
-    //   variantId: undefined,
-    // },
     resolver: yupResolver(schema),
   });
 
@@ -148,12 +138,11 @@ export default function ItemsTable({
     clearErrors(["total", "quantity"]);
   }, [discount, quantity, unitPrice]);
 
-  const onSubmit = async (data: TItemForm) => {
-    console.log(data, "body");
-    // posttItem({ id: orderId, body })
-    //   .unwrap()
-    //   .then(() => {})
-    //   .catch((error) => setError("root", { message: getErrorMessage(error) }));
+  const onSubmit = async (body: TItemForm) => {
+    posttItem({ orderId, body })
+      .unwrap()
+      .then(() => {})
+      .catch((error) => setError("root", { message: getErrorMessage(error) }));
   };
   return (
     <Box
@@ -181,7 +170,7 @@ export default function ItemsTable({
             name="name"
             options={items}
             control={control}
-            // isOptionEqualToValue={(option, value) => option.id === value.id}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
             getOptionLabel={(option) => option.name ?? ""}
             onChange={(e, value) => {
               clearErrors(["name"]);
@@ -223,6 +212,7 @@ export default function ItemsTable({
         <CustomIconButton
           Icon={AddBoxIcon}
           size="large"
+          loading={isLoading}
           onClick={handleSubmit(onSubmit)}
         />
       </Box>

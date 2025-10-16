@@ -1,5 +1,4 @@
 // components/LogTimeline.tsx
-import type { Comment } from "@/types/orders/detail";
 import dayjs from "dayjs";
 import { SHORT_DATE_FORMAT } from "@/constants/keys";
 import { Box, Divider } from "@mui/material";
@@ -9,20 +8,16 @@ import CustomIconButton from "@/components/IconButton";
 import SendIcon from "@mui/icons-material/Send";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { usePostOrderCommentMutation } from "@/api/orders";
+import { selectOrderById, usePostOrderCommentMutation } from "@/api/orders";
 import { getErrorMessage } from "@/utils";
+import { useSelector } from "react-redux";
 
 const schema = Yup.object({
   comment: Yup.string().required("Comment is required"),
 });
 
-export default function Comments({
-  orderId,
-  comments,
-}: {
-  orderId: number;
-  comments: Comment[];
-}) {
+export default function Comments({ orderId }: { orderId: number }) {
+  const order = useSelector(selectOrderById(orderId));
   const { control, setValue, setError, handleSubmit } = useForm({
     resolver: yupResolver(schema),
   });
@@ -47,7 +42,7 @@ export default function Comments({
       }}
     >
       <div>
-        {comments?.map((c) => (
+        {order?.comments?.map((c) => (
           <div key={c?.id}>
             <strong>
               {c?.user?.name || "You"}(

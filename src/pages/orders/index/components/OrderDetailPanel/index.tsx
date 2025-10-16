@@ -18,6 +18,15 @@ import Detail from "./Detail";
 import CustomerDetail from "./CustomerDetail";
 import PrimaryButton from "@/components/Button";
 
+const statuses: { status: string; color: string }[] = [
+  { status: "Payment Pending", color: "info" },
+  { status: "Confirm", color: "success" },
+  { status: "No Pick", color: "warning" },
+  { status: "Cancel", color: "error" },
+  { status: "Duplicate", color: "inherit" },
+  { status: "Fake Order", color: "secondary" },
+];
+
 export default function OrderDetailPanel({
   row,
 }: {
@@ -74,17 +83,7 @@ export default function OrderDetailPanel({
           border: "0px solid",
         }}
       >
-        <Detail
-          orderId={orderId as number}
-          orderNumber={orderNumber}
-          channel={channel?.name}
-          brand={brand?.name}
-          createdAt={createdAt}
-          user={user}
-          assignedAt={assignedAt}
-          status={status}
-          tags={tags}
-        />
+        <Detail orderId={orderId as number} />
       </Grid>
       <Grid container spacing={1} border="0px solid">
         {/* Customer Detail */}
@@ -96,12 +95,7 @@ export default function OrderDetailPanel({
             border: "0px solid",
           }}
         >
-          <CustomerDetail
-            orderId={orderId as number}
-            customer={customer as Customer}
-            address={address as Address}
-            shippingCharges={shippingCharges as number}
-          />
+          <CustomerDetail orderId={orderId as number} />
         </Grid>
 
         {/* Actions */}
@@ -133,6 +127,7 @@ export default function OrderDetailPanel({
             }}
           >
             <Summary
+              orderId={orderId}
               subtotal={0}
               tax={totalTax || 0}
               shipping={0}
@@ -147,22 +142,13 @@ export default function OrderDetailPanel({
                 gap: 0.5,
               }}
             >
-              <PrimaryButton
-                color="info"
-                label="Payment Pending"
-                onClick={() => {}}
-              />
-              <PrimaryButton
-                color="success"
-                label="Confirm"
-                onClick={() => {}}
-              />
-              <PrimaryButton
-                color="warning"
-                label=" No Pick"
-                onClick={() => {}}
-              />
-              <PrimaryButton color="error" label="Cancel" onClick={() => {}} />
+              {statuses.map(({ status, color }) => (
+                <PrimaryButton
+                  color={color}
+                  label={status}
+                  onClick={() => {}}
+                />
+              ))}
             </Grid>
           </Grid>
         </Grid>

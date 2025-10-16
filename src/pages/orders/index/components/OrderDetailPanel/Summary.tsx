@@ -1,19 +1,10 @@
+import { selectOrderById } from "@/api/orders";
 import Text from "@/components/Text";
 import { Grid } from "@mui/material";
+import { useSelector } from "react-redux";
 
-export default function Summary({
-  subtotal,
-  tax,
-  shipping,
-  discount,
-  total,
-}: {
-  subtotal: number;
-  tax: number;
-  shipping: number;
-  discount: number;
-  total: number;
-}) {
+export default function Summary({ orderId }: { orderId: number }) {
+  const order = useSelector(selectOrderById(orderId));
   return (
     <Grid
       sx={{
@@ -27,27 +18,27 @@ export default function Summary({
     >
       <Grid direction={"column"}>
         <Text bold>Subtotal:</Text>
-        <Text bold>{subtotal?.toFixed(2)}</Text>
+        <Text bold>{order?.totalAmount?.toFixed(2)}</Text>
       </Grid>
       <Grid direction={"column"}>
         <Text bold>Tax:</Text>
-        <Text bold>{tax?.toFixed(2)}</Text>
+        <Text bold>{order?.totalTax?.toFixed(2)}</Text>
       </Grid>
       <Grid direction={"column"}>
         <Text bold>Discount:</Text>
-        <Text bold>{discount?.toFixed(2)}</Text>
+        <Text bold>{order?.totalDiscount?.toFixed(2)}</Text>
       </Grid>
       <Grid direction={"column"}>
         <Text bold>Total:</Text>
-        <Text bold>{total?.toFixed(2)}</Text>
+        <Text bold>{order?.totalAmount?.toFixed(2)}</Text>
       </Grid>
       <Grid direction={"column"}>
         <Text bold>Shipping:</Text>
-        <Text bold>{shipping?.toFixed(2)}</Text>
+        <Text bold>{order?.shippingCharges?.toFixed(2)}</Text>
       </Grid>
       <Grid direction={"column"}>
         <Text bold>G.Total:</Text>
-        <Text bold>{total?.toFixed(2)}</Text>
+        <Text bold>{order?.totalAmount?.toFixed(2)}</Text>
       </Grid>
     </Grid>
   );

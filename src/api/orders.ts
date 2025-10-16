@@ -1,6 +1,13 @@
 import { api } from "@/api/index";
 import type { OrderListApiResponse } from "@/types/orders/list";
 import type { GetOrderApiResponse } from "@/types/orders/detail";
+import { createSelector } from "@reduxjs/toolkit";
+
+export const selectOrderById = (id: number) =>
+  createSelector(
+    ordersApi.endpoints.getOrder.select(id),
+    (result) => result.data?.data
+  );
 
 export const ordersApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -66,9 +73,9 @@ export const ordersApi = api.injectEndpoints({
     }),
 
     postOrderItem: build.mutation({
-      query: ({ orderId, data }) => ({
+      query: ({ orderId, body }) => ({
         url: `orders/${orderId}/item`,
-        body: data,
+        body,
         method: "POST",
       }),
       onQueryStarted({ orderId }, { dispatch, queryFulfilled }) {
@@ -86,9 +93,9 @@ export const ordersApi = api.injectEndpoints({
     }),
 
     postOrderPayment: build.mutation({
-      query: ({ orderId, data }) => ({
+      query: ({ orderId, body }) => ({
         url: `orders/${orderId}/payment`,
-        body: data,
+        body,
         method: "POST",
       }),
       onQueryStarted({ orderId }, { dispatch, queryFulfilled }) {

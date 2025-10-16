@@ -10,7 +10,6 @@ export default function LogTimeline({ logs }: { logs: Log[] }) {
     <Box sx={{ minHeight: 250 }}>
       <CustomTimeline
         items={logs}
-        reverse
         getDate={(log) =>
           log.createdAt ? dayjs(log.createdAt).format(SHORT_DATE_FORMAT) : "-"
         }

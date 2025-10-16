@@ -4,7 +4,20 @@ import CustomIconButton from "@/components/IconButton";
 import type { Payment } from "@/types/orders/detail";
 import { Box } from "@mui/material";
 import { useForm } from "react-hook-form";
+import * as Yup from "yup";
+import { getErrorMessage } from "@/utils";
+import { yupResolver } from "@hookform/resolvers/yup";
+import FormRootError from "@/components/form/FormRootError";
 import AddBoxIcon from "@mui/icons-material/AddBox";
+import { usePostOrderPaymentMutation } from "@/api/orders";
+
+const schema = Yup.object({
+  tId: Yup.string(),
+  bank: Yup.string(),
+  amount: Yup.number().required().min(0, "Must be greater than 0"),
+  type: Yup.string().nullable().required("Please enter payment type"),
+  note: Yup.string().nullable(),
+});
 
 const columns = [
   { id: "tId", label: "Tid#" },
@@ -14,6 +27,8 @@ const columns = [
   { id: "note", label: "Note" },
 ];
 
+type TPaymentForm = Payment;
+
 export default function PaymentsTable({
   orderId,
   payments,
@@ -21,7 +36,23 @@ export default function PaymentsTable({
   orderId: number;
   payments: Payment[];
 }) {
-  const { control } = useForm();
+  const {
+    control,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<TPaymentForm>({
+    resolver: yupResolver(schema),
+  });
+
+  const [postPayment, { isLoading }] = usePostOrderPaymentMutation();
+
+  const onSubmit = async (body: TPaymentForm) => {
+    postPayment({ orderId, body })
+      .unwrap()
+      .then(() => {})
+      .catch((error) => setError("root", { message: getErrorMessage(error) }));
+  };
   return (
     <Box
       sx={{
@@ -32,7 +63,7 @@ export default function PaymentsTable({
         justifyContent: "space-between",
       }}
     >
-      <CustomTable columns={columns} rows={payments} />
+      <CustomTable rowIdKey="id" columns={columns} rows={payments} />
       <Box
         sx={{
           display: "flex",
@@ -41,7 +72,7 @@ export default function PaymentsTable({
           gap: 1,
         }}
       >
-        <FormInputText name="tid" control={control} placeholer="Tid" />
+        <FormInputText name="tId" control={control} placeholer="Tid" />
         <FormInputText name="bank" control={control} placeholer="Bank" />
         <FormInputText
           name="amount"
@@ -53,7 +84,13 @@ export default function PaymentsTable({
         <Box sx={{ flexBasis: "300%" }}>
           <FormInputText name="note" control={control} placeholer="Note" />
         </Box>
-        <CustomIconButton Icon={AddBoxIcon} size="large" onClick={() => {}} />
+        <FormRootError errors={errors} />
+        <CustomIconButton
+          Icon={AddBoxIcon}
+          size="large"
+          loading={isLoading}
+          onClick={handleSubmit(onSubmit)}
+        />
       </Box>
     </Box>
   );
