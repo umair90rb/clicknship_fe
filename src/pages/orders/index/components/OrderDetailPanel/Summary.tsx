@@ -18,7 +18,7 @@ export default function Summary({ orderId }: { orderId: number }) {
     >
       <Grid direction={"column"}>
         <Text bold>Subtotal:</Text>
-        <Text bold>{order?.totalAmount?.toFixed(2)}</Text>
+        {/* <Text bold>{order?.items?.reduce((pv, cv) => 0, 0)?.toFixed(2)}</Text> */}
       </Grid>
       <Grid direction={"column"}>
         <Text bold>Tax:</Text>
