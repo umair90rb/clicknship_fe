@@ -1,7 +1,6 @@
 // components/LogTimeline.tsx
 import dayjs from "dayjs";
 import { SHORT_DATE_FORMAT } from "@/constants/keys";
-import { CustomTimeline } from "@/components/CustomTimeline";
 import { Box, Divider } from "@mui/material";
 import { selectOrderById } from "@/api/orders";
 import { useSelector } from "react-redux";

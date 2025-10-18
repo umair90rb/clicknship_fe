@@ -1,6 +1,6 @@
 import { api } from "@/api/index";
 import type { OrderListApiResponse } from "@/types/orders/list";
-import type { GetOrderApiResponse } from "@/types/orders/detail";
+import type { GetOrderApiResponse, Item } from "@/types/orders/detail";
 import { createSelector } from "@reduxjs/toolkit";
 
 export const selectOrderById = (id: number) =>
@@ -70,7 +70,7 @@ export const ordersApi = api.injectEndpoints({
           .catch();
       },
     }),
-    postOrderComment: build.mutation({
+    createOrderComment: build.mutation({
       query: ({ orderId, data }) => ({
         url: `orders/${orderId}/comment`,
         body: data,
@@ -90,7 +90,7 @@ export const ordersApi = api.injectEndpoints({
       },
     }),
 
-    postOrderItem: build.mutation({
+    createOrderItem: build.mutation({
       query: ({ orderId, body }) => ({
         url: `orders/${orderId}/item`,
         body,
@@ -110,7 +110,31 @@ export const ordersApi = api.injectEndpoints({
       },
     }),
 
-    postOrderPayment: build.mutation({
+    updateOrderItem: build.mutation({
+      query: ({ orderId, itemId, body }) => ({
+        url: `orders/${orderId}/item/${itemId}`,
+        body,
+        method: "PATCH",
+      }),
+      onQueryStarted({ orderId, itemId }, { dispatch, queryFulfilled }) {
+        queryFulfilled
+          .then((response) => {
+            if (response.meta?.response?.ok) {
+              dispatch(
+                ordersApi.util.updateQueryData("getOrder", orderId, (draft) => {
+                  Object.assign(
+                    draft.data.items.find((item) => item.id === itemId) as Item,
+                    response?.data
+                  );
+                })
+              );
+            }
+          })
+          .catch();
+      },
+    }),
+
+    createOrderPayment: build.mutation({
       query: ({ orderId, body }) => ({
         url: `orders/${orderId}/payment`,
         body,
@@ -138,7 +162,8 @@ export const {
   useCreateOrderMutation,
   useUpdateOrderMutation,
   useUpdateOrderStatusMutation,
-  usePostOrderCommentMutation,
-  usePostOrderItemMutation,
-  usePostOrderPaymentMutation,
+  useCreateOrderCommentMutation,
+  useCreateOrderItemMutation,
+  useUpdateOrderItemMutation,
+  useCreateOrderPaymentMutation,
 } = ordersApi;

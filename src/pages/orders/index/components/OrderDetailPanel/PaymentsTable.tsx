@@ -9,7 +9,7 @@ import { getErrorMessage } from "@/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormRootError from "@/components/form/FormRootError";
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import { selectOrderById, usePostOrderPaymentMutation } from "@/api/orders";
+import { selectOrderById, useCreateOrderPaymentMutation } from "@/api/orders";
 import { useSelector } from "react-redux";
 
 const schema = Yup.object({
@@ -41,7 +41,7 @@ export default function PaymentsTable({ orderId }: { orderId: number }) {
   });
 
   const order = useSelector(selectOrderById(orderId));
-  const [postPayment, { isLoading }] = usePostOrderPaymentMutation();
+  const [postPayment, { isLoading }] = useCreateOrderPaymentMutation();
 
   const onSubmit = async (body: TPaymentForm) => {
     postPayment({ orderId, body })

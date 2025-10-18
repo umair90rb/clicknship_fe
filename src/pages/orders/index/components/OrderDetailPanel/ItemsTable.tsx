@@ -10,7 +10,7 @@ import * as Yup from "yup";
 import { getErrorMessage } from "@/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormRootError from "@/components/form/FormRootError";
-import { selectOrderById, usePostOrderItemMutation } from "@/api/orders";
+import { selectOrderById, useCreateOrderItemMutation } from "@/api/orders";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
@@ -102,7 +102,7 @@ type TItemForm = Omit<Item, "orderId" | "discount"> & {
 };
 
 export default function ItemsTable({ orderId }: { orderId: number }) {
-  const [posttItem, { isLoading }] = usePostOrderItemMutation();
+  const [posttItem, { isLoading }] = useCreateOrderItemMutation();
   const order = useSelector(selectOrderById(orderId));
 
   const {

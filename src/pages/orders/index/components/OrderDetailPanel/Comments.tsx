@@ -8,7 +8,7 @@ import CustomIconButton from "@/components/IconButton";
 import SendIcon from "@mui/icons-material/Send";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { selectOrderById, usePostOrderCommentMutation } from "@/api/orders";
+import { selectOrderById, useCreateOrderCommentMutation } from "@/api/orders";
 import { getErrorMessage } from "@/utils";
 import { useSelector } from "react-redux";
 
@@ -21,7 +21,7 @@ export default function Comments({ orderId }: { orderId: number }) {
   const { control, setValue, setError, handleSubmit } = useForm({
     resolver: yupResolver(schema),
   });
-  const [postComment, { isLoading }] = usePostOrderCommentMutation();
+  const [postComment, { isLoading }] = useCreateOrderCommentMutation();
 
   const onSubmit = async (data: { comment: string }) =>
     postComment({ orderId, data })
