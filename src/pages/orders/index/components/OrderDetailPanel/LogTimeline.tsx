@@ -1,15 +1,17 @@
 // components/LogTimeline.tsx
-import type { Log } from "@/types/orders/detail";
 import dayjs from "dayjs";
 import { SHORT_DATE_FORMAT } from "@/constants/keys";
 import { CustomTimeline } from "@/components/CustomTimeline";
 import { Box } from "@mui/material";
+import { selectOrderById } from "@/api/orders";
+import { useSelector } from "react-redux";
 
-export default function LogTimeline({ logs }: { logs: Log[] }) {
+export default function LogTimeline({ orderId }: { orderId: number }) {
+  const order = useSelector(selectOrderById(orderId));
   return (
     <Box sx={{ minHeight: 250 }}>
       <CustomTimeline
-        items={logs}
+        items={order?.logs || []}
         getDate={(log) =>
           log.createdAt ? dayjs(log.createdAt).format(SHORT_DATE_FORMAT) : "-"
         }

@@ -9,7 +9,8 @@ import { getErrorMessage } from "@/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormRootError from "@/components/form/FormRootError";
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import { usePostOrderPaymentMutation } from "@/api/orders";
+import { selectOrderById, usePostOrderPaymentMutation } from "@/api/orders";
+import { useSelector } from "react-redux";
 
 const schema = Yup.object({
   tId: Yup.string(),
@@ -29,13 +30,7 @@ const columns = [
 
 type TPaymentForm = Payment;
 
-export default function PaymentsTable({
-  orderId,
-  payments,
-}: {
-  orderId: number;
-  payments: Payment[];
-}) {
+export default function PaymentsTable({ orderId }: { orderId: number }) {
   const {
     control,
     handleSubmit,
@@ -45,6 +40,7 @@ export default function PaymentsTable({
     resolver: yupResolver(schema),
   });
 
+  const order = useSelector(selectOrderById(orderId));
   const [postPayment, { isLoading }] = usePostOrderPaymentMutation();
 
   const onSubmit = async (body: TPaymentForm) => {
@@ -63,7 +59,11 @@ export default function PaymentsTable({
         justifyContent: "space-between",
       }}
     >
-      <CustomTable rowIdKey="id" columns={columns} rows={payments} />
+      <CustomTable
+        rowIdKey="id"
+        columns={columns}
+        rows={order?.payments || []}
+      />
       <Box
         sx={{
           display: "flex",

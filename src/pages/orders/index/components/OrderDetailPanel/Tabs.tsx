@@ -40,23 +40,9 @@ function a11yProps(index: number) {
 
 interface OrderTabsProps {
   orderId: number;
-  items: Item[];
-  payments: Payment[];
-  logs: Log[];
-  comments: Comment[];
-  remarks: string;
-  tags: string[];
 }
 
-export default function OrderTabs({
-  orderId,
-  items,
-  payments,
-  logs,
-  comments,
-  remarks,
-  tags,
-}: OrderTabsProps) {
+export default function OrderTabs({ orderId }: OrderTabsProps) {
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
 
@@ -83,19 +69,19 @@ export default function OrderTabs({
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0} dir={theme.direction}>
-        <ItemsTable orderId={orderId} items={items as Item[]} />
+        <ItemsTable orderId={orderId} />
       </TabPanel>
       <TabPanel value={value} index={1} dir={theme.direction}>
-        <PaymentsTable orderId={orderId} payments={payments as Payment[]} />
+        <PaymentsTable orderId={orderId} />
       </TabPanel>
       <TabPanel value={value} index={2} dir={theme.direction}>
-        <RemarksAndTags orderId={orderId} remarks={remarks} tags={tags} />
+        <RemarksAndTags orderId={orderId} />
       </TabPanel>
       <TabPanel value={value} index={3} dir={theme.direction}>
-        <Comments orderId={orderId} comments={comments} />
+        <Comments orderId={orderId} />
       </TabPanel>
       <TabPanel value={value} index={4} dir={theme.direction}>
-        <LogTimeline logs={logs} />
+        <LogTimeline orderId={orderId} />
       </TabPanel>
     </Box>
   );

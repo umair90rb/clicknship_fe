@@ -33,41 +33,14 @@ export default function OrderDetailPanel({
   row: MRT_Row<Order>;
   table: MRT_TableInstance<Order>;
 }) {
+  const orderId: number = row.getValue("id");
   const { drawerWidth } = useDrawer();
-  const { data, error, isError, isFetching } = useGetOrderQuery(
-    row.getValue("id"),
-    {
-      refetchOnMountOrArgChange: false,
-    }
-  );
+  const { error, isError, isFetching } = useGetOrderQuery(orderId, {
+    refetchOnMountOrArgChange: false,
+  });
 
   if (isFetching) return <Text>Loading...</Text>;
   if (isError) return <Text>{JSON.stringify(error)}</Text>;
-
-  const {
-    id: orderId,
-    orderNumber,
-    createdAt,
-    status,
-    remarks,
-    tags,
-    totalAmount,
-    totalDiscount,
-    totalTax,
-    assignedAt,
-    courerService,
-    customer,
-    address,
-    channel,
-    comments,
-    items,
-    delivery,
-    shippingCharges,
-    logs,
-    payments,
-    user,
-    brand,
-  } = data?.data || {};
 
   return (
     <Box
@@ -108,15 +81,7 @@ export default function OrderDetailPanel({
             border: "0px solid",
           }}
         >
-          <Tabs
-            orderId={orderId as number}
-            items={items as Item[]}
-            payments={payments as Payment[]}
-            logs={logs as Log[]}
-            comments={comments as Comment[]}
-            remarks={remarks as string}
-            tags={tags as string[]}
-          />
+          <Tabs orderId={orderId as number} />
 
           <Grid
             sx={{
@@ -126,14 +91,7 @@ export default function OrderDetailPanel({
               gap: 1,
             }}
           >
-            <Summary
-              orderId={orderId}
-              subtotal={0}
-              tax={totalTax || 0}
-              shipping={0}
-              discount={totalDiscount || 0}
-              total={totalAmount || 0}
-            />
+            <Summary orderId={orderId as number} />
             <Grid
               sx={{
                 display: "flex",

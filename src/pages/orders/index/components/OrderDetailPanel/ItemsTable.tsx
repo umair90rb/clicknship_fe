@@ -10,8 +10,9 @@ import * as Yup from "yup";
 import { getErrorMessage } from "@/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormRootError from "@/components/form/FormRootError";
-import { usePostOrderItemMutation } from "@/api/orders";
+import { selectOrderById, usePostOrderItemMutation } from "@/api/orders";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const schema = Yup.object({
   name: Yup.string(),
@@ -100,14 +101,9 @@ type TItemForm = Omit<Item, "orderId" | "discount"> & {
   discount: number;
 };
 
-export default function ItemsTable({
-  orderId,
-  items: orderItems,
-}: {
-  orderId: number;
-  items: Item[];
-}) {
+export default function ItemsTable({ orderId }: { orderId: number }) {
   const [posttItem, { isLoading }] = usePostOrderItemMutation();
+  const order = useSelector(selectOrderById(orderId));
 
   const {
     control,
@@ -154,13 +150,14 @@ export default function ItemsTable({
         justifyContent: "space-between",
       }}
     >
-      <CustomTable rowIdKey="id" columns={columns} rows={orderItems} />
+      <CustomTable rowIdKey="id" columns={columns} rows={order?.items || []} />
       <Box
         sx={{
           display: "flex",
           flexDirection: "row",
           alignItems: "flex-end",
           gap: 1,
+          py: 1,
         }}
       >
         <Box sx={{ flexBasis: "300%" }}>

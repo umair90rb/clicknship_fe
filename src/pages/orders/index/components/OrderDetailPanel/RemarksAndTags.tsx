@@ -5,9 +5,10 @@ import { Box } from "@mui/material";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { getErrorMessage } from "@/utils";
-import { useUpdateOrderMutation } from "@/api/orders";
+import { selectOrderById, useUpdateOrderMutation } from "@/api/orders";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormRootError from "@/components/form/FormRootError";
+import { useSelector } from "react-redux";
 
 const schema = Yup.object({
   tags: Yup.array().of(Yup.string()).nullable(),
@@ -19,16 +20,9 @@ interface ITagsAndRemarks {
   remarks: string | null;
 }
 
-export default function RemarksAndTags({
-  orderId,
-  remarks,
-  tags,
-}: {
-  orderId: number;
-  remarks: string;
-  tags: string[];
-}) {
+export default function RemarksAndTags({ orderId }: { orderId: number }) {
   const [updateOrder, { isLoading }] = useUpdateOrderMutation();
+  const order = useSelector(selectOrderById(orderId));
 
   const {
     control,
@@ -37,8 +31,8 @@ export default function RemarksAndTags({
     formState: { errors },
   } = useForm<ITagsAndRemarks>({
     defaultValues: {
-      remarks,
-      tags,
+      remarks: order?.remarks,
+      tags: order?.tags,
     },
     resolver: yupResolver(schema),
   });
