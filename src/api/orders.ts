@@ -51,7 +51,25 @@ export const ordersApi = api.injectEndpoints({
           .catch();
       },
     }),
-
+    updateOrderStatus: build.mutation({
+      query: ({ orderId, status }) => ({
+        url: `orders/${orderId}/status`,
+        body: { status },
+        method: "PATCH",
+      }),
+      onQueryStarted({ orderId }, { dispatch, queryFulfilled }) {
+        queryFulfilled
+          .then((response) => {
+            response.meta?.response?.ok &&
+              dispatch(
+                ordersApi.util.updateQueryData("getOrder", orderId, (draft) => {
+                  Object.assign(draft.data, response.data);
+                })
+              );
+          })
+          .catch();
+      },
+    }),
     postOrderComment: build.mutation({
       query: ({ orderId, data }) => ({
         url: `orders/${orderId}/comment`,
@@ -119,6 +137,7 @@ export const {
   useGetOrderQuery,
   useCreateOrderMutation,
   useUpdateOrderMutation,
+  useUpdateOrderStatusMutation,
   usePostOrderCommentMutation,
   usePostOrderItemMutation,
   usePostOrderPaymentMutation,

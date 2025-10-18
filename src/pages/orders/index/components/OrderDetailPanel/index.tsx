@@ -1,14 +1,6 @@
-import { useGetOrderQuery } from "@/api/orders";
+import { useGetOrderQuery, useUpdateOrderStatusMutation } from "@/api/orders";
 import Text from "@/components/Text";
 import type { Order } from "@/types/orders/list";
-import type {
-  Address,
-  Customer,
-  Item,
-  Log,
-  Payment,
-  Comment,
-} from "@/types/orders/detail";
 import type { MRT_Row, MRT_TableInstance } from "material-react-table";
 import { Box, Grid } from "@mui/material";
 import useDrawer from "@/hooks/useDrawer";
@@ -17,15 +9,7 @@ import Summary from "./Summary";
 import Detail from "./Detail";
 import CustomerDetail from "./CustomerDetail";
 import PrimaryButton from "@/components/Button";
-
-const statuses: { status: string; color: string }[] = [
-  { status: "Payment Pending", color: "info" },
-  { status: "Confirm", color: "success" },
-  { status: "No Pick", color: "warning" },
-  { status: "Cancel", color: "error" },
-  { status: "Duplicate", color: "inherit" },
-  { status: "Fake Order", color: "secondary" },
-];
+import { orderStatuses } from "@/constants/order";
 
 export default function OrderDetailPanel({
   row,
@@ -38,6 +22,7 @@ export default function OrderDetailPanel({
   const { error, isError, isFetching } = useGetOrderQuery(orderId, {
     refetchOnMountOrArgChange: false,
   });
+  const [updateOrderStatus, { isLoading }] = useUpdateOrderStatusMutation();
 
   if (isFetching) return <Text>Loading...</Text>;
   if (isError) return <Text>{JSON.stringify(error)}</Text>;
@@ -100,11 +85,14 @@ export default function OrderDetailPanel({
                 gap: 0.5,
               }}
             >
-              {statuses.map(({ status, color }) => (
+              {orderStatuses.map(({ label, color, value }) => (
                 <PrimaryButton
+                  disabled={isLoading}
                   color={color}
-                  label={status}
-                  onClick={() => {}}
+                  label={label}
+                  onClick={() =>
+                    updateOrderStatus({ orderId, status: value }).unwrap()
+                  }
                 />
               ))}
             </Grid>

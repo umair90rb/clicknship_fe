@@ -1,6 +1,6 @@
 import { selectOrderById } from "@/api/orders";
 import Text from "@/components/Text";
-import type { Item } from "@/types/orders/detail";
+import type { Item, Payment } from "@/types/orders/detail";
 import { Grid } from "@mui/material";
 import { useSelector } from "react-redux";
 
@@ -18,12 +18,16 @@ const itemsTotalAndDiscount = (items: Item[] = []): [number, number] =>
     [0, 0]
   );
 
+const totalPayments = (payments: Payment[] = []): number =>
+  payments.reduce((pv, cv) => pv + cv.amount, 0);
+
 export default function Summary({ orderId }: { orderId: number }) {
   const order = useSelector(selectOrderById(orderId));
 
   const [total, discount] = itemsTotalAndDiscount(order?.items);
   const tax = toFixed(order?.totalTax);
   const shipping = toFixed(order?.shippingCharges);
+  const payments = totalPayments(order?.payments);
 
   return (
     <Grid
@@ -52,8 +56,12 @@ export default function Summary({ orderId }: { orderId: number }) {
         <Text bold>Rs.{discount}</Text>
       </Grid>
       <Grid direction={"column"}>
+        <Text bold>T.Payments</Text>
+        <Text bold>Rs.{payments}</Text>
+      </Grid>
+      <Grid direction={"column"}>
         <Text bold>G.Total</Text>
-        <Text bold>Rs.{total + shipping + tax - discount}</Text>
+        <Text bold>Rs.{total + shipping + tax - (discount + payments)}</Text>
       </Grid>
     </Grid>
   );
