@@ -20,6 +20,7 @@
     "@reduxjs/toolkit": "^2.8.2",
     "dayjs": "^1.11.13",
     "material-react-table": "^3.2.1",
+    "material-ui-confirm": "^4.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.62.0",

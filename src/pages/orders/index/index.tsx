@@ -21,6 +21,7 @@ import dayjs from "dayjs";
 import OrderDetailPanel from "./components/OrderDetailPanel";
 import type { Order } from "@/types/orders/list";
 import { DATE_FORMAT } from "@/constants/keys";
+import OrderCreateForm from "./components/OrderCreateForm";
 
 export default function Orders() {
   const columns = useMemo<MRT_ColumnDef<Order>[]>(
@@ -194,8 +195,11 @@ export default function Orders() {
   });
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <MaterialReactTable table={table} />
-    </LocalizationProvider>
+    <>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <MaterialReactTable table={table} />
+      </LocalizationProvider>
+      <OrderCreateForm />
+    </>
   );
 }

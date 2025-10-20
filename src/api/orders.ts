@@ -102,7 +102,14 @@ export const ordersApi = api.injectEndpoints({
             response.meta?.response?.ok &&
               dispatch(
                 ordersApi.util.updateQueryData("getOrder", orderId, (draft) => {
-                  draft.data.items.push(response?.data);
+                  const index = draft.data.items.findIndex(
+                    (i) => i.id === response?.data?.id
+                  );
+                  if (index > -1) {
+                    draft.data.items[index] = response?.data;
+                  } else {
+                    draft.data.items.push(response?.data);
+                  }
                 })
               );
           })
@@ -126,6 +133,29 @@ export const ordersApi = api.injectEndpoints({
                     draft.data.items.find((item) => item.id === itemId) as Item,
                     response?.data
                   );
+                })
+              );
+            }
+          })
+          .catch();
+      },
+    }),
+
+    deleteOrderItem: build.mutation({
+      query: ({ orderId, itemId }) => ({
+        url: `orders/${orderId}/item/${itemId}`,
+        method: "DELETE",
+      }),
+      onQueryStarted({ orderId, itemId }, { dispatch, queryFulfilled }) {
+        queryFulfilled
+          .then((response) => {
+            if (response.meta?.response?.ok) {
+              dispatch(
+                ordersApi.util.updateQueryData("getOrder", orderId, (draft) => {
+                  const index = draft.data.items.findIndex(
+                    (i) => i.id === itemId
+                  );
+                  if (index > -1) draft.data.items.splice(index, 1);
                 })
               );
             }
@@ -165,5 +195,6 @@ export const {
   useCreateOrderCommentMutation,
   useCreateOrderItemMutation,
   useUpdateOrderItemMutation,
+  useDeleteOrderItemMutation,
   useCreateOrderPaymentMutation,
 } = ordersApi;

@@ -61,7 +61,7 @@ export default function Summary({ orderId }: { orderId: number }) {
       </Grid>
       <Grid direction={"column"}>
         <Text bold>G.Total</Text>
-        <Text bold>Rs.{total + shipping + tax - (discount + payments)}</Text>
+        <Text bold>Rs.{total + shipping + tax - payments}</Text>
       </Grid>
     </Grid>
   );
