@@ -1,4 +1,4 @@
-export const orderStatuses: { label: string; color: string; value: string }[] =
+export const ORDER_STATUSES: { label: string; color: string; value: string }[] =
   [
     { label: "Payment Pending", color: "info", value: "payment pending" },
     { label: "Confirm", color: "success", value: "confirmed" },

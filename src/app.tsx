@@ -15,6 +15,7 @@ const NotFound = React.lazy(() => import("@/pages/not-found"));
 
 const Dashboard = React.lazy(() => import("@/pages/dashboard"));
 const Orders = React.lazy(() => import("@/pages/orders/index/"));
+const OrderCreate = React.lazy(() => import("@/pages/orders/create/"));
 // const CreateOrder = React.lazy(() => import("@/pages/orders/create"));
 // const UpdateOrder = React.lazy(() => import("@/pages/orders/update"));
 
@@ -49,7 +50,7 @@ export default function App() {
                   <Route index element={<Dashboard />} />
                   <Route path="orders">
                     <Route index element={<Orders />} />
-                    <Route path="create" element={<Orders />} />
+                    <Route path="create" element={<OrderCreate />} />
                     {/* <Route path=":orderId" element={<ViewOrder />} /> */}
                     {/* <Route path=":orderId/update" element={<UpdateOrder />} /> */}
                   </Route>

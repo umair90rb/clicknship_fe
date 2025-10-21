@@ -9,7 +9,7 @@ import Summary from "./Summary";
 import Detail from "./Detail";
 import CustomerDetail from "./CustomerDetail";
 import PrimaryButton from "@/components/Button";
-import { orderStatuses } from "@/constants/order";
+import { ORDER_STATUSES } from "@/constants/order";
 
 export default function OrderDetailPanel({
   row,
@@ -85,7 +85,7 @@ export default function OrderDetailPanel({
                 gap: 0.5,
               }}
             >
-              {orderStatuses.map(({ label, color, value }) => (
+              {ORDER_STATUSES.map(({ label, color, value }) => (
                 <PrimaryButton
                   disabled={isLoading}
                   color={color}
