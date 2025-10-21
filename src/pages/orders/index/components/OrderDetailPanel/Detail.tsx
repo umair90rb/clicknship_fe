@@ -1,6 +1,6 @@
 import { selectOrderById } from "@/api/orders";
 import Text from "@/components/Text";
-import { orderStatuses } from "@/constants/order";
+import { ORDER_STATUSES } from "@/constants/order";
 import { Box, Chip, Stack } from "@mui/material";
 import { useSelector } from "react-redux";
 
@@ -56,7 +56,7 @@ export default function Detail({ orderId }: { orderId: number }) {
           <Chip
             size="small"
             color={
-              orderStatuses.find(({ value }) => value === order?.status)?.color
+              ORDER_STATUSES.find(({ value }) => value === order?.status)?.color
             }
             label={order?.status}
           />

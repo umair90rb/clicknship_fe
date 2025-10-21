@@ -183,6 +183,14 @@ export const ordersApi = api.injectEndpoints({
           .catch();
       },
     }),
+
+    searchCustomer: build.mutation({
+      query: (body) => ({
+        url: `customers/search`,
+        body,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -197,4 +205,5 @@ export const {
   useUpdateOrderItemMutation,
   useDeleteOrderItemMutation,
   useCreateOrderPaymentMutation,
+  useSearchCustomerMutation,
 } = ordersApi;
