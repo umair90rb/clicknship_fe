@@ -5,17 +5,16 @@ import { Box, Grid, Typography, IconButton, Divider } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
+import Text from "@/components/Text";
 
-// --- replace these imports with your actual component paths ---
 import FormAutocomplete from "@/components/form/FormAutocomplete";
 import { FormInputText } from "@/components/form/FormInput";
 import FormRootError from "@/components/form/FormRootError";
 import CustomIconButton from "@/components/IconButton";
 import { useSearchCustomerMutation } from "@/api/orders";
 import { useEffect } from "react";
-// -------------------------------------------------------------
+import { FormInputTextArea } from "@/components/form/FormTextArea";
 
-// mock items you provided
 const mockItems = [
   {
     id: 1,
@@ -46,6 +45,121 @@ const mockItems = [
   },
 ];
 
+function ItemRow({
+  control,
+  fields,
+  errors,
+  addItemAfter,
+  removeItem,
+  updateItemFromSelection,
+  clearErrors,
+}) {
+  return (
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+      {fields.map((field, index) => (
+        <Grid
+          key={field.fieldId}
+          container
+          spacing={1}
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyItems: "center",
+            alignItems: "center",
+          }}
+        >
+          {/* Autocomplete */}
+          <Grid size="grow">
+            <FormAutocomplete
+              placeholer="Select Item"
+              name={`items.${index}.name`}
+              control={control}
+              options={mockItems}
+              isOptionEqualToValue={(opt: any, val: any) => opt?.id === val?.id}
+              getOptionLabel={(opt: any) => opt?.name ?? ""}
+              onChange={(_e: any, value: any) => {
+                // clear errors on name field
+                clearErrors([`items.${index}.name`]);
+                // update the whole item except quantity & discount
+                updateItemFromSelection(
+                  index,
+                  value
+                    ? {
+                        name: value.name,
+                        sku: value.sku,
+                        grams: value.grams,
+                        unitPrice: value.unitPrice,
+                        productId: value.productId,
+                        variantId: value.variantId,
+                      }
+                    : null
+                );
+              }}
+            />
+          </Grid>
+          <Grid>
+            {/* Quantity */}
+            <FormInputText
+              label="Qty"
+              name={`items.${index}.quantity`}
+              type="number"
+              control={control}
+            />
+          </Grid>
+          <Grid>
+            {/* Discount */}
+            <FormInputText
+              label="Discount"
+              name={`items.${index}.discount`}
+              type="number"
+              control={control}
+            />
+          </Grid>
+          <Grid>
+            {/* Unit Price (disabled) */}
+            <FormInputText
+              label="Unit Price"
+              name={`items.${index}.unitPrice`}
+              type="number"
+              control={control}
+              disabled
+            />
+          </Grid>
+          <Grid>
+            {/* Total (disabled) */}
+            <FormInputText
+              label="Total"
+              name={`items.${index}.total`}
+              type="number"
+              control={control}
+              disabled
+            />
+          </Grid>
+          <Grid>
+            {/* Actions: add after, remove */}
+            <IconButton
+              size="small"
+              title="Add row after"
+              onClick={() => addItemAfter(index)}
+            >
+              <AddBoxIcon />
+            </IconButton>
+            <IconButton
+              size="small"
+              title="Remove"
+              onClick={() => removeItem(index)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Grid>
+          {/* Optional error row */}
+          <FormRootError errors={errors} />
+        </Grid>
+      ))}
+    </Box>
+  );
+}
+
 export default function CreateOrder() {
   const [searchCustomer, { isLoading, data }] = useSearchCustomerMutation();
   const {
@@ -72,17 +186,75 @@ export default function CreateOrder() {
 
   return (
     <OrderDialog>
+      <Grid container spacing={2}>
+        <Grid size={{ xs: 12, md: 4, lg: 4, xl: 4 }}>
+          <Grid container spacing={1}>
+            <Text text="Enter Customer & Address Details" variant="h6" bold />
+            <FormInputText
+              label="Phone"
+              name="customer.phone"
+              control={control}
+            />
+            <FormInputText
+              label="Customer name"
+              name="customer.name"
+              control={control}
+            />
+            <FormInputTextArea
+              minRows={5}
+              placeholder="Address"
+              name="address.address"
+              control={control}
+            />
+            <FormInputTextArea
+              minRows={3}
+              placeholder="Address Note (if any)"
+              name="address.note"
+              control={control}
+            />
+            <FormAutocomplete
+              placeholer="City"
+              name="address.city"
+              control={control}
+              options={["faisalabad", "lahore", "karachi"]}
+            />
+            <FormInputText
+              label="Shipping Charges"
+              name="shippingCharges"
+              type="number"
+              control={control}
+            />
+          </Grid>
+        </Grid>
+        <Grid size={{ xs: 12, md: 8, lg: 8, xl: 8 }}>
+          <Grid container spacing={1} flexDirection={"column"}>
+            <Text text="Enter Items Details" variant="h6" bold />
+            <ItemRow
+              fields={fields}
+              control={control}
+              addItemAfter={addItemAfter}
+              removeItem={removeItem}
+              clearErrors={clearErrors}
+              updateItemFromSelection={updateItemFromSelection}
+              errors={errors}
+            />
+          </Grid>
+        </Grid>
+      </Grid>
+      <br />
+      <br />
+      <br />
       <form onSubmit={onSubmit} noValidate>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ border: "1px solid black" }}>
           {/* Customer row (example) */}
-          <Grid item xs={12} md={6}>
+          <Grid sx={{ border: "1px solid black" }}>
             <FormInputText
               label="Customer name"
               name="customer.name"
               control={control}
             />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid sx={{ border: "1px solid black" }}>
             <FormInputText
               label="Phone"
               name="customer.phone"
@@ -91,142 +263,24 @@ export default function CreateOrder() {
           </Grid>
 
           {/* Items header */}
-          <Grid item xs={12}>
+          <Grid sx={{ border: "1px solid black" }}>
             <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
+                border: "1px solid black",
               }}
             >
               <Typography variant="h6">Items</Typography>
-              <CustomIconButton
-                Icon={AddBoxIcon}
-                size="large"
-                onClick={addItem}
-              />
             </Box>
           </Grid>
 
           {/* Items list */}
-          <Grid item xs={12}>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-              {fields.map((field, index) => (
-                <Box
-                  key={field.fieldId}
-                  sx={{
-                    p: 1,
-                    borderRadius: 1,
-                    border: "1px solid rgba(0,0,0,0.06)",
-                  }}
-                >
-                  <Grid container spacing={1} alignItems="flex-end">
-                    {/* Autocomplete */}
-                    <Grid item xs={12} md={5}>
-                      <FormAutocomplete
-                        label="Select Item"
-                        placeholder="Select Item"
-                        name={`items.${index}.name`}
-                        control={control}
-                        options={mockItems}
-                        isOptionEqualToValue={(opt: any, val: any) =>
-                          opt?.id === val?.id
-                        }
-                        getOptionLabel={(opt: any) => opt?.name ?? ""}
-                        onChange={(_e: any, value: any) => {
-                          // clear errors on name field
-                          clearErrors([`items.${index}.name`]);
-                          // update the whole item except quantity & discount
-                          updateItemFromSelection(
-                            index,
-                            value
-                              ? {
-                                  name: value.name,
-                                  sku: value.sku,
-                                  grams: value.grams,
-                                  unitPrice: value.unitPrice,
-                                  productId: value.productId,
-                                  variantId: value.variantId,
-                                }
-                              : null
-                          );
-                        }}
-                      />
-                    </Grid>
-
-                    {/* Quantity */}
-                    <Grid item xs={6} sm={3} md={1}>
-                      <FormInputText
-                        label="Qty"
-                        name={`items.${index}.quantity`}
-                        type="number"
-                        control={control}
-                      />
-                    </Grid>
-
-                    {/* Discount */}
-                    <Grid item xs={6} sm={3} md={1}>
-                      <FormInputText
-                        label="Discount"
-                        name={`items.${index}.discount`}
-                        type="number"
-                        control={control}
-                      />
-                    </Grid>
-
-                    {/* Unit Price (disabled) */}
-                    <Grid item xs={6} sm={3} md={2}>
-                      <FormInputText
-                        label="Unit Price"
-                        name={`items.${index}.unitPrice`}
-                        type="number"
-                        control={control}
-                        disabled
-                      />
-                    </Grid>
-
-                    {/* Total (disabled) */}
-                    <Grid item xs={6} sm={3} md={2}>
-                      <FormInputText
-                        label="Total"
-                        name={`items.${index}.total`}
-                        type="number"
-                        control={control}
-                        disabled
-                      />
-                    </Grid>
-
-                    {/* Actions: add after, remove */}
-                    <Grid item xs={12} md={1} sx={{ display: "flex", gap: 1 }}>
-                      <IconButton
-                        size="small"
-                        title="Add row after"
-                        onClick={() => addItemAfter(index)}
-                      >
-                        <AddBoxIcon />
-                      </IconButton>
-
-                      <IconButton
-                        size="small"
-                        title="Remove"
-                        onClick={() => removeItem(index)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </Grid>
-
-                    {/* Optional error row */}
-                    <Grid item xs={12}>
-                      <FormRootError errors={errors} />
-                    </Grid>
-                  </Grid>
-                </Box>
-              ))}
-            </Box>
-          </Grid>
+          <Grid sx={{ border: "1px solid black" }}></Grid>
 
           {/* Summary: tax, shipping, totals */}
-          <Grid item xs={12} md={6}>
+          <Grid sx={{ border: "1px solid black" }}>
             <FormInputText
               label="Tax"
               name="tax"
@@ -234,7 +288,7 @@ export default function CreateOrder() {
               control={control}
             />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid sx={{ border: "1px solid black" }}>
             <FormInputText
               label="Shipping Charges"
               name="shippingCharges"
@@ -243,7 +297,7 @@ export default function CreateOrder() {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid sx={{ border: "1px solid black" }}>
             <Divider />
             <Box
               sx={{
@@ -268,16 +322,11 @@ export default function CreateOrder() {
                 Icon={SaveIcon}
                 size="large"
                 loading={isSubmitting}
-                onClick={search}
-                // onClick={() => {
-                //   // trigger submission via hook
-                //   // call form.handleSubmit by submitting the form
-                //   // but since this button isn't type="submit", call onSubmit directly
-                //   // onSubmit already wraps handleSubmit
-                //   (
-                //     document.querySelector("form") as HTMLFormElement
-                //   )?.dispatchEvent(new Event("submit", { cancelable: true }));
-                // }}
+                onClick={() => {
+                  (
+                    document.querySelector("form") as HTMLFormElement
+                  )?.dispatchEvent(new Event("submit", { cancelable: true }));
+                }}
               />
             </Box>
           </Grid>

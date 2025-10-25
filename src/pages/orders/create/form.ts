@@ -48,7 +48,7 @@ export interface ICreateOrderForm {
   channelId: string | null;
   brandId: string | null;
   items: IOrderItem[];
-  payments: IPayments;
+  payments: IPayments[];
 }
 
 /* -------------------------
@@ -84,7 +84,7 @@ const defaultValues: ICreateOrderForm = {
   channelId: null,
   brandId: null,
   items: [defaultItem()],
-  payments: { bank: "", tId: "", type: "", amount: "", note: "" },
+  payments: [{ bank: "", tId: "", type: "", amount: "", note: "" }],
 };
 
 /* -------------------------
@@ -229,6 +229,7 @@ export default function useCreateOrderForm() {
   const onSubmit = handleSubmit(async (data) => {
     // final server-ready transformation can be done here
     // make sure to guard numeric types
+    console.log(data);
     const payload = {
       ...data,
       items: data.items.map((it) => ({
