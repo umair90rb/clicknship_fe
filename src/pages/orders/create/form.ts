@@ -36,7 +36,7 @@ export interface IPayments {
   bank: string;
   tId: string;
   type: string;
-  amount: string;
+  amount: number;
   note: string;
 }
 
@@ -48,7 +48,7 @@ export interface ICreateOrderForm {
   channelId: string | null;
   brandId: string | null;
   items: IOrderItem[];
-  payments: IPayments[];
+  payments: IPayments;
 }
 
 /* -------------------------
@@ -84,7 +84,7 @@ const defaultValues: ICreateOrderForm = {
   channelId: null,
   brandId: null,
   items: [defaultItem()],
-  payments: [{ bank: "", tId: "", type: "", amount: "", note: "" }],
+  payments: { bank: "", tId: "", type: "", amount: 0, note: "" },
 };
 
 /* -------------------------
@@ -121,6 +121,11 @@ export default function useCreateOrderForm() {
     name: "shippingCharges",
   }) as number;
 
+  const watchedPaymentAmount = useWatch({
+    control,
+    name: "payments.amount",
+  }) as number;
+
   // helper: calculate single item total
   const calcItemTotal = useCallback((it: IOrderItem) => {
     // ensure numeric values
@@ -149,12 +154,18 @@ export default function useCreateOrderForm() {
   }, [watchedItems, calcItemTotal, setValue]);
 
   // compute overall order total (derived)
-  const orderItemsTotal = (watchedItems || []).reduce(
-    (sum, it) => sum + Number(it.total || 0),
-    0
+  const [orderItemsTotal, orderItemsTotalDisc] = (watchedItems || []).reduce(
+    (sum, it) => [
+      sum[0] + Number(it.total || 0),
+      sum[1] + Number(it.discount || 0),
+    ],
+    [0, 0]
   );
   const orderOverallTotal =
-    orderItemsTotal + Number(watchedTax || 0) + Number(watchedShipping || 0);
+    orderItemsTotal +
+    Number(watchedTax || 0) +
+    Number(watchedShipping || 0) -
+    Number(watchedPaymentAmount || 0);
 
   /* ---------------------------
      API for items manip
@@ -257,6 +268,9 @@ export default function useCreateOrderForm() {
     removeItem,
     updateItemFromSelection,
     orderItemsTotal,
+    orderItemsTotalDisc,
+    watchedPaymentAmount,
+    watchedShipping,
     orderOverallTotal,
     onSubmit,
   };

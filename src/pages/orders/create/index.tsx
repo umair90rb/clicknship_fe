@@ -1,10 +1,9 @@
 import OrderDialog from "./components/dialog";
 import useCreateOrderForm from "./form";
 
-import { Box, Grid, Typography, IconButton, Divider } from "@mui/material";
+import { Divider, Grid, IconButton } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import DeleteIcon from "@mui/icons-material/Delete";
-import SaveIcon from "@mui/icons-material/Save";
 import Text from "@/components/Text";
 
 import FormAutocomplete from "@/components/form/FormAutocomplete";
@@ -54,109 +53,141 @@ function ItemRow({
   updateItemFromSelection,
   clearErrors,
 }) {
-  return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-      {fields.map((field, index) => (
-        <Grid
-          key={field.fieldId}
-          container
-          spacing={1}
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyItems: "center",
-            alignItems: "center",
+  return fields.map((field, index) => (
+    <Grid
+      key={field.fieldId}
+      container
+      spacing={1}
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        justifyItems: "center",
+        alignItems: "center",
+      }}
+    >
+      {/* Autocomplete */}
+      <Grid size={4.5}>
+        <FormAutocomplete
+          placeholer="Select Item"
+          name={`items.${index}.name`}
+          control={control}
+          options={mockItems}
+          isOptionEqualToValue={(opt: any, val: any) => opt?.id === val?.id}
+          getOptionLabel={(opt: any) => opt?.name ?? ""}
+          onChange={(_e: any, value: any) => {
+            // clear errors on name field
+            clearErrors([`items.${index}.name`]);
+            // update the whole item except quantity & discount
+            updateItemFromSelection(
+              index,
+              value
+                ? {
+                    name: value.name,
+                    sku: value.sku,
+                    grams: value.grams,
+                    unitPrice: value.unitPrice,
+                    productId: value.productId,
+                    variantId: value.variantId,
+                  }
+                : null
+            );
           }}
-        >
-          {/* Autocomplete */}
-          <Grid size="grow">
-            <FormAutocomplete
-              placeholer="Select Item"
-              name={`items.${index}.name`}
-              control={control}
-              options={mockItems}
-              isOptionEqualToValue={(opt: any, val: any) => opt?.id === val?.id}
-              getOptionLabel={(opt: any) => opt?.name ?? ""}
-              onChange={(_e: any, value: any) => {
-                // clear errors on name field
-                clearErrors([`items.${index}.name`]);
-                // update the whole item except quantity & discount
-                updateItemFromSelection(
-                  index,
-                  value
-                    ? {
-                        name: value.name,
-                        sku: value.sku,
-                        grams: value.grams,
-                        unitPrice: value.unitPrice,
-                        productId: value.productId,
-                        variantId: value.variantId,
-                      }
-                    : null
-                );
-              }}
-            />
-          </Grid>
-          <Grid>
-            {/* Quantity */}
-            <FormInputText
-              label="Qty"
-              name={`items.${index}.quantity`}
-              type="number"
-              control={control}
-            />
-          </Grid>
-          <Grid>
-            {/* Discount */}
-            <FormInputText
-              label="Discount"
-              name={`items.${index}.discount`}
-              type="number"
-              control={control}
-            />
-          </Grid>
-          <Grid>
-            {/* Unit Price (disabled) */}
-            <FormInputText
-              label="Unit Price"
-              name={`items.${index}.unitPrice`}
-              type="number"
-              control={control}
-              disabled
-            />
-          </Grid>
-          <Grid>
-            {/* Total (disabled) */}
-            <FormInputText
-              label="Total"
-              name={`items.${index}.total`}
-              type="number"
-              control={control}
-              disabled
-            />
-          </Grid>
-          <Grid>
-            {/* Actions: add after, remove */}
-            <IconButton
-              size="small"
-              title="Add row after"
-              onClick={() => addItemAfter(index)}
-            >
-              <AddBoxIcon />
-            </IconButton>
-            <IconButton
-              size="small"
-              title="Remove"
-              onClick={() => removeItem(index)}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Grid>
-          {/* Optional error row */}
-          <FormRootError errors={errors} />
-        </Grid>
-      ))}
-    </Box>
+        />
+      </Grid>
+      <Grid size={1}>
+        {/* Quantity */}
+        <FormInputText
+          label="Qty"
+          name={`items.${index}.quantity`}
+          type="number"
+          control={control}
+        />
+      </Grid>
+      <Grid size={1.5}>
+        {/* Discount */}
+        <FormInputText
+          label="Discount"
+          name={`items.${index}.discount`}
+          type="number"
+          control={control}
+        />
+      </Grid>
+      <Grid size={1.5}>
+        {/* Unit Price (disabled) */}
+        <FormInputText
+          label="Unit Price"
+          name={`items.${index}.unitPrice`}
+          type="number"
+          control={control}
+          disabled
+        />
+      </Grid>
+      <Grid size={2}>
+        {/* Total (disabled) */}
+        <FormInputText
+          label="Total"
+          name={`items.${index}.total`}
+          type="number"
+          control={control}
+          disabled
+        />
+      </Grid>
+      <Grid size={1.5} container justifyContent={"space-evenly"}>
+        {/* Actions: add after, remove */}
+        <CustomIconButton
+          size="medium"
+          tooltip="Add row after"
+          Icon={AddBoxIcon}
+          onClick={() => addItemAfter(index)}
+        />
+        <CustomIconButton
+          size="medium"
+          color="error"
+          tooltip="Remove"
+          Icon={DeleteIcon}
+          onClick={() => removeItem(index)}
+        />
+      </Grid>
+      {/* Optional error row */}
+      <FormRootError errors={errors} />
+    </Grid>
+  ));
+}
+
+function PaymentRow({ control }) {
+  return (
+    <Grid
+      container
+      spacing={1}
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        justifyItems: "center",
+        alignItems: "center",
+      }}
+    >
+      <Grid size="grow">
+        <FormInputText label="TId" name="payments.tId" control={control} />
+      </Grid>
+      <Grid>
+        <FormInputText label="Bank" name="payments.bank" control={control} />
+      </Grid>
+      <Grid>
+        <FormInputText
+          label="Amount"
+          name="payments.amount"
+          type="number"
+          control={control}
+        />
+      </Grid>
+      <Grid>
+        <FormInputText label="Type" name="payments.type" control={control} />
+      </Grid>
+
+      <Grid>
+        <FormInputText label="Note" name="payments.note" control={control} />
+      </Grid>
+    </Grid>
   );
 }
 
@@ -170,11 +201,14 @@ export default function CreateOrder() {
     removeItem,
     updateItemFromSelection,
     orderItemsTotal,
+    orderItemsTotalDisc,
+    watchedPaymentAmount,
+    watchedShipping,
     orderOverallTotal,
     onSubmit,
   } = useCreateOrderForm();
 
-  const { control, setValue, clearErrors, formState } = form;
+  const { control, getValues, setValue, clearErrors, formState } = form;
   const { errors, isSubmitting } = formState;
 
   const search = () =>
@@ -224,6 +258,19 @@ export default function CreateOrder() {
               type="number"
               control={control}
             />
+            <FormInputTextArea
+              minRows={3}
+              placeholder="Order Remarks/Note (if any)"
+              name="remarks"
+              control={control}
+            />
+            <FormAutocomplete
+              multiple
+              name="tags"
+              placeholer="Tags"
+              control={control}
+              options={["tag1", "tag2"]}
+            />
           </Grid>
         </Grid>
         <Grid size={{ xs: 12, md: 8, lg: 8, xl: 8 }}>
@@ -238,49 +285,22 @@ export default function CreateOrder() {
               updateItemFromSelection={updateItemFromSelection}
               errors={errors}
             />
+            <Text text="Add Payment Detail (if required)" variant="h6" bold />
+            <PaymentRow control={control} />
           </Grid>
         </Grid>
-      </Grid>
-      <br />
-      <br />
-      <br />
-      <form onSubmit={onSubmit} noValidate>
-        <Grid container spacing={2} sx={{ border: "1px solid black" }}>
-          {/* Customer row (example) */}
-          <Grid sx={{ border: "1px solid black" }}>
-            <FormInputText
-              label="Customer name"
-              name="customer.name"
-              control={control}
-            />
-          </Grid>
-          <Grid sx={{ border: "1px solid black" }}>
-            <FormInputText
-              label="Phone"
-              name="customer.phone"
-              control={control}
-            />
-          </Grid>
 
-          {/* Items header */}
-          <Grid sx={{ border: "1px solid black" }}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                border: "1px solid black",
-              }}
-            >
-              <Typography variant="h6">Items</Typography>
-            </Box>
+        <Grid
+          container
+          direction={"row"}
+          justifyContent={"space-evenly"}
+          size="grow"
+        >
+          <Grid>
+            <Text bold>Subtotal</Text>
+            <Text bold>Rs.{orderItemsTotal}</Text>
           </Grid>
-
-          {/* Items list */}
-          <Grid sx={{ border: "1px solid black" }}></Grid>
-
-          {/* Summary: tax, shipping, totals */}
-          <Grid sx={{ border: "1px solid black" }}>
+          <Grid>
             <FormInputText
               label="Tax"
               name="tax"
@@ -288,50 +308,24 @@ export default function CreateOrder() {
               control={control}
             />
           </Grid>
-          <Grid sx={{ border: "1px solid black" }}>
-            <FormInputText
-              label="Shipping Charges"
-              name="shippingCharges"
-              type="number"
-              control={control}
-            />
+          <Grid>
+            <Text bold>Shipping</Text>
+            <Text bold>Rs.{watchedShipping}</Text>
           </Grid>
-
-          <Grid sx={{ border: "1px solid black" }}>
-            <Divider />
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                gap: 2,
-                alignItems: "center",
-                py: 1,
-              }}
-            >
-              <Box>
-                <Typography variant="body2">Items total:</Typography>
-                <Typography variant="h6">{orderItemsTotal}</Typography>
-              </Box>
-              <Box>
-                <Typography variant="body2">
-                  Order total (incl. tax & shipping):
-                </Typography>
-                <Typography variant="h5">{orderOverallTotal}</Typography>
-              </Box>
-              <CustomIconButton
-                Icon={SaveIcon}
-                size="large"
-                loading={isSubmitting}
-                onClick={() => {
-                  (
-                    document.querySelector("form") as HTMLFormElement
-                  )?.dispatchEvent(new Event("submit", { cancelable: true }));
-                }}
-              />
-            </Box>
+          <Grid>
+            <Text bold>T.Discount</Text>
+            <Text bold>Rs.{orderItemsTotalDisc}</Text>
+          </Grid>
+          <Grid>
+            <Text bold>T.Payments</Text>
+            <Text bold>Rs.{watchedPaymentAmount}</Text>
+          </Grid>
+          <Grid>
+            <Text bold>G.Total</Text>
+            <Text bold>Rs.{orderOverallTotal}</Text>
           </Grid>
         </Grid>
-      </form>
+      </Grid>
     </OrderDialog>
   );
 }
