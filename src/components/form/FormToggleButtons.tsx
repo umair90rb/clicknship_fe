@@ -1,27 +1,61 @@
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { InputLabel, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { FormHelperText } from "@mui/material";
+import { Controller } from "react-hook-form";
 
 interface FormToggleButtonsProps {
-  options: { label: string; value: string | number; color: string }[];
-  value: string;
-  onChange: (
-    event: React.MouseEvent<HTMLElement>,
-    newAlignment: string | number | null
-  ) => void;
+  label?: string | null;
+  options:
+    | {
+        label: string;
+        value: string | number;
+        color:
+          | "error"
+          | "primary"
+          | "standard"
+          | "secondary"
+          | "info"
+          | "success"
+          | "warning";
+      }[]
+    | string[];
+  name: string;
+  control: any;
 }
 
 export default function FormToggleButtons({
+  name,
+  control,
   options,
-  value,
-  onChange,
+  label,
 }: FormToggleButtonsProps) {
   return (
-    <ToggleButtonGroup value={value} exclusive onChange={onChange}>
-      {options.map(({ label, value, color }) => (
-        <ToggleButton color={color} value={value}>
-          {label}
-        </ToggleButton>
-      ))}
-    </ToggleButtonGroup>
+    <Controller
+      name={name}
+      control={control}
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
+        <>
+          {label && <InputLabel>{label}</InputLabel>}
+          <ToggleButtonGroup
+            size="small"
+            value={value}
+            exclusive
+            onChange={onChange}
+          >
+            {options.map((option) =>
+              typeof option === "string" ? (
+                <ToggleButton color={"primary"} value={option}>
+                  {option}
+                </ToggleButton>
+              ) : (
+                <ToggleButton color={option?.color} value={option?.value}>
+                  {option?.label}
+                </ToggleButton>
+              )
+            )}
+          </ToggleButtonGroup>
+          {error && <FormHelperText error>{error?.message}</FormHelperText>}
+        </>
+      )}
+    />
   );
 }

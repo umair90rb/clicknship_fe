@@ -1,13 +1,14 @@
 import { useEffect, useCallback } from "react";
 import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
+import { orderSchema } from "./validationSchema";
+import {
+  useCreateOrderMutation,
+  useSearchCustomerMutation,
+} from "@/api/orders";
 
-/* -------------------------
-   Types
-   ------------------------- */
 export interface IOrderItem {
-  id?: string | number; // optional field-array id
+  id?: string | number;
   name: string;
   sku: string;
   grams: number;
@@ -20,19 +21,20 @@ export interface IOrderItem {
 }
 
 export interface ICustomer {
-  id: string;
+  id?: number | null;
   name: string;
   phone: string;
+  email: string;
 }
 
 export interface IAddress {
+  id?: string | null;
   address: string;
   note: string;
   city: string;
-  zip: string;
 }
 
-export interface IPayments {
+export interface IPayment {
   bank: string;
   tId: string;
   type: string;
@@ -45,25 +47,17 @@ export interface ICreateOrderForm {
   address: IAddress;
   tax: number;
   shippingCharges: number;
-  channelId: string | null;
-  brandId: string | null;
+  channel: {
+    id: number | null;
+    name: string | null;
+    brandId: number | null;
+  };
+  remarks: string | null;
+  tags: string[];
   items: IOrderItem[];
-  payments: IPayments;
+  payment: IPayment;
 }
 
-/* -------------------------
-   Validation
-   ------------------------- */
-const schema = Yup.object({
-  customer: Yup.object({
-    phone: Yup.string().required("Enter a valid phone number!"),
-    name: Yup.string().required("Enter customer name!"),
-  }),
-});
-
-/* -------------------------
-   Defaults
-   ------------------------- */
 const defaultItem = (): IOrderItem => ({
   name: "",
   sku: "",
@@ -77,27 +71,29 @@ const defaultItem = (): IOrderItem => ({
 });
 
 const defaultValues: ICreateOrderForm = {
-  customer: { id: "", name: "", phone: "" },
-  address: { address: "", note: "", city: "", zip: "" },
+  customer: { id: null, name: "", phone: "", email: "" },
+  address: { address: "", note: "", city: "" },
   tax: 0,
   shippingCharges: 0,
-  channelId: null,
-  brandId: null,
+  channel: {
+    id: null,
+    name: null,
+    brandId: null,
+  },
   items: [defaultItem()],
-  payments: { bank: "", tId: "", type: "", amount: 0, note: "" },
+  payment: { bank: "", tId: "", type: "", amount: 0, note: "" },
+  remarks: "",
+  tags: [],
 };
 
-/* -------------------------
-   Hook
-   ------------------------- */
 export default function useCreateOrderForm() {
   const form = useForm<ICreateOrderForm>({
     defaultValues,
-    resolver: yupResolver(schema),
+    resolver: yupResolver(orderSchema),
     mode: "onChange",
   });
 
-  const { control, handleSubmit, setValue, getValues } = form;
+  const { control, handleSubmit, setValue, getValues, setError } = form;
 
   const { fields, append, remove, insert } = useFieldArray({
     control,
@@ -123,7 +119,7 @@ export default function useCreateOrderForm() {
 
   const watchedPaymentAmount = useWatch({
     control,
-    name: "payments.amount",
+    name: "payment.amount",
   }) as number;
 
   // helper: calculate single item total
@@ -189,11 +185,6 @@ export default function useCreateOrderForm() {
     remove(index);
   };
 
-  /**
-   * updateItemFromSelection
-   * - selectedItem is the object returned by autocomplete (mockItems entry)
-   * - It will override item fields except quantity and discount (kept from current item)
-   */
   const updateItemFromSelection = (
     index: number,
     selectedItem: Partial<IOrderItem> | null
@@ -234,31 +225,78 @@ export default function useCreateOrderForm() {
     });
   };
 
+  // useEffect(() => {
+  //   console.log(form.formState.errors);
+  // }, [form.formState]);
+
+  const [
+    searchCustomer,
+    { isLoading: isSearchingCustomer, data: customerSearchData },
+  ] = useSearchCustomerMutation();
+  const onSearchCustomer = async () => {
+    const phone = getValues("customer.phone");
+    if (phone) {
+      await searchCustomer({ phone, withAddress: true }).unwrap();
+      return;
+    }
+    setError("customer.phone", {
+      message: "Please enter valid phone before searching",
+    });
+  };
+
+  useEffect(() => {
+    if (customerSearchData && Object.keys(customerSearchData).length) {
+      const { addresses, orders, name, email, id } = customerSearchData || {};
+      id && setValue("customer.id", id);
+      name && setValue("customer.name", name);
+      email && setValue("customer.email", email);
+      if (addresses && Array.isArray(addresses) && addresses.length) {
+        const { id, address, city, note } = addresses[0];
+        setValue("address.id", id);
+        setValue("address.address", address);
+        setValue("address.city", city);
+        setValue("address.note", note);
+      }
+    }
+  }, [customerSearchData]);
+
   /* ---------------------------
      submit
      --------------------------- */
-  const onSubmit = handleSubmit(async (data) => {
-    // final server-ready transformation can be done here
-    // make sure to guard numeric types
-    console.log(data);
+
+  const [
+    createOrder,
+    {
+      isLoading: isCreatingOrder,
+      error: orderCreationError,
+      isSuccess: orderCreatedSuccessfully,
+    },
+  ] = useCreateOrderMutation();
+  const onSubmit = async (data: any, status: string) => {
+    const { payment, channel, ...order } = data;
     const payload = {
-      ...data,
-      items: data.items.map((it) => ({
+      ...order,
+      items: data.items.map(({ total, ...it }) => ({
         ...it,
         unitPrice: Number(it.unitPrice || 0),
         quantity: Number(it.quantity || 0),
         discount: Number(it.discount || 0),
-        total: Number(it.total || 0),
         grams: Number(it.grams || 0),
       })),
-      tax: Number(data.tax || 0),
+      channelId: channel.id,
+      brandId: channel.id,
+      totalTax: Number(data.tax || 0),
       shippingCharges: Number(data.shippingCharges || 0),
-      orderOverallTotal,
+      totalAmount: orderOverallTotal,
+      totalDiscount: orderItemsTotalDisc,
+      ...(payment.amount > 0 ? { payments: [payment] } : {}),
+      status,
     };
     // placeholder: replace with actual API call
     // await api.createOrder(payload)
     console.log("SUBMIT payload", payload);
-  });
+    await createOrder(payload);
+  };
 
   return {
     form,
@@ -267,11 +305,17 @@ export default function useCreateOrderForm() {
     addItemAfter,
     removeItem,
     updateItemFromSelection,
+    onSearchCustomer,
+    isSearchingCustomer,
     orderItemsTotal,
     orderItemsTotalDisc,
     watchedPaymentAmount,
     watchedShipping,
     orderOverallTotal,
+    handleSubmit,
     onSubmit,
+    isCreatingOrder,
+    orderCreatedSuccessfully,
+    orderCreationError,
   };
 }

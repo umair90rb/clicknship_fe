@@ -1,5 +1,5 @@
 export function getErrorMessage(error: any) {
-  if (!error) return "Unknown error";
+  if (!error) return;
   return (
     error?.data?.message ||
     error?.error ||

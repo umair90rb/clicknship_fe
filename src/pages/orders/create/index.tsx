@@ -1,7 +1,8 @@
+import { useLocation, useNavigate } from "react-router";
 import OrderDialog from "./components/dialog";
 import useCreateOrderForm from "./form";
 
-import { Divider, Grid, IconButton } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Text from "@/components/Text";
@@ -10,9 +11,10 @@ import FormAutocomplete from "@/components/form/FormAutocomplete";
 import { FormInputText } from "@/components/form/FormInput";
 import FormRootError from "@/components/form/FormRootError";
 import CustomIconButton from "@/components/IconButton";
-import { useSearchCustomerMutation } from "@/api/orders";
-import { useEffect } from "react";
+import SearchIcon from "@mui/icons-material/Search";
 import { FormInputTextArea } from "@/components/form/FormTextArea";
+import FormToggleButtons from "@/components/form/FormToggleButtons";
+import { useEffect } from "react";
 
 const mockItems = [
   {
@@ -72,7 +74,10 @@ function ItemRow({
           name={`items.${index}.name`}
           control={control}
           options={mockItems}
-          isOptionEqualToValue={(opt: any, val: any) => opt?.id === val?.id}
+          setValue={(value, options) =>
+            options.find((opt) => opt.name === value)
+          }
+          isOptionEqualToValue={(opt: any, val: any) => opt?.name === val?.name}
           getOptionLabel={(opt: any) => opt?.name ?? ""}
           onChange={(_e: any, value: any) => {
             // clear errors on name field
@@ -167,72 +172,121 @@ function PaymentRow({ control }) {
       }}
     >
       <Grid size="grow">
-        <FormInputText label="TId" name="payments.tId" control={control} />
+        <FormInputText label="TId" name="payment.tId" control={control} />
       </Grid>
       <Grid>
-        <FormInputText label="Bank" name="payments.bank" control={control} />
+        <FormInputText label="Bank" name="payment.bank" control={control} />
       </Grid>
       <Grid>
         <FormInputText
           label="Amount"
-          name="payments.amount"
+          name="payment.amount"
           type="number"
           control={control}
         />
       </Grid>
       <Grid>
-        <FormInputText label="Type" name="payments.type" control={control} />
+        <FormToggleButtons
+          options={["Cash", "Transfer"]}
+          name="payment.type"
+          control={control}
+        />
       </Grid>
 
       <Grid>
-        <FormInputText label="Note" name="payments.note" control={control} />
+        <FormInputText label="Note" name="payment.note" control={control} />
       </Grid>
     </Grid>
   );
 }
 
 export default function CreateOrder() {
-  const [searchCustomer, { isLoading, data }] = useSearchCustomerMutation();
   const {
     form,
     fields,
-    addItem,
     addItemAfter,
     removeItem,
     updateItemFromSelection,
+    onSearchCustomer,
+    isSearchingCustomer,
     orderItemsTotal,
     orderItemsTotalDisc,
     watchedPaymentAmount,
     watchedShipping,
     orderOverallTotal,
+    handleSubmit,
     onSubmit,
+    isCreatingOrder,
+    orderCreatedSuccessfully,
+    orderCreationError,
   } = useCreateOrderForm();
 
-  const { control, getValues, setValue, clearErrors, formState } = form;
+  const { control, clearErrors, formState } = form;
   const { errors, isSubmitting } = formState;
 
-  const search = () =>
-    searchCustomer({ phone: "03051866823", withAddress: true }).unwrap();
+  const navigate = useNavigate();
+
+  const onClose = () => {
+    navigate(-1);
+  };
 
   useEffect(() => {
-    console.log(data);
-  }, [isLoading]);
+    if (orderCreatedSuccessfully) {
+      onClose();
+    }
+  }, [orderCreatedSuccessfully]);
 
   return (
-    <OrderDialog>
+    <OrderDialog
+      loading={isCreatingOrder}
+      onSaveAsConfirm={handleSubmit((data) => onSubmit(data, "confirmed"))}
+      onSaveAsDraft={handleSubmit((data) => onSubmit(data, "draft"))}
+      handleClose={onClose}
+    >
       <Grid container spacing={2}>
         <Grid size={{ xs: 12, md: 4, lg: 4, xl: 4 }}>
           <Grid container spacing={1}>
             <Text text="Enter Customer & Address Details" variant="h6" bold />
+            <Box
+              sx={{
+                width: "100%",
+                border: "0px solid black",
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              <FormInputText
+                label="Customer Phone"
+                name="customer.phone"
+                control={control}
+              />
+              <CustomIconButton
+                loading={isSearchingCustomer}
+                Icon={SearchIcon}
+                onClick={onSearchCustomer}
+              />
+            </Box>
             <FormInputText
-              label="Phone"
-              name="customer.phone"
+              label="Customer Name"
+              name="customer.name"
               control={control}
             />
             <FormInputText
-              label="Customer name"
-              name="customer.name"
+              label="Customer Email"
+              name="customer.email"
               control={control}
+            />
+            <FormAutocomplete
+              name="channel"
+              placeholer="Order Channel"
+              control={control}
+              errorKey={"name"}
+              isOptionEqualToValue={(opt: any, val: any) => opt?.id === val?.id}
+              getOptionLabel={(opt: any) => opt?.name ?? ""}
+              options={[
+                { id: 1, name: "Store", brandId: 1 },
+                { id: 2, name: "Other Store", brandId: 2 },
+              ]}
             />
             <FormInputTextArea
               minRows={5}

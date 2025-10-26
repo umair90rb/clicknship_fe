@@ -19,6 +19,7 @@
     "@mui/x-date-pickers": "^8.9.0",
     "@reduxjs/toolkit": "^2.8.2",
     "dayjs": "^1.11.13",
+    "lodash": "^4.17.21",
     "material-react-table": "^3.2.1",
     "material-ui-confirm": "^4.0.0",
     "react": "^19.1.0",

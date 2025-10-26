@@ -40,6 +40,7 @@ export default function Text({
   color = "",
   bold = undefined,
   children,
+  ...props
 }: PropsWithChildren<TextProps>) {
   return (
     <Typography
@@ -47,7 +48,7 @@ export default function Text({
       component="p"
       color={color}
       variant={variant}
-      sx={{ textAlign }}
+      sx={{ textAlign, ...props }}
     >
       {text || children}
     </Typography>

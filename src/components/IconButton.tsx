@@ -39,6 +39,7 @@ export default function CustomIconButton({
   color = "primary",
   loading = false,
   badge,
+  ...props
 }: IconButtonProps) {
   return (
     <Tooltip title={tooltip}>
@@ -49,6 +50,7 @@ export default function CustomIconButton({
         onClick={onClick}
         size={size}
         loading={loading}
+        {...props}
       >
         <Icon fontSize={size} />
         {badge && (

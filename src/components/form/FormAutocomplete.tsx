@@ -12,6 +12,8 @@ interface FormAutoselectProps extends FormInputProps {
   options: any[];
   multiple?: boolean;
   disableCloseOnSelect?: boolean;
+  setValue?: (value: any, options: any[]) => void;
+  errorKey?: string | null;
 }
 
 export default function FormAutocomplete({
@@ -22,6 +24,8 @@ export default function FormAutocomplete({
   options,
   multiple = false,
   disableCloseOnSelect = multiple,
+  setValue,
+  errorKey,
   ...props
 }: FormAutoselectProps) {
   return (
@@ -42,7 +46,7 @@ export default function FormAutocomplete({
             size="small"
             multiple={multiple}
             options={options}
-            value={value}
+            value={setValue ? setValue(value, options) : value}
             onChange={(_e, value) => onChange(value)}
             renderOption={
               multiple
@@ -62,8 +66,10 @@ export default function FormAutocomplete({
             }
             renderInput={(params) => (
               <TextField
-                error={!!error}
-                helperText={error?.message}
+                error={Boolean(error)}
+                helperText={
+                  Boolean(error) && (error?.message || "Error in this field")
+                }
                 placeholder={placeholer}
                 {...params}
               />

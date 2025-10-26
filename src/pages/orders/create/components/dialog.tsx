@@ -1,15 +1,15 @@
-import { useLocation, useNavigate } from "react-router";
-import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import DialogContent from "@mui/material/DialogContent";
 import Slide from "@mui/material/Slide";
 import type { TransitionProps } from "@mui/material/transitions";
 import { forwardRef, type PropsWithChildren } from "react";
+import CustomIconButton from "@/components/IconButton";
+import Text from "@/components/Text";
+import PrimaryButton from "@/components/Button";
+import { Box } from "@mui/material";
 
 // transition on close not working due to model binding with url need to do r&d but at last
 const TransitionUp = forwardRef(function Transition(
@@ -23,14 +23,18 @@ const TransitionUp = forwardRef(function Transition(
   );
 });
 
-export default function OrderDialog({ children }: PropsWithChildren) {
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const handleClose = () => {
-    navigate(-1);
-  };
-
+export default function OrderDialog({
+  children,
+  onSaveAsConfirm,
+  onSaveAsDraft,
+  loading,
+  handleClose,
+}: PropsWithChildren<{
+  loading: boolean;
+  onSaveAsDraft: () => void;
+  onSaveAsConfirm: () => void;
+  handleClose: () => void;
+}>) {
   return (
     <Dialog
       fullScreen
@@ -53,23 +57,31 @@ export default function OrderDialog({ children }: PropsWithChildren) {
     >
       <AppBar sx={{ position: "relative" }}>
         <Toolbar variant="dense">
-          <IconButton
-            edge="start"
-            color="inherit"
+          <CustomIconButton
             onClick={handleClose}
-            aria-label="close"
+            color="inherit"
+            Icon={CloseIcon}
+            tooltip="Close create order"
+          />
+          <Text ml={2} flex={1} text="Create Order" />
+          <Box
+            sx={{ width: 350, gap: 1, flexDirection: "row", display: "flex" }}
           >
-            <CloseIcon />
-          </IconButton>
-          <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            Create Order
-          </Typography>
-          <Button autoFocus color="inherit" onClick={() => {}}>
-            save
-          </Button>
-          <Button autoFocus color="inherit" onClick={() => {}}>
-            cancel
-          </Button>
+            <PrimaryButton
+              disabled={loading}
+              variant="text"
+              onClick={onSaveAsDraft}
+              label="Save as draft"
+              color="inherit"
+            />
+            <PrimaryButton
+              disabled={loading}
+              variant="contained"
+              onClick={onSaveAsConfirm}
+              label="Save & Confirm"
+              color="success"
+            />
+          </Box>
         </Toolbar>
       </AppBar>
       <DialogContent>{children}</DialogContent>
