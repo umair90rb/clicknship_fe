@@ -236,7 +236,10 @@ export default function useCreateOrderForm() {
   const onSearchCustomer = async () => {
     const phone = getValues("customer.phone");
     if (phone) {
-      await searchCustomer({ phone, withAddress: true }).unwrap();
+      await searchCustomer({
+        phone,
+        withAddress: true,
+      }).unwrap();
       return;
     }
     setError("customer.phone", {
@@ -246,7 +249,7 @@ export default function useCreateOrderForm() {
 
   useEffect(() => {
     if (customerSearchData && Object.keys(customerSearchData).length) {
-      const { addresses, orders, name, email, id } = customerSearchData || {};
+      const { addresses, name, email, id } = customerSearchData || {};
       id && setValue("customer.id", id);
       name && setValue("customer.name", name);
       email && setValue("customer.email", email);
@@ -294,7 +297,6 @@ export default function useCreateOrderForm() {
     };
     // placeholder: replace with actual API call
     // await api.createOrder(payload)
-    console.log("SUBMIT payload", payload);
     await createOrder(payload);
   };
 

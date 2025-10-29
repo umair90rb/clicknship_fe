@@ -1,4 +1,4 @@
-import { useOnboardMutation } from "@/api/onboard";
+import { useOnboardMutation } from "@/api/auth";
 import type { OnboardRequestResponse } from "@/types/onboard";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
