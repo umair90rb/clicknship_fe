@@ -1,0 +1,238 @@
+import { useLazyListProductQuery } from "@/api/products";
+import {
+  MaterialReactTable,
+  type MRT_ColumnFiltersState,
+  useMaterialReactTable,
+  type MRT_ColumnDef,
+} from "material-react-table";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { buildFilters } from "../orders/utils";
+import TopToolbar from "@/components/data-table/TopToolbar";
+import BottomToolbar from "@/components/data-table/BottomToolbar";
+import type { Product } from "@/types/products";
+import useDrawer from "@/hooks/useDrawer";
+import CustomIconButton from "@/components/IconButton";
+
+export default function Products() {
+  const { drawerWidth, open } = useDrawer();
+  const [fetchProductsList, { data, isFetching }] = useLazyListProductQuery();
+
+  const columns = useMemo<MRT_ColumnDef<Product>[]>(
+    () => [
+      {
+        id: "id",
+        accessorKey: "id",
+        header: "Product Id",
+        enableEditing: false,
+        enableColumnFilter: false,
+      },
+      {
+        id: "name",
+        accessorKey: "name",
+        header: "Name",
+        muiEditTextFieldProps: {
+          autoFocus: true,
+        },
+      },
+      {
+        id: "description",
+        accessorKey: "description",
+        header: "Description",
+        enableColumnFilter: false,
+      },
+      {
+        id: "sku",
+        accessorKey: "sku",
+        header: "SKU",
+      },
+      {
+        id: "barcode",
+        accessorKey: "barcode",
+        header: "Barcode",
+      },
+      {
+        id: "unitPrice",
+        accessorKey: "unitPrice",
+        header: "Unit Price",
+        filterVariant: "range",
+      },
+      {
+        id: "costPrice",
+        accessorKey: "costPrice",
+        header: "Cost Price",
+        filterVariant: "range",
+      },
+      {
+        id: "incentive",
+        accessorKey: "incentive",
+        header: "Inventive (Rs)",
+        filterVariant: "range",
+      },
+      {
+        id: "weight",
+        accessorKey: "weight",
+        header: "Weight (g)",
+        filterVariant: "range",
+      },
+
+      {
+        id: "unit",
+        accessorKey: "unit.name",
+        header: "Unit",
+        editVariant: "select",
+        editSelectOptions: ["channel 1", "channle 2"],
+        muiEditTextFieldProps: {
+          select: true,
+          // error: !!validationErrors?.state,
+          // helperText: validationErrors?.state,
+        },
+        filterVariant: "select",
+        filterSelectOptions: ["channel 1", "channle 2"],
+      },
+      {
+        id: "category",
+        accessorKey: "category.name",
+        header: "Category",
+        editVariant: "select",
+        editSelectOptions: ["channel 1", "channle 2"],
+        muiEditTextFieldProps: {
+          select: true,
+          // error: !!validationErrors?.state,
+          // helperText: validationErrors?.state,
+        },
+        filterVariant: "select",
+        filterSelectOptions: ["channel 1", "channle 2"],
+      },
+      {
+        id: "brand",
+        accessorKey: "brand.name",
+        header: "Brand",
+        editVariant: "select",
+        editSelectOptions: ["channel 1", "channle 2"],
+        muiEditTextFieldProps: {
+          select: true,
+          // error: !!validationErrors?.state,
+          // helperText: validationErrors?.state,
+        },
+        filterVariant: "select",
+        filterSelectOptions: ["channel 1", "channle 2"],
+      },
+    ],
+    []
+  );
+
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 15,
+  });
+
+  const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
+    []
+  );
+  const firstRender = useRef(true);
+
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      fetchProductsList({
+        skip: pagination.pageIndex * pagination.pageSize,
+        take: pagination.pageSize,
+        ...buildFilters(columnFilters),
+      });
+      return;
+    }
+
+    const handler = setTimeout(() => {
+      const filters = buildFilters(columnFilters);
+      console.log(filters);
+      fetchProductsList({
+        skip: pagination.pageIndex * pagination.pageSize,
+        take: pagination.pageSize,
+        ...filters,
+      });
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [pagination.pageIndex, pagination.pageSize, columnFilters]);
+
+  const table = useMaterialReactTable({
+    // enableClickToCopy: true,
+    // muiCopyButtonProps: {
+    //   startIcon: <ContentCopyIcon />,
+    // },
+    enableFilterMatchHighlighting: false,
+    enableFacetedValues: true,
+    enableColumnFilters: true,
+    paginationDisplayMode: "pages",
+    enableSelectAll: true,
+    enableStickyHeader: true,
+    enableRowSelection: true,
+    enableColumnResizing: true,
+    enableColumnOrdering: true,
+    enableRowActions: true,
+    enableKeyboardShortcuts: true,
+    layoutMode: "semantic",
+    muiTableContainerProps: {
+      sx: {
+        minHeight: `calc(100vh - 160px)`,
+        height: "auto",
+        width: "auto",
+        maxWidth: `calc(100vw - ${open ? drawerWidth : 0}px)`,
+      },
+    },
+
+    initialState: {
+      density: "compact",
+      columnFilters: [],
+      showColumnFilters: true,
+      columnVisibility: {
+        province: false,
+      },
+    },
+    createDisplayMode: "row",
+    editDisplayMode: "row",
+    enableEditing: true,
+    columns,
+    data: data?.data || [],
+    manualFiltering: true,
+    manualPagination: true,
+    autoResetPageIndex: false,
+    rowCount: data?.meta?.total || 0,
+    state: { isLoading: isFetching, columnFilters, pagination },
+    onPaginationChange: setPagination,
+    onColumnFiltersChange: setColumnFilters,
+    renderTopToolbar: (props) => (
+      <TopToolbar
+        {...props}
+        actions={[
+          {
+            label: "Add New Product",
+            onClick() {
+              props.table.setCreatingRow(true);
+            },
+          },
+        ]}
+      />
+    ),
+    renderRowActions: ({ table, row }) => [
+      <CustomIconButton Icon={DeleteIcon} color="error" onClick={() => {}} />,
+      <CustomIconButton
+        Icon={EditIcon}
+        onClick={() => table.setEditingRow(row)}
+      />,
+    ],
+    renderBottomToolbar: (props) => <BottomToolbar {...props} />,
+  });
+
+  return (
+    <>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <MaterialReactTable table={table} />
+      </LocalizationProvider>
+    </>
+  );
+}

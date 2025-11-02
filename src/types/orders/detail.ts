@@ -1,6 +1,6 @@
-export interface GetOrderApiResponse {
-  data: Order;
-}
+import type { GetApiResponse } from "../common";
+
+export type GetOrderApiResponse = GetApiResponse<Order>;
 
 export interface Order {
   id: number;

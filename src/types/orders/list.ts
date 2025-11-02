@@ -1,7 +1,6 @@
-export interface OrderListApiResponse {
-  data: Order[];
-  meta: Meta;
-}
+import type { ListApiResponse } from "../common";
+
+export type OrderListApiResponse = ListApiResponse<Order>;
 
 export interface Order {
   id: number;
@@ -29,10 +28,4 @@ export interface Address {
 export interface Customer {
   name: string;
   phone: string;
-}
-
-export interface Meta {
-  total: number;
-  skip: number;
-  take: number;
 }

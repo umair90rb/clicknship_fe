@@ -14,10 +14,15 @@ const ResetPassword = React.lazy(() => import("@/pages/reset-password"));
 const NotFound = React.lazy(() => import("@/pages/not-found"));
 
 const Dashboard = React.lazy(() => import("@/pages/dashboard"));
+
 const Orders = React.lazy(() => import("@/pages/orders/index/"));
 const OrderCreate = React.lazy(() => import("@/pages/orders/create/"));
+const OrderReturn = React.lazy(() => import("@/pages/orders/return/"));
 // const CreateOrder = React.lazy(() => import("@/pages/orders/create"));
 // const UpdateOrder = React.lazy(() => import("@/pages/orders/update"));
+
+const Products = React.lazy(() => import("@/pages/products/index"));
+const Customers = React.lazy(() => import("@/pages/customers/index"));
 
 const TenantGuard = ({ children }: PropsWithChildren) => {
   const tenant = useTenant();
@@ -51,9 +56,14 @@ export default function App() {
                   <Route path="orders">
                     <Route index element={<Orders />} />
                     <Route path="create" element={<OrderCreate />} />
+                    <Route path="return" element={<OrderReturn />} />
                     {/* <Route path=":orderId" element={<ViewOrder />} /> */}
                     {/* <Route path=":orderId/update" element={<UpdateOrder />} /> */}
                   </Route>
+                  <Route path="products">
+                    <Route index element={<Products />} />
+                  </Route>
+                  <Route path="customers" element={<Customers />} />
                   <Route path="*" element={<NotFound />} />
                 </Route>
 

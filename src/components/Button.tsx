@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
 
-interface PrimaryButtonProps {
+export interface PrimaryButtonProps {
   type?: "submit" | "button" | "reset";
   label: string;
   onClick: () => void;

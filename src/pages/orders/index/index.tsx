@@ -1,13 +1,11 @@
 import {
   MaterialReactTable,
   type MRT_ColumnFiltersState,
-} from "material-react-table";
-import { useEffect, useMemo, useRef, useState } from "react";
-import {
   useMaterialReactTable,
   MRT_ActionMenuItem,
   type MRT_ColumnDef,
 } from "material-react-table";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import EditIcon from "@mui/icons-material/Edit";
@@ -21,8 +19,10 @@ import dayjs from "dayjs";
 import OrderDetailPanel from "./components/OrderDetailPanel";
 import type { Order } from "@/types/orders/list";
 import { DATE_FORMAT } from "@/constants/keys";
+import useDrawer from "@/hooks/useDrawer";
 
 export default function Orders() {
+  const { drawerWidth, open } = useDrawer();
   const columns = useMemo<MRT_ColumnDef<Order>[]>(
     () => [
       {
@@ -161,8 +161,10 @@ export default function Orders() {
     layoutMode: "semantic",
     muiTableContainerProps: {
       sx: {
-        maxHeight: "none",
+        minHeight: `calc(100vh - 160px)`,
         height: "auto",
+        width: "auto",
+        maxWidth: `calc(100vw - ${open ? drawerWidth : 0}px)`,
       },
     },
 
@@ -184,9 +186,14 @@ export default function Orders() {
     state: { isLoading, columnFilters, pagination },
     onPaginationChange: setPagination,
     onColumnFiltersChange: setColumnFilters,
-    renderTopToolbar: (props) => <TopToolbar title="Orders" {...props} />,
+    renderTopToolbar: (props) => <TopToolbar title="" {...props} />,
     renderRowActionMenuItems: ({ table }) => [
-      <MRT_ActionMenuItem table={table} icon={<DeleteIcon />} label="Delete" />,
+      <MRT_ActionMenuItem
+        onClick={() => console.log("delete button clicked")}
+        table={table}
+        icon={<DeleteIcon />}
+        label="Delete"
+      />,
       <MRT_ActionMenuItem table={table} icon={<EditIcon />} label="Edit" />,
     ],
     renderBottomToolbar: (props) => <BottomToolbar {...props} />,

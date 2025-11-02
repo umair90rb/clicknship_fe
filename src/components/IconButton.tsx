@@ -10,7 +10,7 @@ const CustomBadge = styled(Badge)`
   }
 `;
 
-interface IconButtonProps {
+export interface CustomIconButtonProps {
   Icon: any;
   onClick: () => void;
   type?: "submit" | "button" | "reset";
@@ -40,7 +40,7 @@ export default function CustomIconButton({
   loading = false,
   badge,
   ...props
-}: IconButtonProps) {
+}: CustomIconButtonProps) {
   return (
     <Tooltip title={tooltip}>
       <IconButton

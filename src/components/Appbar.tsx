@@ -187,7 +187,7 @@ export default function PrimarySearchAppBar({
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
-            C&S
+            Click n Ship
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Search>
