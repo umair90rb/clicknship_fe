@@ -34,9 +34,13 @@ export default function TopToolbar({
           <MRT_ToggleFullScreenButton table={table} />
         </Grid>
         <Grid>
-          {actions?.map((action) => (
-            <PrimaryButton {...action} />
-          ))}
+          <Grid container spacing={1}>
+            {actions?.map((action) => (
+              <Grid>
+                <PrimaryButton {...action} />
+              </Grid>
+            ))}
+          </Grid>
         </Grid>
       </Grid>
       <MRT_ToolbarAlertBanner table={table} />

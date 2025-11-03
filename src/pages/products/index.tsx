@@ -10,15 +10,18 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
 import { buildFilters } from "../orders/utils";
 import TopToolbar from "@/components/data-table/TopToolbar";
 import BottomToolbar from "@/components/data-table/BottomToolbar";
 import type { Product } from "@/types/products";
 import useDrawer from "@/hooks/useDrawer";
 import CustomIconButton from "@/components/IconButton";
+import UnitManagementModal from "./UnitManagementModal";
 
 export default function Products() {
   const { drawerWidth, open } = useDrawer();
+  const [unitModalOpen, setUnitModalOpen] = useState(false);
   const [fetchProductsList, { data, isFetching }] = useLazyListProductQuery();
 
   const columns = useMemo<MRT_ColumnDef<Product>[]>(
@@ -210,9 +213,16 @@ export default function Products() {
         {...props}
         actions={[
           {
-            label: "Add New Product",
+            label: "Add Product",
             onClick() {
               props.table.setCreatingRow(true);
+            },
+            Icon: AddIcon,
+          },
+          {
+            label: "Unit of Measures",
+            onClick() {
+              setUnitModalOpen(true);
             },
           },
         ]}
@@ -233,6 +243,7 @@ export default function Products() {
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <MaterialReactTable table={table} />
       </LocalizationProvider>
+      <UnitManagementModal open={unitModalOpen} setOpen={setUnitModalOpen} />
     </>
   );
 }

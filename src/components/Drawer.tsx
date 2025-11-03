@@ -86,8 +86,8 @@ const menus: MenuWithChildren[] = [
         Icon: CategoryIcon,
       },
       {
-        title: "Staff",
-        url: "/staff",
+        title: "Staff & Permissions",
+        url: "/staff-and-permissions",
         Icon: GroupIcon,
       },
       {

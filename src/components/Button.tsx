@@ -16,6 +16,7 @@ export interface PrimaryButtonProps {
     | "warning";
   fullWidth?: boolean;
   loading?: boolean;
+  Icon?: any;
 }
 
 export default function PrimaryButton({
@@ -27,9 +28,11 @@ export default function PrimaryButton({
   color = "primary",
   fullWidth = true,
   loading = false,
+  Icon,
 }: PrimaryButtonProps) {
   return (
     <Button
+      startIcon={Icon && <Icon />}
       disabled={disabled || loading}
       type={type}
       fullWidth={fullWidth}
