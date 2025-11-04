@@ -29,7 +29,7 @@ const baseQuery = fetchBaseQuery({
 
 export const api = createApi({
   baseQuery,
-  tagTypes: ["orders", "order"],
+  tagTypes: ["orders", "order", "units"],
   endpoints: (build) => ({
     health: build.query({
       query: () => "health",

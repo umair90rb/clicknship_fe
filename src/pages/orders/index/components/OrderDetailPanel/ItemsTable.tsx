@@ -228,7 +228,7 @@
 //         <Box sx={{ flexBasis: "300%" }}>
 //           <FormAutocomplete
 //             label="Select Item"
-//             placeholer="Select Item"
+//             placeholder="Select Item"
 //             name="name"
 //             options={items}
 //             control={control}

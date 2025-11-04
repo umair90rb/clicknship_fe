@@ -4,6 +4,7 @@ import { Controller } from "react-hook-form";
 
 interface FormInputPropsWithType extends FormInputProps {
   type?: string;
+  autoFocus?: boolean;
 }
 
 export const FormInputText = ({
@@ -11,9 +12,10 @@ export const FormInputText = ({
   control,
   label,
   type = "text",
-  placeholer,
+  placeholder,
   disabled = false,
   setValue,
+  autoFocus = false,
 }: FormInputPropsWithType) => {
   return (
     <Controller
@@ -21,6 +23,7 @@ export const FormInputText = ({
       control={control}
       render={({ field: { onChange, value }, fieldState: { error } }) => (
         <TextField
+          autoFocus={autoFocus}
           disabled={disabled}
           helperText={error ? error.message : null}
           size="small"
@@ -30,7 +33,7 @@ export const FormInputText = ({
           fullWidth
           label={label}
           type={type}
-          placeholder={placeholer}
+          placeholder={placeholder}
           slotProps={{
             inputLabel: { shrink: value || value === 0 },
           }}

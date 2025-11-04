@@ -65,7 +65,7 @@ export default function Comments({ orderId }: { orderId: number }) {
           <FormInputText
             name="comment"
             control={control}
-            placeholer="Comment"
+            placeholder="Comment"
           />
         </Box>
         <CustomIconButton

@@ -6,7 +6,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useState, type PropsWithChildren } from "react";
 import PrimaryButton, { type PrimaryButtonProps } from "./Button";
 import Text from "./Text";
-import { Box, Grid, type Breakpoint } from "@mui/material";
+import { Box, CircularProgress, Grid, type Breakpoint } from "@mui/material";
 import CustomIconButton from "./IconButton";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import FullscreenOutlinedIcon from "@mui/icons-material/FullscreenOutlined";
@@ -20,6 +20,7 @@ interface CustomDialogProps {
   description?: string;
   size?: Breakpoint;
   fullScreen?: boolean;
+  loading?: boolean;
 }
 
 export default function CustomDialog({
@@ -31,11 +32,23 @@ export default function CustomDialog({
   description,
   size = "sm",
   fullScreen = false,
+  loading,
 }: PropsWithChildren<CustomDialogProps>) {
   const [toggleFullScreen, setToggleFullScreen] = useState(fullScreen);
   const handleToggleFullScreen = () => setToggleFullScreen(!toggleFullScreen);
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const renderContent = () => {
+    if (loading) {
+      return (
+        <Box sx={{ textAlign: "center" }}>
+          <CircularProgress />
+        </Box>
+      );
+    }
+    return children;
   };
 
   return (
@@ -78,7 +91,7 @@ export default function CustomDialog({
       </DialogTitle>
       <DialogContent dividers>
         {description && <DialogContentText>{description}</DialogContentText>}
-        {children}
+        {renderContent()}
       </DialogContent>
       <DialogActions>
         <PrimaryButton onClick={handleClose} label="Cancel" color="inherit" />

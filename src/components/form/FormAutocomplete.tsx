@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { Controller } from "react-hook-form";
 
-interface FormAutoselectProps extends FormInputProps {
+interface FormAutoSelectProps extends FormInputProps {
   options: any[];
   multiple?: boolean;
   disableCloseOnSelect?: boolean;
@@ -20,14 +20,14 @@ export default function FormAutocomplete({
   name,
   control,
   label,
-  placeholer,
+  placeholder,
   options,
   multiple = false,
   disableCloseOnSelect = multiple,
   setValue,
   errorKey,
   ...props
-}: FormAutoselectProps) {
+}: FormAutoSelectProps) {
   return (
     <Controller
       name={name}
@@ -70,7 +70,7 @@ export default function FormAutocomplete({
                 helperText={
                   Boolean(error) && (error?.message || "Error in this field")
                 }
-                placeholder={placeholer}
+                placeholder={placeholder}
                 {...params}
               />
             )}

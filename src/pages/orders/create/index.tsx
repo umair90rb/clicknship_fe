@@ -70,7 +70,7 @@ function ItemRow({
       {/* Autocomplete */}
       <Grid size={4.5}>
         <FormAutocomplete
-          placeholer="Select Item"
+          placeholder="Select Item"
           name={`items.${index}.name`}
           control={control}
           options={mockItems}
@@ -278,7 +278,7 @@ export default function CreateOrder() {
             />
             <FormAutocomplete
               name="channel"
-              placeholer="Order Channel"
+              placeholder="Order Channel"
               control={control}
               errorKey={"name"}
               isOptionEqualToValue={(opt: any, val: any) => opt?.id === val?.id}
@@ -301,7 +301,7 @@ export default function CreateOrder() {
               control={control}
             />
             <FormAutocomplete
-              placeholer="City"
+              placeholder="City"
               name="address.city"
               control={control}
               options={["faisalabad", "lahore", "karachi"]}
@@ -321,7 +321,7 @@ export default function CreateOrder() {
             <FormAutocomplete
               multiple
               name="tags"
-              placeholer="Tags"
+              placeholder="Tags"
               control={control}
               options={["tag1", "tag2"]}
             />

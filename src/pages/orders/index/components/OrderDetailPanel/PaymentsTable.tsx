@@ -72,17 +72,17 @@ export default function PaymentsTable({ orderId }: { orderId: number }) {
           gap: 1,
         }}
       >
-        <FormInputText name="tId" control={control} placeholer="Tid" />
-        <FormInputText name="bank" control={control} placeholer="Bank" />
+        <FormInputText name="tId" control={control} placeholder="Tid" />
+        <FormInputText name="bank" control={control} placeholder="Bank" />
         <FormInputText
           name="amount"
           type="number"
           control={control}
-          placeholer="Amount"
+          placeholder="Amount"
         />
-        <FormInputText name="type" control={control} placeholer="Type" />
+        <FormInputText name="type" control={control} placeholder="Type" />
         <Box sx={{ flexBasis: "300%" }}>
-          <FormInputText name="note" control={control} placeholer="Note" />
+          <FormInputText name="note" control={control} placeholder="Note" />
         </Box>
         <FormRootError errors={errors} />
         <CustomIconButton
