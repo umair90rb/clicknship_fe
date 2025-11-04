@@ -48,8 +48,8 @@ function CreateUnitForm() {
     control,
     handleSubmit,
     setError,
+    reset,
     setFocus,
-    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -63,10 +63,15 @@ function CreateUnitForm() {
     createUnit(data)
       .unwrap()
       .then(() => {
-        setValue("name", "");
-        setValue("description", "");
+        reset();
+        setTimeout(() => setFocus("name"), 100);
       })
-      .catch((error) => setError("root", { message: getErrorMessage(error) }))
+      .catch((error) => {
+        const message = getErrorMessage(error);
+        setError(message.includes("name") ? "name" : "root", {
+          message,
+        });
+      })
   );
 
   return (
