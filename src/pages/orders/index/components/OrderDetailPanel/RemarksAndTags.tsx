@@ -66,11 +66,13 @@ export default function RemarksAndTags({ orderId }: { orderId: number }) {
         options={["tag1", "tag2"]}
       />
       <FormRootError errors={errors} />
-      <PrimaryButton
-        label="Update"
-        loading={isLoading}
-        onClick={handleSubmit(onSubmit)}
-      />
+      <Box textAlign="center">
+        <PrimaryButton
+          label="Update"
+          loading={isLoading}
+          onClick={handleSubmit(onSubmit)}
+        />
+      </Box>
     </Box>
   );
 }

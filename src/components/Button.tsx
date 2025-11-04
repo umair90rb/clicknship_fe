@@ -26,12 +26,13 @@ export default function PrimaryButton({
   disabled = false,
   variant = "contained",
   color = "primary",
-  fullWidth = true,
+  fullWidth = false,
   loading = false,
   Icon,
 }: PrimaryButtonProps) {
   return (
     <Button
+      size="small"
       startIcon={Icon && <Icon />}
       disabled={disabled || loading}
       type={type}

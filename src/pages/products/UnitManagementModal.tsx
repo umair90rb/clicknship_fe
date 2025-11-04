@@ -1,15 +1,14 @@
 import CustomDialog from "@/components/Dialog";
-import { useState } from "react";
+import type { ModalProps } from "@/types/common";
 
-export default function UnitManagementModal({ open, setOpen }) {
+type UnitManagementModalProps = ModalProps;
+
+export default function UnitManagementModal({
+  open,
+  setOpen,
+}: UnitManagementModalProps) {
   return (
-    <CustomDialog
-      open={open}
-      setOpen={setOpen}
-      title="Manage Units"
-      actions={[{ onClick() {}, label: "Add Unit" }]}
-      enableCloseButton
-    >
+    <CustomDialog open={open} setOpen={setOpen} title="Manage Units" size="md">
       <p>UOM Management</p>
     </CustomDialog>
   );

@@ -17,3 +17,8 @@ export interface Meta {
 export interface GetApiResponse<T> {
   data: T;
 }
+
+export interface ModalProps {
+  open: boolean;
+  setOpen: (state: any) => void;
+}

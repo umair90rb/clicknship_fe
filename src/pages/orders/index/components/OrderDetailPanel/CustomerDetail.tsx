@@ -88,6 +88,7 @@ export default function CustomerDetail({ orderId }: { orderId: number }) {
       <FormRootError errors={errors} />
       <Box mt={2} />
       <PrimaryButton
+        fullWidth
         loading={isLoading}
         label="Update Address Info"
         onClick={handleSubmit(onSubmit)}
