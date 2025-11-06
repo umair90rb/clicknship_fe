@@ -1,3 +1,5 @@
+import type { Brand, Category } from "./categoryAndBrands";
+
 export interface Product {
   id: number;
   name: string;
@@ -8,22 +10,7 @@ export interface Product {
   costPrice: number | null;
   incentive: number | null;
   weight: number | null;
+  unit: string | null;
   brand: Brand | null;
-  unit: Unit | null;
   category: Category | null;
-}
-
-export interface Brand {
-  id: number;
-  name: string;
-}
-
-export interface Unit {
-  id: number;
-  name: string;
-}
-
-export interface Category {
-  id: number;
-  name: string;
 }

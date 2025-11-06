@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import {
   MRT_GlobalFilterTextField,
   MRT_ShowHideColumnsButton,
@@ -12,26 +12,38 @@ import {
 import Text from "../Text";
 import PrimaryButton, { type PrimaryButtonProps } from "../Button";
 
+export interface ITopToolbarProps {
+  title?: string;
+  hideFilterButton?: boolean;
+  hideFullScreenButton?: boolean;
+  actions?: PrimaryButtonProps[];
+  table: MRT_TableInstance<any>;
+}
+
 export default function TopToolbar({
   title,
   table,
   actions,
-}: {
-  title?: string;
-  actions?: PrimaryButtonProps[];
-  table: MRT_TableInstance<any>;
-}) {
+  hideFilterButton = false,
+  hideFullScreenButton = false,
+}: ITopToolbarProps) {
   return (
     <>
       <Grid container spacing={1} p={1} justifyContent={"space-between"}>
-        <Grid size="grow">
+        <Grid alignContent={"center"}>
           {title && <Text variant="body1" bold text={title} />}
-          <MRT_ToggleGlobalFilterButton table={table} />
+        </Grid>
+        <Grid alignContent={"center"}>
           <MRT_GlobalFilterTextField table={table} />
-          <MRT_ToggleFiltersButton table={table} />
+        </Grid>
+        <Grid size="grow">
+          <MRT_ToggleGlobalFilterButton table={table} />
+          {!hideFilterButton && <MRT_ToggleFiltersButton table={table} />}
           <MRT_ShowHideColumnsButton table={table} />
           <MRT_ToggleDensePaddingButton table={table} />
-          <MRT_ToggleFullScreenButton table={table} />
+          {!hideFullScreenButton && (
+            <MRT_ToggleFullScreenButton table={table} />
+          )}
         </Grid>
         <Grid>
           <Grid container spacing={1}>

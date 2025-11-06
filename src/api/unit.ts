@@ -8,10 +8,6 @@ export const unitApi = api.injectEndpoints({
         url: "unit/all",
         method: "GET",
       }),
-      // providesTags: (result) =>
-      //   result?.map(({ id }) => ({ type: "units", id })) || [
-      //     { type: "units", id: "LIST" },
-      //   ],
     }),
     createUnit: build.mutation({
       query: (body: any) => ({

@@ -21,8 +21,6 @@ import UnitManagementModal from "./UnitManagementModal";
 
 export default function Products() {
   const { drawerWidth, open } = useDrawer();
-  const [unitModalOpen, setUnitModalOpen] = useState(false);
-  const [fetchProductsList, { data, isFetching }] = useLazyListProductQuery();
 
   const columns = useMemo<MRT_ColumnDef<Product>[]>(
     () => [
@@ -84,7 +82,7 @@ export default function Products() {
 
       {
         id: "unit",
-        accessorKey: "unit.name",
+        accessorKey: "unit",
         header: "Unit",
         editVariant: "select",
         editSelectOptions: ["channel 1", "channle 2"],
@@ -128,6 +126,9 @@ export default function Products() {
     []
   );
 
+  const [unitModalOpen, setUnitModalOpen] = useState(false);
+  const [fetchProductsList, { data, isFetching }] = useLazyListProductQuery();
+
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15,
@@ -151,7 +152,6 @@ export default function Products() {
 
     const handler = setTimeout(() => {
       const filters = buildFilters(columnFilters);
-      console.log(filters);
       fetchProductsList({
         skip: pagination.pageIndex * pagination.pageSize,
         take: pagination.pageSize,
@@ -192,9 +192,6 @@ export default function Products() {
       density: "compact",
       columnFilters: [],
       showColumnFilters: true,
-      columnVisibility: {
-        province: false,
-      },
     },
     createDisplayMode: "row",
     editDisplayMode: "row",

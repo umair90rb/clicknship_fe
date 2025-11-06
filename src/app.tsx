@@ -22,6 +22,9 @@ const OrderReturn = React.lazy(() => import("@/pages/orders/return/"));
 // const UpdateOrder = React.lazy(() => import("@/pages/orders/update"));
 
 const Products = React.lazy(() => import("@/pages/products/index"));
+const CategoryAndBrands = React.lazy(
+  () => import("@/pages/CategoryAndBrands/index")
+);
 const Customers = React.lazy(() => import("@/pages/customers/index"));
 
 const TenantGuard = ({ children }: PropsWithChildren) => {
@@ -62,6 +65,9 @@ export default function App() {
                   </Route>
                   <Route path="products">
                     <Route index element={<Products />} />
+                  </Route>
+                  <Route path="categories-and-brands">
+                    <Route index element={<CategoryAndBrands />} />
                   </Route>
                   <Route path="customers" element={<Customers />} />
                   <Route path="*" element={<NotFound />} />
