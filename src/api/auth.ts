@@ -1,5 +1,5 @@
 import { api } from "@/api/index";
-import type { LoginRequestBody } from "@/types/auth";
+import type { LoginRequestBody, RefreshTokenRequestBody } from "@/types/auth";
 import type { OnboardRequestBody } from "@/types/onboard";
 
 export const authApi = api.injectEndpoints({
@@ -7,6 +7,13 @@ export const authApi = api.injectEndpoints({
     login: build.mutation({
       query: (credentials: LoginRequestBody) => ({
         url: "auth/login",
+        body: credentials,
+        method: "POST",
+      }),
+    }),
+    refresh: build.mutation({
+      query: (credentials: RefreshTokenRequestBody) => ({
+        url: "auth/refresh",
         body: credentials,
         method: "POST",
       }),

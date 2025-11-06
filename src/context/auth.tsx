@@ -3,8 +3,8 @@ import {
   useEffect,
   useState,
   type PropsWithChildren,
-} from 'react';
-import { AUTH_TOKEN_KEY } from '../constants/keys';
+} from "react";
+import { AUTH_TOKEN_KEY, REFRESH_TOKEN_KEY } from "../constants/keys";
 
 function getToken() {
   return localStorage.getItem(AUTH_TOKEN_KEY);
@@ -14,7 +14,7 @@ interface AuthContextProps {
   isAuthenticated: boolean;
   isLoadingAuth: boolean;
   token: null | string;
-  login: (token: string) => void;
+  login: (token: string, refreshToken: string) => void;
   logout: () => void;
 }
 
@@ -23,7 +23,7 @@ export const AuthContext = createContext<AuthContextProps>({
   isAuthenticated: false,
   isLoadingAuth: true,
   token: null,
-  login: (token: string) => {},
+  login: (token: string, refreshToken: string) => {},
   logout: () => {},
 });
 
@@ -32,11 +32,11 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [token, setToken] = useState<null | string>(null);
 
-  const login = async (token: string) => {
+  const login = async (token: string, refreshToken: string) => {
     localStorage.setItem(AUTH_TOKEN_KEY, token);
+    localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
     setToken(token);
     setIsAuthenticated(true);
-    
   };
 
   const logout = () => {

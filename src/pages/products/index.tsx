@@ -220,7 +220,7 @@ export default function Products() {
             Icon: AddIcon,
           },
           {
-            label: "Unit of Measures",
+            label: "Manage Units",
             onClick() {
               setUnitModalOpen(true);
             },

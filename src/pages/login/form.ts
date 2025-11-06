@@ -35,7 +35,7 @@ export default function useLoginForm() {
       .unwrap()
       .then((response) => {
         if ("access_token" in response) {
-          login(response.access_token);
+          login(response.access_token, response?.refresh_token);
         }
       })
       .catch((err) => {
