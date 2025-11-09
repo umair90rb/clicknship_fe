@@ -53,6 +53,7 @@ export const unitApi = api.injectEndpoints({
 });
 
 export const {
+  useListUnitQuery,
   useLazyListUnitQuery,
   useCreateUnitMutation,
   useDeleteUnitMutation,

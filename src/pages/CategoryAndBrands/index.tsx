@@ -16,6 +16,8 @@ import CustomIconButton from "@/components/IconButton";
 import {
   useCreateBrandMutation,
   useCreateCategoryMutation,
+  useDeleteBrandMutation,
+  useDeleteCategoryMutation,
   useLazyListBrandQuery,
   useLazyListCategoryQuery,
 } from "@/api/categoryAndBrands";
@@ -80,7 +82,7 @@ function CreateCategoryForm() {
       />
       <Grid spacing={1} container m={1} flexDirection={"column"}>
         <Grid>
-          <FormInputText autoFocus control={control} label="Name" name="name" />
+          <FormInputText control={control} label="Name" name="name" />
         </Grid>
         <Grid size="grow">
           <FormInputTextArea
@@ -96,7 +98,7 @@ function CreateCategoryForm() {
         <PrimaryButton
           fullWidth
           Icon={AddIcon}
-          label="Add Category"
+          label="Add New Category"
           onClick={onSubmit}
           loading={isLoading}
         />
@@ -139,6 +141,8 @@ function CategoryTable() {
 
   const [fetchCategoriesList, { data, isFetching }] =
     useLazyListCategoryQuery();
+
+  const [deleteCategory, { isLoading }] = useDeleteCategoryMutation();
 
   useEffect(() => {
     fetchCategoriesList({});
@@ -186,11 +190,15 @@ function CategoryTable() {
       />
     ),
     renderRowActions: ({ table, row }) => [
-      <CustomIconButton Icon={DeleteIcon} color="error" onClick={() => {}} />,
       <CustomIconButton
-        Icon={EditIcon}
-        onClick={() => table.setEditingRow(row)}
+        Icon={DeleteIcon}
+        color="error"
+        onClick={() => deleteCategory(row.getValue<number>("id"))}
       />,
+      // <CustomIconButton
+      //   Icon={EditIcon}
+      //   onClick={() => table.setEditingRow(row)}
+      // />,
     ],
     renderBottomToolbar: (props) => <BottomToolbar {...props} />,
   });
@@ -251,7 +259,7 @@ function CreateBrandForm() {
       />
       <Grid spacing={1} container m={1} flexDirection={"column"}>
         <Grid>
-          <FormInputText autoFocus control={control} label="Name" name="name" />
+          <FormInputText control={control} label="Name" name="name" />
         </Grid>
         <Grid size="grow">
           <FormSwitchButton control={control} label="Enabled" name="active" />
@@ -262,7 +270,7 @@ function CreateBrandForm() {
         <PrimaryButton
           fullWidth
           Icon={AddIcon}
-          label="Add Brand"
+          label="Add New Brand"
           onClick={onSubmit}
           loading={isLoading}
         />
@@ -305,6 +313,7 @@ function BrandTable() {
   );
 
   const [fetchBrand, { data, isFetching }] = useLazyListBrandQuery();
+  const [deleteBrand, { isLoading: isDeleting }] = useDeleteBrandMutation();
 
   useEffect(() => {
     fetchBrand({});
@@ -352,11 +361,15 @@ function BrandTable() {
       />
     ),
     renderRowActions: ({ table, row }) => [
-      <CustomIconButton Icon={DeleteIcon} color="error" onClick={() => {}} />,
       <CustomIconButton
-        Icon={EditIcon}
-        onClick={() => table.setEditingRow(row)}
+        Icon={DeleteIcon}
+        color="error"
+        onClick={() => deleteBrand(row.getValue<number>("id"))}
       />,
+      // <CustomIconButton
+      //   Icon={EditIcon}
+      //   onClick={() => table.setEditingRow(row)}
+      // />,
     ],
     renderBottomToolbar: (props) => <BottomToolbar {...props} />,
   });

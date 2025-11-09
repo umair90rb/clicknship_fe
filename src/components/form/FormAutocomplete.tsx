@@ -13,6 +13,8 @@ interface FormAutoSelectProps extends FormInputProps {
   multiple?: boolean;
   disableCloseOnSelect?: boolean;
   setValue?: (value: any, options: any[]) => void;
+  getOptionLabel?: (option: any) => string;
+  getOptionValue?: (option: any) => any;
   errorKey?: string | null;
 }
 
@@ -25,6 +27,8 @@ export default function FormAutocomplete({
   multiple = false,
   disableCloseOnSelect = multiple,
   setValue,
+  getOptionLabel,
+  getOptionValue,
   errorKey,
   ...props
 }: FormAutoSelectProps) {
@@ -46,8 +50,11 @@ export default function FormAutocomplete({
             size="small"
             multiple={multiple}
             options={options}
+            getOptionLabel={getOptionLabel}
             value={setValue ? setValue(value, options) : value}
-            onChange={(_e, value) => onChange(value)}
+            onChange={(_e, value) =>
+              onChange(getOptionValue ? getOptionValue(value) : value)
+            }
             renderOption={
               multiple
                 ? (props, option, { selected }) => {

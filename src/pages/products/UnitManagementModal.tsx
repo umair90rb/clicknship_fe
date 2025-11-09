@@ -1,13 +1,12 @@
 import {
   useCreateUnitMutation,
   useDeleteUnitMutation,
-  useLazyListUnitQuery,
+  useListUnitQuery,
 } from "@/api/unit";
 import CustomDialog from "@/components/Dialog";
 import type { ModalProps } from "@/types/common";
 import type { Unit } from "@/types/units";
 import { Chip, CircularProgress, Divider, Grid } from "@mui/material";
-import { useEffect } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useForm } from "react-hook-form";
 import { FormInputText } from "@/components/form/FormInput";
@@ -104,13 +103,7 @@ export default function UnitManagementModal({
   open,
   setOpen,
 }: UnitManagementModalProps) {
-  const [fetchUnits, { data, error, isFetching }] = useLazyListUnitQuery();
-
-  useEffect(() => {
-    if (open) {
-      fetchUnits({});
-    }
-  }, [open]);
+  const { data, isFetching, error } = useListUnitQuery({});
 
   return (
     <CustomDialog

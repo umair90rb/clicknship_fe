@@ -11,7 +11,6 @@ export default function FormRootError({ errors }: FormRootErrorProps) {
   return (
     root && (
       <Box mt={1}>
-        {" "}
         <Text color="error">{root?.message}</Text>
       </Box>
     )

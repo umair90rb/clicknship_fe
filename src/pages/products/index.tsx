@@ -1,4 +1,4 @@
-import { useLazyListProductQuery } from "@/api/products";
+import { useLazyListProductQuery, useListProductQuery } from "@/api/products";
 import {
   MaterialReactTable,
   type MRT_ColumnFiltersState,
@@ -18,9 +18,28 @@ import type { Product } from "@/types/products";
 import useDrawer from "@/hooks/useDrawer";
 import CustomIconButton from "@/components/IconButton";
 import UnitManagementModal from "./UnitManagementModal";
+import CreateUpdateProductModal from "./CreateUpdateProductModal";
+import useCategoryBrandUnitList from "@/hooks/useCategoryBrandUnitList";
+import type { MuiTableDropdownOption } from "@/types/common";
 
 export default function Products() {
   const { drawerWidth, open } = useDrawer();
+
+  const { unitList, brandList, categoryList } = useCategoryBrandUnitList();
+
+  const units = useMemo<string[]>(
+    () => unitList?.map(({ name }) => name) || [],
+    [unitList]
+  );
+  const categories = useMemo<MuiTableDropdownOption[]>(
+    () =>
+      categoryList?.map(({ id, name }) => ({ value: id, label: name })) || [],
+    [categoryList]
+  );
+  const brands = useMemo<MuiTableDropdownOption[]>(
+    () => brandList?.map(({ id, name }) => ({ value: id, label: name })) || [],
+    [brandList]
+  );
 
   const columns = useMemo<MRT_ColumnDef<Product>[]>(
     () => [
@@ -35,9 +54,6 @@ export default function Products() {
         id: "name",
         accessorKey: "name",
         header: "Name",
-        muiEditTextFieldProps: {
-          autoFocus: true,
-        },
       },
       {
         id: "description",
@@ -49,6 +65,7 @@ export default function Products() {
         id: "sku",
         accessorKey: "sku",
         header: "SKU",
+        enableClickToCopy: true,
       },
       {
         id: "barcode",
@@ -84,50 +101,26 @@ export default function Products() {
         id: "unit",
         accessorKey: "unit",
         header: "Unit",
-        editVariant: "select",
-        editSelectOptions: ["channel 1", "channle 2"],
-        muiEditTextFieldProps: {
-          select: true,
-          // error: !!validationErrors?.state,
-          // helperText: validationErrors?.state,
-        },
         filterVariant: "select",
-        filterSelectOptions: ["channel 1", "channle 2"],
+        filterSelectOptions: units,
       },
       {
         id: "category",
         accessorKey: "category.name",
         header: "Category",
-        editVariant: "select",
-        editSelectOptions: ["channel 1", "channle 2"],
-        muiEditTextFieldProps: {
-          select: true,
-          // error: !!validationErrors?.state,
-          // helperText: validationErrors?.state,
-        },
         filterVariant: "select",
-        filterSelectOptions: ["channel 1", "channle 2"],
+        filterSelectOptions: categories,
       },
       {
         id: "brand",
         accessorKey: "brand.name",
         header: "Brand",
-        editVariant: "select",
-        editSelectOptions: ["channel 1", "channle 2"],
-        muiEditTextFieldProps: {
-          select: true,
-          // error: !!validationErrors?.state,
-          // helperText: validationErrors?.state,
-        },
         filterVariant: "select",
-        filterSelectOptions: ["channel 1", "channle 2"],
+        filterSelectOptions: brands,
       },
     ],
     []
   );
-
-  const [unitModalOpen, setUnitModalOpen] = useState(false);
-  const [fetchProductsList, { data, isFetching }] = useLazyListProductQuery();
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -137,30 +130,45 @@ export default function Products() {
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
     []
   );
-  const firstRender = useRef(true);
+  const [unitModalOpen, setUnitModalOpen] = useState(false);
+  const [productModalOpen, setProductModalOpen] = useState(false);
 
-  useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false;
-      fetchProductsList({
-        skip: pagination.pageIndex * pagination.pageSize,
-        take: pagination.pageSize,
-        ...buildFilters(columnFilters),
-      });
-      return;
-    }
+  const filters = buildFilters(columnFilters);
 
-    const handler = setTimeout(() => {
-      const filters = buildFilters(columnFilters);
-      fetchProductsList({
-        skip: pagination.pageIndex * pagination.pageSize,
-        take: pagination.pageSize,
-        ...filters,
-      });
-    }, 500);
+  const { data, isFetching } = useListProductQuery(
+    {
+      skip: pagination.pageIndex * pagination.pageSize,
+      take: pagination.pageSize,
+      ...filters,
+    },
+    { refetchOnMountOrArgChange: true }
+  );
+  // const [fetchProductsList, { data, isFetching }] = useLazyListProductQuery();
 
-    return () => clearTimeout(handler);
-  }, [pagination.pageIndex, pagination.pageSize, columnFilters]);
+  // const firstRender = useRef(true);
+
+  // useEffect(() => {
+  //   if (firstRender.current) {
+  //     firstRender.current = false;
+  //     fetchProductsList({
+  //       skip: pagination.pageIndex * pagination.pageSize,
+  //       take: pagination.pageSize,
+  //       ...buildFilters(columnFilters),
+  //     });
+  //     return;
+  //   }
+
+  //   const handler = setTimeout(() => {
+  //     const filters = buildFilters(columnFilters);
+  //     fetchProductsList({
+  //       skip: pagination.pageIndex * pagination.pageSize,
+  //       take: pagination.pageSize,
+  //       ...filters,
+  //     });
+  //   }, 500);
+
+  //   return () => clearTimeout(handler);
+  // }, [pagination.pageIndex, pagination.pageSize, columnFilters]);
 
   const table = useMaterialReactTable({
     // enableClickToCopy: true,
@@ -193,9 +201,6 @@ export default function Products() {
       columnFilters: [],
       showColumnFilters: true,
     },
-    createDisplayMode: "row",
-    editDisplayMode: "row",
-    enableEditing: true,
     columns,
     data: data?.data || [],
     manualFiltering: true,
@@ -212,7 +217,7 @@ export default function Products() {
           {
             label: "Add Product",
             onClick() {
-              props.table.setCreatingRow(true);
+              setProductModalOpen(true);
             },
             Icon: AddIcon,
           },
@@ -241,6 +246,10 @@ export default function Products() {
         <MaterialReactTable table={table} />
       </LocalizationProvider>
       <UnitManagementModal open={unitModalOpen} setOpen={setUnitModalOpen} />
+      <CreateUpdateProductModal
+        open={productModalOpen}
+        setOpen={setProductModalOpen}
+      />
     </>
   );
 }

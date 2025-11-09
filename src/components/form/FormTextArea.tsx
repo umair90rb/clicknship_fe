@@ -14,7 +14,7 @@ export const FormInputTextArea = ({
   label,
   minRows = 2,
   maxRows = 5,
-  placeholder = label,
+  placeholder,
 }: FormTextAreaProps) => {
   return (
     <Controller

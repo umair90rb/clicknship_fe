@@ -123,9 +123,11 @@ export const categoryAndBrandApi = api.injectEndpoints({
 });
 
 export const {
+  useListCategoryQuery,
   useLazyListCategoryQuery,
   useCreateCategoryMutation,
   useDeleteCategoryMutation,
+  useListBrandQuery,
   useLazyListBrandQuery,
   useCreateBrandMutation,
   useDeleteBrandMutation,

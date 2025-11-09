@@ -22,3 +22,8 @@ export interface ModalProps {
   open: boolean;
   setOpen: (state: any) => void;
 }
+
+export interface MuiTableDropdownOption {
+  value: number;
+  label: string;
+}
