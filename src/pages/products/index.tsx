@@ -1,11 +1,11 @@
-import { useLazyListProductQuery, useListProductQuery } from "@/api/products";
+import { useListProductQuery } from "@/api/products";
 import {
   MaterialReactTable,
   type MRT_ColumnFiltersState,
   useMaterialReactTable,
   type MRT_ColumnDef,
 } from "material-react-table";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import EditIcon from "@mui/icons-material/Edit";
@@ -141,34 +141,8 @@ export default function Products() {
       take: pagination.pageSize,
       ...filters,
     },
-    { refetchOnMountOrArgChange: true }
+    {}
   );
-  // const [fetchProductsList, { data, isFetching }] = useLazyListProductQuery();
-
-  // const firstRender = useRef(true);
-
-  // useEffect(() => {
-  //   if (firstRender.current) {
-  //     firstRender.current = false;
-  //     fetchProductsList({
-  //       skip: pagination.pageIndex * pagination.pageSize,
-  //       take: pagination.pageSize,
-  //       ...buildFilters(columnFilters),
-  //     });
-  //     return;
-  //   }
-
-  //   const handler = setTimeout(() => {
-  //     const filters = buildFilters(columnFilters);
-  //     fetchProductsList({
-  //       skip: pagination.pageIndex * pagination.pageSize,
-  //       take: pagination.pageSize,
-  //       ...filters,
-  //     });
-  //   }, 500);
-
-  //   return () => clearTimeout(handler);
-  // }, [pagination.pageIndex, pagination.pageSize, columnFilters]);
 
   const table = useMaterialReactTable({
     // enableClickToCopy: true,
@@ -190,6 +164,7 @@ export default function Products() {
     muiTableContainerProps: {
       sx: {
         minHeight: `calc(100vh - 160px)`,
+        maxHeight: `calc(100vh - 160px)`,
         height: "auto",
         width: "auto",
         maxWidth: `calc(100vw - ${open ? drawerWidth : 0}px)`,

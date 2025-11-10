@@ -156,7 +156,6 @@ export default function Orders() {
     enableRowSelection: true,
     enableColumnResizing: true,
     enableColumnOrdering: true,
-    enableRowActions: true,
     enableKeyboardShortcuts: true,
     layoutMode: "semantic",
     muiTableContainerProps: {
@@ -187,15 +186,6 @@ export default function Orders() {
     onPaginationChange: setPagination,
     onColumnFiltersChange: setColumnFilters,
     renderTopToolbar: (props) => <TopToolbar title="" {...props} />,
-    renderRowActionMenuItems: ({ table }) => [
-      <MRT_ActionMenuItem
-        onClick={() => console.log("delete button clicked")}
-        table={table}
-        icon={<DeleteIcon />}
-        label="Delete"
-      />,
-      <MRT_ActionMenuItem table={table} icon={<EditIcon />} label="Edit" />,
-    ],
     renderBottomToolbar: (props) => <BottomToolbar {...props} />,
     renderDetailPanel: (props) => <OrderDetailPanel {...props} />,
   });

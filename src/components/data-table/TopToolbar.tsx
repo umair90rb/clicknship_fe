@@ -15,6 +15,7 @@ import PrimaryButton, { type PrimaryButtonProps } from "../Button";
 export interface ITopToolbarProps {
   title?: string;
   hideFilterButton?: boolean;
+  hideGlobalFilterButton?: boolean;
   hideFullScreenButton?: boolean;
   actions?: PrimaryButtonProps[];
   table: MRT_TableInstance<any>;
@@ -25,6 +26,7 @@ export default function TopToolbar({
   table,
   actions,
   hideFilterButton = false,
+  hideGlobalFilterButton = false,
   hideFullScreenButton = false,
 }: ITopToolbarProps) {
   return (
@@ -37,7 +39,9 @@ export default function TopToolbar({
           <MRT_GlobalFilterTextField table={table} />
         </Grid>
         <Grid size="grow">
-          <MRT_ToggleGlobalFilterButton table={table} />
+          {hideGlobalFilterButton && (
+            <MRT_ToggleGlobalFilterButton table={table} />
+          )}
           {!hideFilterButton && <MRT_ToggleFiltersButton table={table} />}
           <MRT_ShowHideColumnsButton table={table} />
           <MRT_ToggleDensePaddingButton table={table} />

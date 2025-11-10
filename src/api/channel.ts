@@ -2,7 +2,7 @@ import { api } from "@/api/index";
 
 export const channelApi = api.injectEndpoints({
   endpoints: (build) => ({
-    onboard: build.mutation({
+    listChannel: build.query({
       query: (body) => ({
         url: "channel",
         body,
@@ -12,4 +12,4 @@ export const channelApi = api.injectEndpoints({
   }),
 });
 
-export const { useOnboardMutation } = channelApi;
+export const { useListChannelQuery, useLazyListChannelQuery } = channelApi;

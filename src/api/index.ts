@@ -27,7 +27,6 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-// ✅ Wrapper base query that handles 401 + refresh
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
 

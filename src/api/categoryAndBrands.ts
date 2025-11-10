@@ -8,13 +8,13 @@ export const categoryAndBrandApi = api.injectEndpoints({
   endpoints: (build) => ({
     listCategory: build.query<CategoryListApiResponse, {}>({
       query: () => ({
-        url: "category/all",
+        url: "categories",
         method: "GET",
       }),
     }),
     createCategory: build.mutation({
       query: (body: any) => ({
-        url: "category/create",
+        url: "categories/create",
         body,
         method: "POST",
       }),
@@ -37,7 +37,7 @@ export const categoryAndBrandApi = api.injectEndpoints({
     }),
     deleteCategory: build.mutation({
       query: (id: number) => ({
-        url: `category/${id}`,
+        url: `categories/${id}`,
         method: "DELETE",
       }),
       onQueryStarted(id, { dispatch, queryFulfilled }) {
@@ -65,7 +65,7 @@ export const categoryAndBrandApi = api.injectEndpoints({
 
     listBrand: build.query<BrandListApiResponse, {}>({
       query: () => ({
-        url: "brand/all",
+        url: "brand",
         method: "GET",
       }),
     }),
