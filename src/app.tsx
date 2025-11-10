@@ -23,7 +23,7 @@ const OrderReturn = React.lazy(() => import("@/pages/orders/return/"));
 
 const Products = React.lazy(() => import("@/pages/products/index"));
 const CategoryAndBrands = React.lazy(
-  () => import("@/pages/CategoryAndBrands/index")
+  () => import("@/pages/categories-and-brands/index")
 );
 const Customers = React.lazy(() => import("@/pages/customers/index"));
 
