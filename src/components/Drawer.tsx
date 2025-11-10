@@ -7,6 +7,7 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import GroupIcon from "@mui/icons-material/Group";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import LocationPinIcon from "@mui/icons-material/LocationPin";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import StoreIcon from "@mui/icons-material/Store";
@@ -77,9 +78,32 @@ const menus: MenuWithChildren[] = [
     ],
   },
   {
+    title: "Logistics",
+    children: [
+      {
+        title: "Courier Services",
+        url: "/courier-services",
+        Icon: LocalShippingIcon,
+      },
+      {
+        title: "Cities Management",
+        url: "/cities-management",
+        Icon: LocationPinIcon,
+      },
+    ],
+  },
+  {
     title: "Setting",
     url: "/setting",
     children: [
+      // need to separate categories from brands and include units here
+      // because in companies mostly Customer agent is the one who manage products/category/units but brands are
+      // created/managed by companies other personal so make category based on companies use case.
+      {
+        title: "Sales Channel",
+        url: "/sales-channel",
+        Icon: StoreIcon,
+      },
       {
         title: "Categories & Brands",
         url: "/categories-and-brands",
@@ -89,16 +113,6 @@ const menus: MenuWithChildren[] = [
         title: "Staff & Permissions",
         url: "/staff-and-permissions",
         Icon: GroupIcon,
-      },
-      {
-        title: "Sales Channel",
-        url: "/sales-channel",
-        Icon: StoreIcon,
-      },
-      {
-        title: "Delivery Services",
-        url: "/delivery-services",
-        Icon: LocalShippingIcon,
       },
     ],
   },

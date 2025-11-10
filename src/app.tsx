@@ -14,6 +14,7 @@ const ResetPassword = React.lazy(() => import("@/pages/reset-password"));
 const NotFound = React.lazy(() => import("@/pages/not-found"));
 
 const Dashboard = React.lazy(() => import("@/pages/dashboard"));
+const Reports = React.lazy(() => import("@/pages/reports"));
 
 const Orders = React.lazy(() => import("@/pages/orders/index/"));
 const OrderCreate = React.lazy(() => import("@/pages/orders/create/"));
@@ -22,10 +23,22 @@ const OrderReturn = React.lazy(() => import("@/pages/orders/return/"));
 // const UpdateOrder = React.lazy(() => import("@/pages/orders/update"));
 
 const Products = React.lazy(() => import("@/pages/products/index"));
+const Customers = React.lazy(() => import("@/pages/customers/index"));
+
+const CourierServices = React.lazy(
+  () => import("@/pages/logistic/courier-services/")
+);
+const CitiesManagement = React.lazy(
+  () => import("@/pages/logistic/cities-management/")
+);
+
+const SalesChannel = React.lazy(() => import("@/pages/sales-channel/index"));
 const CategoryAndBrands = React.lazy(
   () => import("@/pages/categories-and-brands/index")
 );
-const Customers = React.lazy(() => import("@/pages/customers/index"));
+const StaffAndPermissions = React.lazy(
+  () => import("@/pages/staff-and-permissions/index")
+);
 
 const TenantGuard = ({ children }: PropsWithChildren) => {
   const tenant = useTenant();
@@ -56,6 +69,8 @@ export default function App() {
                   }
                 >
                   <Route index element={<Dashboard />} />
+                  <Route path="reports" element={<Reports />} />
+
                   <Route path="orders">
                     <Route index element={<Orders />} />
                     <Route path="create" element={<OrderCreate />} />
@@ -63,13 +78,29 @@ export default function App() {
                     {/* <Route path=":orderId" element={<ViewOrder />} /> */}
                     {/* <Route path=":orderId/update" element={<UpdateOrder />} /> */}
                   </Route>
-                  <Route path="products">
-                    <Route index element={<Products />} />
-                  </Route>
-                  <Route path="categories-and-brands">
-                    <Route index element={<CategoryAndBrands />} />
-                  </Route>
+
+                  <Route path="products" element={<Products />} />
                   <Route path="customers" element={<Customers />} />
+
+                  <Route
+                    path="courier-services"
+                    element={<CourierServices />}
+                  />
+                  <Route
+                    path="cities-management"
+                    element={<CitiesManagement />}
+                  />
+
+                  <Route path="sales-channel" element={<SalesChannel />} />
+                  <Route
+                    path="categories-and-brands"
+                    element={<CategoryAndBrands />}
+                  />
+                  <Route
+                    path="staff-and-permissions"
+                    element={<StaffAndPermissions />}
+                  />
+
                   <Route path="*" element={<NotFound />} />
                 </Route>
 

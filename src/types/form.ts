@@ -5,4 +5,5 @@ export interface FormInputProps {
   placeholder?: string;
   setValue?: any;
   disabled?: boolean;
+  helperText?: string;
 }

@@ -16,6 +16,7 @@ export const FormInputText = ({
   disabled = false,
   setValue,
   autoFocus = false,
+  helperText,
 }: FormInputPropsWithType) => {
   return (
     <Controller
@@ -25,7 +26,7 @@ export const FormInputText = ({
         <TextField
           autoFocus={autoFocus}
           disabled={disabled}
-          helperText={error ? error.message : null}
+          helperText={error ? error.message : helperText}
           size="small"
           error={!!error}
           onChange={setValue ? (e) => setValue(e) : onChange}
