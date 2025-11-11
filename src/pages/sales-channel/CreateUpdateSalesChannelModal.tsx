@@ -7,10 +7,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import FormRootError from "@/components/form/FormRootError";
 import { getErrorMessage } from "@/utils";
-import { useCreateProductMutation } from "@/api/products";
 import FormAutocomplete from "@/components/form/FormAutocomplete";
 import useCategoryBrandUnitList from "@/hooks/useCategoryBrandUnitList";
 import { useMemo } from "react";
+import FormToggleButtons from "@/components/form/FormToggleButtons";
+import { useCreateSalesChannelMutation } from "@/api/channel";
 
 type CreateUpdateSalesChannelModalProps = ModalProps;
 
@@ -28,7 +29,13 @@ function CreateUpdateSalesChannelForm({ control, errors }) {
         <FormInputText autoFocus control={control} label="Name" name="name" />
       </Grid>
       <Grid size={{ xs: 12, sm: 12, md: 12 }}>
-        <FormInputText control={control} label="Type" name="type" />
+        {/* <FormInputText control={control} label="Type" name="type" /> */}
+        <FormToggleButtons
+          options={["Shopify", "Whatsapp", "Email", "Other"]}
+          control={control}
+          name="type"
+          label=""
+        />
       </Grid>
 
       <Grid size={{ xs: 12, sm: 12, md: 12 }}>
@@ -59,9 +66,13 @@ function CreateUpdateSalesChannelForm({ control, errors }) {
 }
 
 const schema = Yup.object({
-  name: Yup.string().required("Sales channel name is required"),
-  type: Yup.string().required("Sales channel SKU is required"),
-  source: Yup.string().nullable(),
+  name: Yup.string().required("Name is required"),
+  type: Yup.string().required("Type is required"),
+  source: Yup.string().when("type", ([type], schema) => {
+    return type === "Shopify"
+      ? schema.required("Source is required for Shopify channels")
+      : schema.notRequired();
+  }),
   brandId: Yup.number().nullable(),
   active: Yup.boolean().required(),
 });
@@ -78,7 +89,7 @@ export default function CreateUpdateSalesChannelModal({
   open,
   setOpen,
 }: CreateUpdateSalesChannelModalProps) {
-  const [createProduct, { isLoading }] = useCreateProductMutation();
+  const [createSalesChannel, { isLoading }] = useCreateSalesChannelMutation();
   const {
     control,
     handleSubmit,
@@ -90,7 +101,7 @@ export default function CreateUpdateSalesChannelModal({
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    return createProduct(data)
+    return createSalesChannel(data)
       .unwrap()
       .then(() => setOpen(false))
       .catch((error) => {

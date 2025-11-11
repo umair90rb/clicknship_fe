@@ -1,4 +1,3 @@
-import { useListProductQuery } from "@/api/products";
 import {
   MaterialReactTable,
   type MRT_ColumnFiltersState,
@@ -8,18 +7,19 @@ import {
 import { useMemo, useState } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+// import EditIcon from "@mui/icons-material/Edit";
+// import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import { buildFilters } from "../orders/utils";
+// import { buildFilters } from "../orders/utils";
 import TopToolbar from "@/components/data-table/TopToolbar";
 import BottomToolbar from "@/components/data-table/BottomToolbar";
 import type { Product } from "@/types/products";
 import useDrawer from "@/hooks/useDrawer";
-import CustomIconButton from "@/components/IconButton";
+// import CustomIconButton from "@/components/IconButton";
 import useCategoryBrandUnitList from "@/hooks/useCategoryBrandUnitList";
 import type { MuiTableDropdownOption } from "@/types/common";
 import CreateUpdateSalesChannelModal from "./CreateUpdateSalesChannelModal";
+import { useListSalesChannelQuery } from "@/api/channel";
 
 export default function SalesChannel() {
   const { drawerWidth, open } = useDrawer();
@@ -81,16 +81,9 @@ export default function SalesChannel() {
     []
   );
 
-  const filters = buildFilters(columnFilters);
+  //   const filters = buildFilters(columnFilters);
 
-  const { data, isFetching } = useListProductQuery(
-    {
-      skip: pagination.pageIndex * pagination.pageSize,
-      take: pagination.pageSize,
-      ...filters,
-    },
-    {}
-  );
+  const { data, isFetching } = useListSalesChannelQuery({});
 
   const table = useMaterialReactTable({
     // enableClickToCopy: true,
@@ -125,11 +118,11 @@ export default function SalesChannel() {
       showColumnFilters: true,
     },
     columns,
-    data: data?.data || [],
+    data: data || [],
     manualFiltering: true,
     manualPagination: true,
     autoResetPageIndex: false,
-    rowCount: data?.meta?.total || 0,
+    // rowCount: data?.meta?.total || 0,
     state: { isLoading: isFetching, columnFilters, pagination },
     onPaginationChange: setPagination,
     onColumnFiltersChange: setColumnFilters,

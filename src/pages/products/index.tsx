@@ -24,7 +24,6 @@ import type { MuiTableDropdownOption } from "@/types/common";
 
 export default function Products() {
   const { drawerWidth, open } = useDrawer();
-
   const { unitList, brandList, categoryList } = useCategoryBrandUnitList();
 
   const units = useMemo<string[]>(

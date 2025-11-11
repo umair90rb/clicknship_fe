@@ -5,7 +5,7 @@ export const unitApi = api.injectEndpoints({
   endpoints: (build) => ({
     listUnit: build.query<UnitListApiResponse, {}>({
       query: () => ({
-        url: "unit/all",
+        url: "unit",
         method: "GET",
       }),
     }),

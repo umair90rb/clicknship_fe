@@ -10,8 +10,10 @@ import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import LocationPinIcon from "@mui/icons-material/LocationPin";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+import LogoutIcon from "@mui/icons-material/Logout";
 import StoreIcon from "@mui/icons-material/Store";
 import WidgetsIcon from "@mui/icons-material/Widgets";
+import LensBlurIcon from "@mui/icons-material/LensBlur";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
@@ -25,11 +27,14 @@ import Toolbar from "@mui/material/Toolbar";
 
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import useAuth from "@/hooks/useAuth";
 
 interface MenuItem {
   title: string;
   url?: string;
   Icon?: any;
+  secondaryAction?: any;
+  onClick?: () => void;
 }
 
 interface MenuWithChildren extends MenuItem {
@@ -123,16 +128,20 @@ interface MenuListItemProps {
 }
 
 function MenuListItem({ menu }: MenuListItemProps) {
-  const { url, title, Icon } = menu;
+  const { url, title, Icon, secondaryAction, onClick } = menu;
   const navigate = useNavigate();
   const location = useLocation();
 
   return (
-    <ListItem disablePadding dense>
+    <ListItem secondaryAction={secondaryAction} disablePadding dense>
       <ListItemButton
         selected={location?.pathname === url}
         onClick={() => {
-          navigate(url as string);
+          if (onClick) {
+            onClick();
+          } else {
+            navigate(url as string);
+          }
         }}
       >
         <ListItemIcon>{Icon && <Icon />}</ListItemIcon>
@@ -183,20 +192,35 @@ function ExpandableMenuList({ menu }: ExpandableMenuListProps) {
 }
 
 function renderMenu(menus: MenuWithChildren[]) {
+  const { logout } = useAuth();
   return (
-    <List
-      sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-      component="nav"
-      dense
-    >
-      {menus.map((menu, index) =>
-        "children" in menu ? (
-          <ExpandableMenuList key={index} menu={menu} />
-        ) : (
-          <MenuListItem key={index} menu={menu} />
-        )
-      )}
-    </List>
+    <>
+      <List
+        sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+        component="nav"
+        dense
+      >
+        {menus.map((menu, index) =>
+          "children" in menu ? (
+            <ExpandableMenuList key={index} menu={menu} />
+          ) : (
+            <MenuListItem key={index} menu={menu} />
+          )
+        )}
+      </List>
+      <Box flexGrow={1} />
+      <MenuListItem
+        menu={{ url: "", Icon: LogoutIcon, title: "Logout", onClick: logout }}
+      />
+      {/* <MenuListItem
+        menu={{
+          url: "",
+          title: "Version",
+          Icon: LensBlurIcon,
+          secondaryAction: <p>1.0.0</p>,
+        }}
+      /> */}
+    </>
   );
 }
 
@@ -223,8 +247,16 @@ export default function ClippedDrawer({
         [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: "border-box" },
       }}
     >
-      <Toolbar />
-      <Box sx={{ overflow: "auto" }}>{renderMenu(menus)}</Box>
+      <Toolbar variant="dense" />
+      <Box
+        sx={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        {renderMenu(menus)}
+      </Box>
     </Drawer>
   );
 }

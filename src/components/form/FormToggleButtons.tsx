@@ -38,12 +38,13 @@ export default function FormToggleButtons({
           <ToggleButtonGroup
             size="small"
             value={value}
+            fullWidth
             exclusive
             onChange={onChange}
           >
             {options.map((option) =>
               typeof option === "string" ? (
-                <ToggleButton color={"primary"} value={option}>
+                <ToggleButton size="small" color="primary" value={option}>
                   {option}
                 </ToggleButton>
               ) : (
