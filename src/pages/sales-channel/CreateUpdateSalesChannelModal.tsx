@@ -43,7 +43,7 @@ function CreateUpdateSalesChannelForm({ control, errors }) {
           control={control}
           label="Source"
           name="source"
-          helperText="For type shopify, get this source from your shopify admin dashboard"
+          helperText="For type shopify, get this source from your shopify admin dashboard, https://admin.shopify.com/store/ali123 from this link ali123 is source"
         />
       </Grid>
 
@@ -106,7 +106,7 @@ export default function CreateUpdateSalesChannelModal({
       .then(() => setOpen(false))
       .catch((error) => {
         const message = getErrorMessage(error);
-        setError(message.includes("name") ? "name" : "root", {
+        setError(message.includes("source") ? "source" : "root", {
           message,
         });
       });
