@@ -4,6 +4,8 @@ import Container from "@/components/Container";
 import HDivider from "@/components/Divider";
 import { FormInputText } from "@/components/form/FormInput";
 import LinkButton from "@/components/LinkButton";
+import Logo from "@/components/Logo";
+import PrivacyPolicy from "@/components/PrivacyLinks";
 import Text from "@/components/Text";
 import useResetPasswordForm from "@/pages/reset-password/form";
 import Box from "@mui/material/Box";
@@ -18,8 +20,9 @@ export default function ResetPassword() {
     <>
       <CssBaseline enableColorScheme />
       <Container direction="column" justifyContent="space-between">
+        <Logo />
         <Card variant="outlined">
-          <Text variant="h4" text="Reset Password" />
+          <Text textAlign="center" variant="h4" text="Reset Password" />
           <FormInputText name="email" control={form.control} label="Email" />
           <PrimaryButton
             type="button"
@@ -28,12 +31,13 @@ export default function ResetPassword() {
           />
           <HDivider text="or" />
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <Text>
+            <Text textAlign="center">
               <LinkButton label="Sign In" onClick={() => navigate("/login")} />{" "}
               to your account!
             </Text>
           </Box>
         </Card>
+        <PrivacyPolicy />
       </Container>
     </>
   );

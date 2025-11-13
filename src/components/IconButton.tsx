@@ -1,14 +1,6 @@
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import { styled } from "@mui/material/styles";
-import Badge, { badgeClasses } from "@mui/material/Badge";
-
-const CustomBadge = styled(Badge)`
-  & .${badgeClasses.badge} {
-    top: -12px;
-    right: -6px;
-  }
-`;
+import Badge from "@mui/material/Badge";
 
 export interface CustomIconButtonProps {
   Icon: any;
@@ -52,13 +44,12 @@ export default function CustomIconButton({
         loading={loading}
         {...props}
       >
-        <Icon fontSize={size} />
-        {badge && (
-          <CustomBadge
-            badgeContent={badge}
-            color="primary"
-            overlap="circular"
-          />
+        {badge ? (
+          <Badge badgeContent={badge} color="error">
+            <Icon fontSize={size} />
+          </Badge>
+        ) : (
+          <Icon fontSize={size} />
         )}
       </IconButton>
     </Tooltip>

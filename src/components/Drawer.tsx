@@ -10,10 +10,8 @@ import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import LocationPinIcon from "@mui/icons-material/LocationPin";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
-import LogoutIcon from "@mui/icons-material/Logout";
 import StoreIcon from "@mui/icons-material/Store";
 import WidgetsIcon from "@mui/icons-material/Widgets";
-import LensBlurIcon from "@mui/icons-material/LensBlur";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
@@ -123,6 +121,14 @@ const menus: MenuWithChildren[] = [
   },
 ];
 
+const bottomMenus: MenuWithChildren[] = [
+  {
+    title: "Profile",
+    url: "/profile",
+    Icon: SpaceDashboardIcon,
+  },
+];
+
 interface MenuListItemProps {
   menu: MenuItem;
 }
@@ -209,17 +215,6 @@ function renderMenu(menus: MenuWithChildren[]) {
         )}
       </List>
       <Box flexGrow={1} />
-      <MenuListItem
-        menu={{ url: "", Icon: LogoutIcon, title: "Logout", onClick: logout }}
-      />
-      {/* <MenuListItem
-        menu={{
-          url: "",
-          title: "Version",
-          Icon: LensBlurIcon,
-          secondaryAction: <p>1.0.0</p>,
-        }}
-      /> */}
     </>
   );
 }

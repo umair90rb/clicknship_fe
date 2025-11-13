@@ -11,6 +11,8 @@ import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Navigate, useNavigate, useSearchParams } from "react-router";
 import useAuth from "../../hooks/useAuth";
+import Logo from "@/components/Logo";
+import PrivacyPolicy from "@/components/PrivacyLinks";
 
 export default function Login() {
   const [searchParams] = useSearchParams();
@@ -28,8 +30,9 @@ export default function Login() {
     <>
       <CssBaseline enableColorScheme />
       <Container direction="column" justifyContent="space-between">
+        <Logo />
         <Card variant="outlined">
-          <Text variant="h4" text="Log into your account" />
+          <Text variant="h4" textAlign="center" text="Log into your account" />
           {message && (
             <Text
               variant="body1"
@@ -61,7 +64,7 @@ export default function Login() {
           />
           <HDivider text="or" />
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <Text>
+            <Text textAlign="center">
               Don&apos;t have an account?{" "}
               <LinkButton
                 label="Sign up"
@@ -74,6 +77,7 @@ export default function Login() {
             </Text>
           </Box>
         </Card>
+        <PrivacyPolicy />
       </Container>
     </>
   );
