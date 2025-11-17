@@ -7,14 +7,7 @@ import PrimaryButton from "@/components/Button";
 import HDivider from "@/components/Divider";
 import { FormInputText } from "@/components/form/FormInput";
 import LinkButton from "@/components/LinkButton";
-import {
-  Card,
-  CardHeader,
-  Checkbox,
-  Chip,
-  Grid,
-  ListItem,
-} from "@mui/material";
+import { CardHeader, Checkbox, Chip, Grid, ListItem } from "@mui/material";
 import Box from "@mui/material/Box";
 import { SimpleTreeView } from "@mui/x-tree-view/SimpleTreeView";
 import { TreeItem } from "@mui/x-tree-view/TreeItem";
@@ -55,7 +48,7 @@ function Permission({ permission }: PermissionProps) {
   );
 }
 
-export default function CreateUpdateRole() {
+export default function CreateUpdateAndRoleList() {
   const [resources, setResources] = useState<string[]>([]);
   const [rawPermissions, setRawPermission] = useState<string[]>([]);
 
@@ -134,7 +127,7 @@ export default function CreateUpdateRole() {
   }, [permissionsList]);
 
   return (
-    <Card sx={{ py: 2, px: 5 }}>
+    <>
       <CardHeader
         title="Available Roles"
         slotProps={{
@@ -218,6 +211,6 @@ export default function CreateUpdateRole() {
           />
         </Grid>
       </Grid>
-    </Card>
+    </>
   );
 }

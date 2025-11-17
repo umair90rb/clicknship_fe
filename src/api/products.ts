@@ -11,11 +11,9 @@ export const productApi = api.injectEndpoints({
       }),
       providesTags: (result) => {
         console.log(result);
-        return [
-          { type: "products", id: "LIST" },
-          "data" in result &&
-            result.data.map((p: Product) => ({ id: p.id, type: "products" })),
-        ];
+        return "data" in result
+          ? result.data.map((p: Product) => ({ id: p.id, type: "products" }))
+          : [{ type: "products", id: "LIST" }];
       },
     }),
     createProduct: build.mutation({
@@ -25,23 +23,6 @@ export const productApi = api.injectEndpoints({
         method: "POST",
       }),
       invalidatesTags: [{ type: "products", id: "LIST" }],
-      // onQueryStarted({}, { dispatch, queryFulfilled }) {
-      //   queryFulfilled
-      //     .then((response) => {
-      //       response.meta?.response?.ok &&
-      //         dispatch(
-      //           productApi.util.updateQueryData(
-      //             "listProduct",
-      //             {},
-      //             (products) => {
-      //               products.data.push(response.data);
-      //             },
-      //             true
-      //           )
-      //         );
-      //     })
-      //     .catch((e) => console.log(e));
-      // },
     }),
   }),
 });
