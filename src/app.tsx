@@ -22,22 +22,20 @@ const OrderReturn = React.lazy(() => import("@/pages/orders/return/"));
 // const CreateOrder = React.lazy(() => import("@/pages/orders/create"));
 // const UpdateOrder = React.lazy(() => import("@/pages/orders/update"));
 
-const Products = React.lazy(() => import("@/pages/products/index"));
-const Customers = React.lazy(() => import("@/pages/customers/index"));
+const Products = React.lazy(() => import("@/pages/products"));
+const Customers = React.lazy(() => import("@/pages/customers"));
 
-const CourierServices = React.lazy(
-  () => import("@/pages/logistic/courier-services/")
+const CourierIntegration = React.lazy(
+  () => import("@/pages/courier-integration")
 );
-const CitiesManagement = React.lazy(
-  () => import("@/pages/logistic/cities-management/")
-);
+const CitiesManagement = React.lazy(() => import("@/pages/cities-management"));
 
-const SalesChannel = React.lazy(() => import("@/pages/sales-channel/index"));
+const SalesChannel = React.lazy(() => import("@/pages/sales-channel"));
 const CategoryAndBrands = React.lazy(
-  () => import("@/pages/categories-and-brands/index")
+  () => import("@/pages/categories-and-brands")
 );
 const StaffAndPermissions = React.lazy(
-  () => import("@/pages/staff-and-permissions/index")
+  () => import("@/pages/staff-and-permissions")
 );
 
 const TenantGuard = ({ children }: PropsWithChildren) => {
@@ -83,8 +81,8 @@ export default function App() {
                   <Route path="customers" element={<Customers />} />
 
                   <Route
-                    path="courier-services"
-                    element={<CourierServices />}
+                    path="courier-integration"
+                    element={<CourierIntegration />}
                   />
                   <Route
                     path="cities-management"

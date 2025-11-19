@@ -84,8 +84,8 @@ const menus: MenuWithChildren[] = [
     title: "Logistics",
     children: [
       {
-        title: "Courier Services",
-        url: "/courier-services",
+        title: "Courier Integration",
+        url: "/courier-integration",
         Icon: LocalShippingIcon,
       },
       {

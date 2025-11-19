@@ -16,6 +16,7 @@ interface FormAutoSelectProps extends FormInputProps {
   getOptionLabel?: (option: any) => string;
   getOptionValue?: (option: any) => any;
   errorKey?: string | null;
+  loading?: boolean;
 }
 
 export default function FormAutocomplete({
@@ -30,6 +31,7 @@ export default function FormAutocomplete({
   getOptionLabel,
   getOptionValue,
   errorKey,
+  loading = false,
   ...props
 }: FormAutoSelectProps) {
   return (
@@ -42,6 +44,7 @@ export default function FormAutocomplete({
           <Autocomplete
             disablePortal
             autoHighlight
+            loading={loading}
             clearOnEscape
             handleHomeEndKeys
             autoComplete

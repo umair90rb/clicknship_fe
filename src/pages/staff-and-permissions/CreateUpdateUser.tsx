@@ -14,7 +14,7 @@ import { useListRoleQuery } from "@/api/role";
 type CreateUpdateProductModalProps = ModalProps;
 
 function CreateUpdateUserForm({ control, errors }) {
-  const { data: roleList, isLoading } = useListRoleQuery({});
+  const { data: roleList, isLoading: isRoleLoading } = useListRoleQuery({});
   return (
     <Grid container spacing={1}>
       <Grid size={{ xs: 12, sm: 12, md: 12 }}>
@@ -35,6 +35,7 @@ function CreateUpdateUserForm({ control, errors }) {
       <Grid size={{ xs: 12, sm: 12, md: 12 }}>
         <FormAutocomplete
           options={roleList?.map(({ id, name }) => ({ id, label: name })) || []}
+          loading={isRoleLoading}
           control={control}
           getOptionValue={(value) => value.id}
           setValue={(value, options) => options.find((opt) => opt.id === value)}
@@ -120,7 +121,7 @@ export default function CreateUpdateUserModal({
           loading: isLoading,
         },
       ]}
-      size="sm"
+      size="xs"
     >
       <CreateUpdateUserForm control={control} errors={errors} />
     </CustomDialog>
