@@ -10,7 +10,6 @@ export const productApi = api.injectEndpoints({
         method: "POST",
       }),
       providesTags: (result) => {
-        console.log(result);
         return "data" in result
           ? result.data.map((p: Product) => ({ id: p.id, type: "products" }))
           : [{ type: "products", id: "LIST" }];

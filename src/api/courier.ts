@@ -1,5 +1,9 @@
 import { api } from "@/api/index";
-import type { AvailableCourierIntegrationList } from "@/types/courier";
+import type {
+  AvailableCourierIntegrationList,
+  CourierIntegration,
+  ListCourierIntegrationRequestResponse,
+} from "@/types/courier";
 
 export const courierApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -12,34 +16,21 @@ export const courierApi = api.injectEndpoints({
         method: "GET",
       }),
     }),
-    listIntegration: build.query<any[], {}>({
-      query: () => ({
+    listIntegration: build.query<ListCourierIntegrationRequestResponse, {}>({
+      query: (body) => ({
         url: "couriers",
-        method: "GET",
+        body,
+        method: "POST",
       }),
+      providesTags: (_) => ["couriers"],
     }),
     createIntegration: build.mutation<any, {}>({
       query: (body: any) => ({
-        url: "couriers",
+        url: "couriers/create",
         method: "POST",
         body,
       }),
-      onQueryStarted(id, { dispatch, queryFulfilled }) {
-        queryFulfilled
-          .then((response) => {
-            response.meta?.response?.ok &&
-              dispatch(
-                courierApi.util.updateQueryData(
-                  "listIntegration",
-                  {},
-                  (draft) => {
-                    draft.push(response.data);
-                  }
-                )
-              );
-          })
-          .catch();
-      },
+      invalidatesTags: ["couriers"],
     }),
   }),
 });

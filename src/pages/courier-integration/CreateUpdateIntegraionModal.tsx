@@ -20,7 +20,7 @@ type CreateUpdateIntegrationModalProps = ModalProps;
 const schema = Yup.object({
   name: Yup.string().required("Account name is required"),
   courier: Yup.string().required("Please select courier service"),
-  pickupAddress: Yup.string().nullable(),
+  dispatchAddress: Yup.string().nullable(),
   returnAddress: Yup.string().nullable(),
   fields: Yup.array().min(1),
 });
@@ -28,7 +28,7 @@ const schema = Yup.object({
 const defaultValues = {
   name: null,
   courier: null,
-  pickupAddress: null,
+  dispatchAddress: null,
   returnAddress: null,
 };
 
@@ -45,20 +45,22 @@ export default function CreateUpdateIntegrationModal({
     control,
     handleSubmit,
     setError,
-    watch,
     formState: { errors },
   } = useForm({
-    // resolver: yupResolver(schema),
+    resolver: yupResolver(schema),
     defaultValues,
   });
 
-  const { fields, replace } = useFieldArray({ control, name: "fields" });
+  const { fields, replace } = useFieldArray({
+    control,
+    name: "fields",
+  });
 
   const courier = useWatch({ control, name: "courier" });
 
   useEffect(() => {
     console.log(courier, availableCourierIntegration);
-    if (courier && availableCourierIntegration[courier]) {
+    if (courier && availableCourierIntegration?.[courier]) {
       const requiredFields = availableCourierIntegration?.[courier]?.fields;
       console.log(requiredFields, courier);
       // Map required field names to objects for useFieldArray
@@ -69,14 +71,13 @@ export default function CreateUpdateIntegrationModal({
         })
       );
       console.log(newFields);
-      replace(newFields); // reset field array
+      replace(newFields);
     } else {
-      replace([]); // no courier selected
+      replace([]);
     }
   }, [courier, replace]);
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
     return addIntegration(data)
       .unwrap()
       .then(() => setOpen(false))
@@ -144,8 +145,8 @@ export default function CreateUpdateIntegrationModal({
         <Grid size={{ xs: 12, sm: 6, md: 6 }}>
           <FormInputTextArea
             control={control}
-            label="Pickup Address"
-            name="pickupAddress"
+            label="Dispatch Address"
+            name="dispatchAddress"
             minRows={5}
           />
         </Grid>
