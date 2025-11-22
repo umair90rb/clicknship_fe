@@ -1,7 +1,6 @@
 import { api } from "@/api/index";
 import type {
   AvailableCourierIntegrationList,
-  CourierIntegration,
   ListCourierIntegrationRequestResponse,
 } from "@/types/courier";
 
@@ -30,7 +29,7 @@ export const courierApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["couriers"],
+      // invalidatesTags: ["couriers"],
     }),
   }),
 });
