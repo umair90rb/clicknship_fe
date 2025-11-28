@@ -11,7 +11,7 @@ export interface CourierMappedCity {
   courier: string;
   mapped: string;
   code?: string;
-  courierAssignedId?: string;
+  courierCityId?: string;
 }
 
 export type ListCitiesRequestResponse = ListApiResponse<City>;

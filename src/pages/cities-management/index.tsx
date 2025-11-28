@@ -39,9 +39,9 @@ function CityDetailPanel({
           {courierMappedCity?.code && (
             <Text variant="body1">City Code: {courierMappedCity?.code}</Text>
           )}
-          {courierMappedCity?.courierAssignedId && (
+          {courierMappedCity?.courierCityId && (
             <Text variant="body1">
-              Courier Assigned Id: {courierMappedCity?.courierAssignedId}
+              Courier Assigned Id: {courierMappedCity?.courierCityId}
             </Text>
           )}
         </Grid>
