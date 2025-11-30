@@ -9,8 +9,8 @@ import FormRootError from "@/components/form/FormRootError";
 import { getErrorField, getErrorMessage } from "@/utils";
 import FormAutocomplete from "@/components/form/FormAutocomplete";
 import {
-  useCreateIntegrationMutation,
-  useListAvailableIntegrationsQuery,
+  useCreateCourierIntegrationMutation,
+  useListAvailableCourierIntegrationsQuery,
 } from "@/api/courier";
 import { FormInputTextArea } from "@/components/form/FormTextArea";
 import { useEffect } from "react";
@@ -36,11 +36,11 @@ export default function CreateUpdateIntegrationModal({
   open,
   setOpen,
 }: CreateUpdateIntegrationModalProps) {
-  const [addIntegration, { isLoading }] = useCreateIntegrationMutation();
+  const [addIntegration, { isLoading }] = useCreateCourierIntegrationMutation();
   const {
     data: availableCourierIntegration,
     isLoading: isLoadingAvailableCourier,
-  } = useListAvailableIntegrationsQuery({});
+  } = useListAvailableCourierIntegrationsQuery({});
   const {
     control,
     handleSubmit,

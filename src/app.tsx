@@ -7,6 +7,7 @@ import React, { Suspense, type PropsWithChildren } from "react"; // Import Suspe
 import { Provider } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router";
 import { ConfirmProvider } from "material-ui-confirm";
+import { ConfirmSelectProvider } from "./components/ConfirmSelection";
 
 const Login = React.lazy(() => import("@/pages/login"));
 const Signup = React.lazy(() => import("@/pages/signup"));
@@ -50,82 +51,84 @@ const TenantGuard = ({ children }: PropsWithChildren) => {
 
 export default function App() {
   return (
-    <ConfirmProvider>
-      <Provider store={store}>
-        <BrowserRouter>
-          <AuthProvider>
-            <Suspense fallback={<div>Loading...</div>}>
-              <Routes>
-                <Route
-                  path="/"
-                  element={
-                    <TenantGuard>
-                      <PrivateRoute>
-                        <DashboardLayout />
-                      </PrivateRoute>
-                    </TenantGuard>
-                  }
-                >
-                  <Route index element={<Dashboard />} />
-                  <Route path="reports" element={<Reports />} />
+    <ConfirmSelectProvider>
+      <ConfirmProvider>
+        <Provider store={store}>
+          <BrowserRouter>
+            <AuthProvider>
+              <Suspense fallback={<div>Loading...</div>}>
+                <Routes>
+                  <Route
+                    path="/"
+                    element={
+                      <TenantGuard>
+                        <PrivateRoute>
+                          <DashboardLayout />
+                        </PrivateRoute>
+                      </TenantGuard>
+                    }
+                  >
+                    <Route index element={<Dashboard />} />
+                    <Route path="reports" element={<Reports />} />
 
-                  <Route path="orders">
-                    <Route index element={<Orders />} />
-                    <Route path="create" element={<OrderCreate />} />
-                    <Route path="return" element={<OrderReturn />} />
-                    {/* <Route path=":orderId" element={<ViewOrder />} /> */}
-                    {/* <Route path=":orderId/update" element={<UpdateOrder />} /> */}
+                    <Route path="orders">
+                      <Route index element={<Orders />} />
+                      <Route path="create" element={<OrderCreate />} />
+                      <Route path="return" element={<OrderReturn />} />
+                      {/* <Route path=":orderId" element={<ViewOrder />} /> */}
+                      {/* <Route path=":orderId/update" element={<UpdateOrder />} /> */}
+                    </Route>
+
+                    <Route path="products" element={<Products />} />
+                    <Route path="customers" element={<Customers />} />
+
+                    <Route
+                      path="courier-integration"
+                      element={<CourierIntegration />}
+                    />
+                    <Route
+                      path="cities-management"
+                      element={<CitiesManagement />}
+                    />
+
+                    <Route path="sales-channel" element={<SalesChannel />} />
+                    <Route
+                      path="categories-and-brands"
+                      element={<CategoryAndBrands />}
+                    />
+                    <Route
+                      path="staff-and-permissions"
+                      element={<StaffAndPermissions />}
+                    />
+
+                    <Route path="*" element={<NotFound />} />
                   </Route>
 
-                  <Route path="products" element={<Products />} />
-                  <Route path="customers" element={<Customers />} />
-
                   <Route
-                    path="courier-integration"
-                    element={<CourierIntegration />}
+                    path="login"
+                    element={
+                      <TenantGuard>
+                        <Login />
+                      </TenantGuard>
+                    }
                   />
                   <Route
-                    path="cities-management"
-                    element={<CitiesManagement />}
-                  />
-
-                  <Route path="sales-channel" element={<SalesChannel />} />
-                  <Route
-                    path="categories-and-brands"
-                    element={<CategoryAndBrands />}
-                  />
-                  <Route
-                    path="staff-and-permissions"
-                    element={<StaffAndPermissions />}
+                    path="reset-password"
+                    element={
+                      <TenantGuard>
+                        <ResetPassword />
+                      </TenantGuard>
+                    }
                   />
 
+                  <Route path="signup" element={<Signup />} />
                   <Route path="*" element={<NotFound />} />
-                </Route>
-
-                <Route
-                  path="login"
-                  element={
-                    <TenantGuard>
-                      <Login />
-                    </TenantGuard>
-                  }
-                />
-                <Route
-                  path="reset-password"
-                  element={
-                    <TenantGuard>
-                      <ResetPassword />
-                    </TenantGuard>
-                  }
-                />
-
-                <Route path="signup" element={<Signup />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </AuthProvider>
-        </BrowserRouter>
-      </Provider>
-    </ConfirmProvider>
+                </Routes>
+              </Suspense>
+            </AuthProvider>
+          </BrowserRouter>
+        </Provider>
+      </ConfirmProvider>
+    </ConfirmSelectProvider>
   );
 }

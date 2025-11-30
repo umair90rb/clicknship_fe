@@ -16,7 +16,7 @@ import { buildFilters } from "../orders/utils";
 import TopToolbar from "@/components/data-table/TopToolbar";
 import BottomToolbar from "@/components/data-table/BottomToolbar";
 import type { CourierIntegration } from "@/types/courier";
-import { useListIntegrationQuery } from "@/api/courier";
+import { useListCourierIntegrationQuery } from "@/api/courier";
 import CustomIconButton from "@/components/IconButton";
 
 export default function CourierServices() {
@@ -76,7 +76,7 @@ export default function CourierServices() {
 
   const filters = buildFilters(columnFilters);
 
-  const { data, isFetching } = useListIntegrationQuery(
+  const { data, isFetching } = useListCourierIntegrationQuery(
     {
       skip: pagination.pageIndex * pagination.pageSize,
       take: pagination.pageSize,

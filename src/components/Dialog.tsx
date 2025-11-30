@@ -21,6 +21,9 @@ interface CustomDialogProps {
   size?: Breakpoint;
   fullScreen?: boolean;
   loading?: boolean;
+  hideCancelButton?: boolean;
+  hideFullScreenButton?: boolean;
+  onCancel?: () => void;
 }
 
 export default function CustomDialog({
@@ -33,6 +36,9 @@ export default function CustomDialog({
   size = "sm",
   fullScreen = false,
   loading,
+  hideCancelButton = false,
+  hideFullScreenButton = false,
+  onCancel,
 }: PropsWithChildren<CustomDialogProps>) {
   const [toggleFullScreen, setToggleFullScreen] = useState(fullScreen);
   const handleToggleFullScreen = () => setToggleFullScreen(!toggleFullScreen);
@@ -71,16 +77,18 @@ export default function CustomDialog({
       >
         <Text variant="body1">{title}</Text>
         <Box>
-          <CustomIconButton
-            size="small"
-            Icon={
-              toggleFullScreen
-                ? FullscreenExitOutlinedIcon
-                : FullscreenOutlinedIcon
-            }
-            aria-label="toggle-full-screen"
-            onClick={handleToggleFullScreen}
-          />
+          {!hideFullScreenButton && (
+            <CustomIconButton
+              size="small"
+              Icon={
+                toggleFullScreen
+                  ? FullscreenExitOutlinedIcon
+                  : FullscreenOutlinedIcon
+              }
+              aria-label="toggle-full-screen"
+              onClick={handleToggleFullScreen}
+            />
+          )}
           <CustomIconButton
             size="small"
             Icon={CloseOutlinedIcon}
@@ -94,7 +102,13 @@ export default function CustomDialog({
         {renderContent()}
       </DialogContent>
       <DialogActions>
-        <PrimaryButton onClick={handleClose} label="Cancel" color="inherit" />
+        {!hideCancelButton && (
+          <PrimaryButton
+            onClick={onCancel || handleClose}
+            label="Cancel"
+            color="inherit"
+          />
+        )}
         {(actions || []).map((action) => (
           <PrimaryButton {...action} />
         ))}

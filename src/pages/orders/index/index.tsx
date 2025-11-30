@@ -10,6 +10,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 // import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useLazyListOrdersQuery } from "@/api/orders";
 import BottomToolbar from "@/components/data-table/BottomToolbar";
@@ -20,9 +22,14 @@ import OrderDetailPanel from "./components/OrderDetailPanel";
 import type { Order } from "@/types/orders/list";
 import { DATE_FORMAT } from "@/constants/keys";
 import useDrawer from "@/hooks/useDrawer";
+import { useNavigate } from "react-router";
+import { useConfirmSelect } from "@/components/ConfirmSelection";
+import { useListCourierIntegrationQuery } from "@/api/courier";
+import { useCreateBookingMutation } from "@/api/booking";
 
 export default function Orders() {
   const { drawerWidth, open } = useDrawer();
+  const navigate = useNavigate();
   const columns = useMemo<MRT_ColumnDef<Order>[]>(
     () => [
       {
@@ -107,6 +114,18 @@ export default function Orders() {
     []
   );
 
+  const confirmSelect = useConfirmSelect();
+  const { data: courierList, isFetching: isCourierListFetching } =
+    useListCourierIntegrationQuery({});
+  const [
+    createBooking,
+    {
+      data: createBookingResponse,
+      isLoading: createBookingIsLoading,
+      isSuccess: createBookingIsSuccess,
+      error: createBookingError,
+    },
+  ] = useCreateBookingMutation();
   const [fetchOrdersList, { data, isFetching: isLoading }] =
     useLazyListOrdersQuery();
   const [pagination, setPagination] = useState({
@@ -183,9 +202,46 @@ export default function Orders() {
     autoResetPageIndex: false,
     rowCount: data?.meta?.total || 0,
     state: { isLoading, columnFilters, pagination },
+    enableBatchRowSelection: true,
     onPaginationChange: setPagination,
     onColumnFiltersChange: setColumnFilters,
-    renderTopToolbar: (props) => <TopToolbar title="" {...props} />,
+    renderTopToolbar: (props) => (
+      <TopToolbar
+        title=""
+        actions={[
+          {
+            label: "Create Order",
+            onClick() {
+              navigate("/orders/create");
+            },
+            Icon: AddIcon,
+          },
+          {
+            label: "Book",
+            loading: createBookingIsLoading,
+            onClick: async () => {
+              const orderIds = props.table
+                .getSelectedRowModel()
+                .rows.map((row) => row.original.id);
+              const courierId = await confirmSelect(
+                (courierList?.data || []).map((c) => ({
+                  label: c.name,
+                  value: c.id,
+                })),
+                {
+                  title: "Select Courier Service",
+                  label: "Courier Services",
+                }
+              );
+              await createBooking({ orderIds, courierId });
+            },
+            Icon: LocalShippingIcon,
+            disabled: props.table.getSelectedRowModel().rows.length === 0,
+          },
+        ]}
+        {...props}
+      />
+    ),
     renderBottomToolbar: (props) => <BottomToolbar {...props} />,
     renderDetailPanel: (props) => <OrderDetailPanel {...props} />,
   });

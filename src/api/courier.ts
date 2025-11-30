@@ -6,7 +6,7 @@ import type {
 
 export const courierApi = api.injectEndpoints({
   endpoints: (build) => ({
-    listAvailableIntegrations: build.query<
+    listAvailableCourierIntegrations: build.query<
       AvailableCourierIntegrationList[],
       {}
     >({
@@ -15,7 +15,10 @@ export const courierApi = api.injectEndpoints({
         method: "GET",
       }),
     }),
-    listIntegration: build.query<ListCourierIntegrationRequestResponse, {}>({
+    listCourierIntegration: build.query<
+      ListCourierIntegrationRequestResponse,
+      {}
+    >({
       query: (body) => ({
         url: "couriers",
         body,
@@ -23,7 +26,7 @@ export const courierApi = api.injectEndpoints({
       }),
       providesTags: (_) => ["couriers"],
     }),
-    createIntegration: build.mutation<any, {}>({
+    createCourierIntegration: build.mutation<any, {}>({
       query: (body: any) => ({
         url: "couriers/create",
         method: "POST",
@@ -35,9 +38,9 @@ export const courierApi = api.injectEndpoints({
 });
 
 export const {
-  useListAvailableIntegrationsQuery,
-  useLazyListAvailableIntegrationsQuery,
-  useListIntegrationQuery,
-  useLazyListIntegrationQuery,
-  useCreateIntegrationMutation,
+  useListAvailableCourierIntegrationsQuery,
+  useLazyListAvailableCourierIntegrationsQuery,
+  useListCourierIntegrationQuery,
+  useLazyListCourierIntegrationQuery,
+  useCreateCourierIntegrationMutation,
 } = courierApi;

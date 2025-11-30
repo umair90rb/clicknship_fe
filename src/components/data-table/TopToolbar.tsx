@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import {
   MRT_GlobalFilterTextField,
   MRT_ShowHideColumnsButton,
@@ -35,11 +35,20 @@ export default function TopToolbar({
         <Grid alignContent={"center"}>
           {title && <Text variant="body1" bold text={title} />}
         </Grid>
+        <Grid size="grow">
+          <Grid container spacing={1}>
+            {actions?.map((action) => (
+              <Grid>
+                <PrimaryButton {...action} />
+              </Grid>
+            ))}
+          </Grid>
+        </Grid>
         <Grid alignContent={"center"}>
           <MRT_GlobalFilterTextField table={table} />
         </Grid>
-        <Grid size="grow">
-          {hideGlobalFilterButton && (
+        <Grid>
+          {!hideGlobalFilterButton && (
             <MRT_ToggleGlobalFilterButton table={table} />
           )}
           {!hideFilterButton && <MRT_ToggleFiltersButton table={table} />}
@@ -48,15 +57,6 @@ export default function TopToolbar({
           {!hideFullScreenButton && (
             <MRT_ToggleFullScreenButton table={table} />
           )}
-        </Grid>
-        <Grid>
-          <Grid container spacing={1}>
-            {actions?.map((action) => (
-              <Grid>
-                <PrimaryButton {...action} />
-              </Grid>
-            ))}
-          </Grid>
         </Grid>
       </Grid>
       <MRT_ToolbarAlertBanner table={table} />
