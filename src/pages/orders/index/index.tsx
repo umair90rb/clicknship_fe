@@ -26,6 +26,7 @@ import { useNavigate } from "react-router";
 import { useConfirmSelect } from "@/components/ConfirmSelection";
 import { useListCourierIntegrationQuery } from "@/api/courier";
 import { useCreateBookingMutation } from "@/api/booking";
+import CustomIconButton from "@/components/IconButton";
 
 export default function Orders() {
   const { drawerWidth, open } = useDrawer();
@@ -161,6 +162,20 @@ export default function Orders() {
     return () => clearTimeout(handler);
   }, [pagination.pageIndex, pagination.pageSize, columnFilters]);
 
+  const handleBooking = async (orderIds: number[]) => {
+    const courierId = await confirmSelect(
+      (courierList?.data || []).map((c) => ({
+        label: c.name,
+        value: c.id,
+      })),
+      {
+        title: "Select Courier Service",
+        label: "Courier Services",
+      }
+    );
+    await createBooking({ orderIds, courierId });
+  };
+
   const table = useMaterialReactTable({
     // enableClickToCopy: true,
     // muiCopyButtonProps: {
@@ -205,6 +220,24 @@ export default function Orders() {
     enableBatchRowSelection: true,
     onPaginationChange: setPagination,
     onColumnFiltersChange: setColumnFilters,
+    enableRowActions: true,
+    // renderRowActions: (props) => {
+    //   return (
+    //     <CustomIconButton
+    //       Icon={LocalShippingIcon}
+    //       onClick={() => handleBooking([props.row.original.id])}
+    //     />
+    //   );
+    // },
+    renderRowActionMenuItems: ({ row, table }) => [
+      <MRT_ActionMenuItem
+        icon={<LocalShippingIcon />}
+        key="book"
+        label="Book Order"
+        onClick={() => handleBooking([row.original.id])}
+        table={table}
+      />,
+    ],
     renderTopToolbar: (props) => (
       <TopToolbar
         title=""
@@ -219,21 +252,11 @@ export default function Orders() {
           {
             label: "Book",
             loading: createBookingIsLoading,
-            onClick: async () => {
+            onClick() {
               const orderIds = props.table
                 .getSelectedRowModel()
                 .rows.map((row) => row.original.id);
-              const courierId = await confirmSelect(
-                (courierList?.data || []).map((c) => ({
-                  label: c.name,
-                  value: c.id,
-                })),
-                {
-                  title: "Select Courier Service",
-                  label: "Courier Services",
-                }
-              );
-              await createBooking({ orderIds, courierId });
+              return handleBooking(orderIds);
             },
             Icon: LocalShippingIcon,
             disabled: props.table.getSelectedRowModel().rows.length === 0,
