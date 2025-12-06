@@ -5,7 +5,7 @@ import {
   MRT_ActionMenuItem,
   type MRT_ColumnDef,
 } from "material-react-table";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import EditIcon from "@mui/icons-material/Edit";
@@ -139,24 +139,31 @@ export default function Orders() {
   );
   const firstRender = useRef(true);
 
-  useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false;
+  const fetchOrders = useCallback(
+    () =>
       fetchOrdersList({
         skip: pagination.pageIndex * pagination.pageSize,
         take: pagination.pageSize,
         ...buildFilters(columnFilters),
-      });
+      }),
+    [pagination.pageIndex, pagination.pageSize, columnFilters]
+  );
+
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      fetchOrders();
       return;
     }
 
     const handler = setTimeout(() => {
-      const filters = buildFilters(columnFilters);
-      fetchOrdersList({
-        skip: pagination.pageIndex * pagination.pageSize,
-        take: pagination.pageSize,
-        ...filters,
-      });
+      // const filters = buildFilters(columnFilters);
+      // fetchOrdersList({
+      //   skip: pagination.pageIndex * pagination.pageSize,
+      //   take: pagination.pageSize,
+      //   ...filters,
+      // });
+      fetchOrders();
     }, 500);
 
     return () => clearTimeout(handler);
@@ -241,6 +248,7 @@ export default function Orders() {
     renderTopToolbar: (props) => (
       <TopToolbar
         title=""
+        onRefresh={fetchOrders}
         actions={[
           {
             label: "Create Order",

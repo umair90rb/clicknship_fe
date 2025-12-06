@@ -11,12 +11,15 @@ import {
 } from "material-react-table";
 import Text from "../Text";
 import PrimaryButton, { type PrimaryButtonProps } from "../Button";
+import CustomIconButton from "../IconButton";
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 export interface ITopToolbarProps {
   title?: string;
   hideFilterButton?: boolean;
   hideGlobalFilterButton?: boolean;
   hideFullScreenButton?: boolean;
+  onRefresh?: () => void;
   actions?: PrimaryButtonProps[];
   table: MRT_TableInstance<any>;
 }
@@ -28,6 +31,7 @@ export default function TopToolbar({
   hideFilterButton = false,
   hideGlobalFilterButton = false,
   hideFullScreenButton = false,
+  onRefresh
 }: ITopToolbarProps) {
   return (
     <>
@@ -51,6 +55,7 @@ export default function TopToolbar({
           {!hideGlobalFilterButton && (
             <MRT_ToggleGlobalFilterButton table={table} />
           )}
+          {onRefresh && <CustomIconButton color="inherit" tooltip="Refresh Data" Icon={RefreshIcon} onClick={onRefresh} />}
           {!hideFilterButton && <MRT_ToggleFiltersButton table={table} />}
           <MRT_ShowHideColumnsButton table={table} />
           <MRT_ToggleDensePaddingButton table={table} />
