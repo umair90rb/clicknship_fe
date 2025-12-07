@@ -11,6 +11,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
+import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 // import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useLazyListOrdersQuery } from "@/api/orders";
@@ -25,12 +26,15 @@ import useDrawer from "@/hooks/useDrawer";
 import { useNavigate } from "react-router";
 import { useConfirmSelect } from "@/components/ConfirmSelection";
 import { useListCourierIntegrationQuery } from "@/api/courier";
-import { useCreateBookingMutation } from "@/api/booking";
+import { useCancelBookingMutation, useCreateBookingMutation } from "@/api/booking";
 import CustomIconButton from "@/components/IconButton";
+import { OrderStatus } from "@/types/orders";
+import { useConfirm } from "material-ui-confirm";
 
 export default function Orders() {
   const { drawerWidth, open } = useDrawer();
   const navigate = useNavigate();
+  const confirm = useConfirm();
   const columns = useMemo<MRT_ColumnDef<Order>[]>(
     () => [
       {
@@ -121,12 +125,20 @@ export default function Orders() {
   const [
     createBooking,
     {
-      data: createBookingResponse,
+      // data: createBookingResponse,
       isLoading: createBookingIsLoading,
-      isSuccess: createBookingIsSuccess,
-      error: createBookingError,
+      // isSuccess: createBookingIsSuccess,
+      // error: createBookingError,
     },
   ] = useCreateBookingMutation();
+  const [cancelBooking, 
+    // {
+    //   data: cancelBookingResponse,
+    //   isLoading: cancelBookingIsLoading,
+    //   isSuccess: cancelBookingIsSuccess,
+    //   error: cancelBookingError,
+    // }
+  ] = useCancelBookingMutation();
   const [fetchOrdersList, { data, isFetching: isLoading }] =
     useLazyListOrdersQuery();
   const [pagination, setPagination] = useState({
@@ -169,7 +181,7 @@ export default function Orders() {
     return () => clearTimeout(handler);
   }, [pagination.pageIndex, pagination.pageSize, columnFilters]);
 
-  const handleBooking = async (orderIds: number[]) => {
+  const handleCreateBooking = async (orderIds: number[]) => {
     const courierId = await confirmSelect(
       (courierList?.data || []).map((c) => ({
         label: c.name,
@@ -181,6 +193,13 @@ export default function Orders() {
       }
     );
     await createBooking({ orderIds, courierId });
+  };
+
+  const handleCancelBooking = async (orderIds: number[]) => {
+    const { confirmed } = await confirm({title: 'Order Cancel', description: "Are you sure to cancel order(s) booking?"});
+    if(confirmed) {
+      await cancelBooking({ orderIds });
+    }
   };
 
   const table = useMaterialReactTable({
@@ -232,16 +251,25 @@ export default function Orders() {
     //   return (
     //     <CustomIconButton
     //       Icon={LocalShippingIcon}
-    //       onClick={() => handleBooking([props.row.original.id])}
+    //       onClick={() => handleCreateBooking([props.row.original.id])}
     //     />
     //   );
     // },
     renderRowActionMenuItems: ({ row, table }) => [
       <MRT_ActionMenuItem
         icon={<LocalShippingIcon />}
-        key="book"
+        disabled={row.original.status === OrderStatus.booked}
+        key="book-order"
         label="Book Order"
-        onClick={() => handleBooking([row.original.id])}
+        onClick={() => handleCreateBooking([row.original.id])}
+        table={table}
+      />,
+      <MRT_ActionMenuItem
+        icon={<DisabledByDefaultIcon />}
+        disabled={row.original.status !== OrderStatus.booked}
+        key="cancel-order-booking"
+        label="Cancel Order Booking"
+        onClick={() => handleCancelBooking([row.original.id])}
         table={table}
       />,
     ],
@@ -264,7 +292,7 @@ export default function Orders() {
               const orderIds = props.table
                 .getSelectedRowModel()
                 .rows.map((row) => row.original.id);
-              return handleBooking(orderIds);
+              return handleCreateBooking(orderIds);
             },
             Icon: LocalShippingIcon,
             disabled: props.table.getSelectedRowModel().rows.length === 0,

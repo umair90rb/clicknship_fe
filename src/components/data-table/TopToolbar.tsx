@@ -53,14 +53,14 @@ export default function TopToolbar({
         </Grid>
         <Grid>
           {!hideGlobalFilterButton && (
-            <MRT_ToggleGlobalFilterButton table={table} />
+            <MRT_ToggleGlobalFilterButton color="inherit" table={table} />
           )}
           {onRefresh && <CustomIconButton color="inherit" tooltip="Refresh Data" Icon={RefreshIcon} onClick={onRefresh} />}
-          {!hideFilterButton && <MRT_ToggleFiltersButton table={table} />}
-          <MRT_ShowHideColumnsButton table={table} />
-          <MRT_ToggleDensePaddingButton table={table} />
+          {!hideFilterButton && <MRT_ToggleFiltersButton color="inherit" table={table} />}
+          <MRT_ShowHideColumnsButton color="inherit" table={table} />
+          <MRT_ToggleDensePaddingButton color="inherit" table={table} />
           {!hideFullScreenButton && (
-            <MRT_ToggleFullScreenButton table={table} />
+            <MRT_ToggleFullScreenButton color="inherit" table={table} />
           )}
         </Grid>
       </Grid>

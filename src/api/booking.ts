@@ -16,7 +16,7 @@ export const bookingApi = api.injectEndpoints({
       }),
     }),
     cancelBooking: build.mutation<any, {}>({
-      query: (body: { cns: string[] }) => ({
+      query: (body: { orderIds: number[] }) => ({
         url: "booking/cancel",
         method: "POST",
         body,

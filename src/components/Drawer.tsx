@@ -2,10 +2,10 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";
-import CategoryIcon from "@mui/icons-material/Category";
+import Lan from "@mui/icons-material/Lan";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import GroupIcon from "@mui/icons-material/Group";
+import BadgeIcon from '@mui/icons-material/Badge';
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import LocationPinIcon from "@mui/icons-material/LocationPin";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -110,12 +110,12 @@ const menus: MenuWithChildren[] = [
       {
         title: "Categories & Brands",
         url: "/categories-and-brands",
-        Icon: CategoryIcon,
+        Icon: Lan,
       },
       {
         title: "Staff & Permissions",
         url: "/staff-and-permissions",
-        Icon: GroupIcon,
+        Icon: BadgeIcon,
       },
     ],
   },
