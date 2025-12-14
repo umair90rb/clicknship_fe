@@ -10,6 +10,7 @@ import {
   timelineOppositeContentClasses,
 } from "@mui/lab";
 import type { ReactNode } from "react";
+import Text from "./Text";
 
 interface CustomTimelineProps<T> {
   items: T[];
@@ -29,6 +30,10 @@ export function CustomTimeline<T>({
   getDotText,
 }: CustomTimelineProps<T>) {
   const data = reverse ? [...items].reverse() : items;
+
+  if(!data.length) {
+    return <Text>No data to display</Text>
+  }
 
   return (
     <Timeline

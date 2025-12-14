@@ -1,4 +1,3 @@
-import type { Comment, Item, Log, Payment } from "@/types/orders/detail";
 import { Box, Tabs, Tab, AppBar } from "@mui/material";
 import * as React from "react";
 import { useTheme } from "@mui/material/styles";
@@ -7,6 +6,7 @@ import PaymentsTable from "./PaymentsTable";
 import LogTimeline from "./LogTimeline";
 import Comments from "./Comments";
 import RemarksAndTags from "./RemarksAndTags";
+import Tracking from "./Tracking";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -66,6 +66,7 @@ export default function OrderTabs({ orderId }: OrderTabsProps) {
           <Tab label="Tags & Remarks" {...a11yProps(2)} />
           <Tab label="Comments" {...a11yProps(3)} />
           <Tab label="Order Logs" {...a11yProps(4)} />
+          <Tab label="Shipment Tracking" {...a11yProps(5)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0} dir={theme.direction}>
@@ -82,6 +83,9 @@ export default function OrderTabs({ orderId }: OrderTabsProps) {
       </TabPanel>
       <TabPanel value={value} index={4} dir={theme.direction}>
         <LogTimeline orderId={orderId} />
+      </TabPanel>
+      <TabPanel value={value} index={5} dir={theme.direction}>
+        <Tracking orderId={orderId} />
       </TabPanel>
     </Box>
   );

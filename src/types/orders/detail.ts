@@ -18,7 +18,7 @@ export interface Order {
   items: Item[];
   address: Address;
   payments: Payment[];
-  delivery: Delivery;
+  shipment: Shipment;
   customer: Customer;
   channel: Channel;
   comments: Comment[];
@@ -76,16 +76,21 @@ export interface Payment {
   orderId: number;
 }
 
-export interface Delivery {
+export interface TrackingEvent {
+  status: string;
+  date: Date;
+  reason: string;
+  receiver: string;
+}
+
+export interface Shipment {
   id: number;
   cn: string;
   status: string;
-  trackingStatus: string;
-  trackedAt?: string;
-  tracking?: string;
+  lastTrackedAt?: string;
+  trackingJson?: TrackingEvent[];
   orderId: number;
   courierServiceId: number;
-  courierServiceCompany: string;
 }
 
 export interface Customer {

@@ -3,6 +3,8 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import LogoutIcon from "@mui/icons-material/Logout";
+import PaymentIcon from '@mui/icons-material/Payment';
+import ViewSidebarIcon from '@mui/icons-material/ViewSidebar';
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SearchIcon from "@mui/icons-material/Search";
 import AppBar from "@mui/material/AppBar";
@@ -18,6 +20,8 @@ import CustomIconButton from "./IconButton";
 import Text from "./Text";
 import useAuth from "@/hooks/useAuth";
 import Logo from "./Logo";
+import PrimaryButton from "./Button";
+import { useNavigate } from "react-router";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -70,6 +74,7 @@ export default function PrimarySearchAppBar({
   toggleDrawer,
 }: PrimarySearchAppBarProp) {
   const { logout } = useAuth();
+  const navigate = useNavigate()
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
 
@@ -170,20 +175,29 @@ export default function PrimarySearchAppBar({
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <CustomIconButton
+              Icon={PaymentIcon}
+              tooltip="Add Credit"
+              color="inherit"
+              onClick={() => navigate('/billing')}
+            />
+            <CustomIconButton
               Icon={NotificationsIcon}
               color="inherit"
+              tooltip="Notifications"
               onClick={() => {}}
               badge={1}
             />
             <CustomIconButton
               Icon={AccountCircle}
               color="inherit"
+              tooltip="Account Management"
               onClick={() => {}}
             />
             <CustomIconButton
-              Icon={LogoutIcon}
+              Icon={ViewSidebarIcon}
+              tooltip="Show Toolbar"
               color="inherit"
-              onClick={logout}
+              onClick={() => {}}
             />
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
