@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import {
   MRT_GlobalFilterTextField,
   MRT_ShowHideColumnsButton,

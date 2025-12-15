@@ -17,8 +17,8 @@ export default function Logo({ icon = false }) {
       <Text
         bold
         variant="h6"
-        display={{ xs: "none", sm: "block" }}
-        text="ClickNShip"
+        sx={{ display: { xs: "none", sm: "block" } }}
+        text="Click n Ship"
       />
     </Box>
   );

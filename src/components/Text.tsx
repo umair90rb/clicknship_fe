@@ -1,5 +1,7 @@
+import type { Theme } from "@emotion/react";
+import type { SxProps } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import type { PropsWithChildren } from "react";
+import type { ElementType, PropsWithChildren } from "react";
 
 interface TextProps {
   text?: string | number;
@@ -31,6 +33,8 @@ interface TextProps {
     | "textSecondary"
     | "";
   bold?: boolean;
+  sx?: SxProps<Theme>
+  component?: ElementType;
 }
 
 export default function Text({
@@ -40,15 +44,16 @@ export default function Text({
   color = "",
   bold = undefined,
   children,
-  ...props
+  sx = {},
+  component = "p"
 }: PropsWithChildren<TextProps>) {
   return (
     <Typography
       fontWeight={bold ? "bold" : undefined}
-      component="p"
+      component={component}
       color={color}
       variant={variant}
-      sx={{ textAlign, ...props }}
+      sx={{ textAlign, ...sx }}
     >
       {text || children}
     </Typography>

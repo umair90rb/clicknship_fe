@@ -2,7 +2,7 @@ import { selectOrderById } from "@/api/orders";
 import CopyButton from "@/components/CopyButton";
 import Text from "@/components/Text";
 import { ORDER_STATUSES } from "@/constants/order";
-import {  Chip, Grid, type ButtonPropsColorOverrides, type ChipPropsColorOverrides } from "@mui/material";
+import {  Chip, Grid } from "@mui/material";
 import { useSelector } from "react-redux";
 
 export default function Detail({ orderId }: { orderId: number }) {

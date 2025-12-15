@@ -63,7 +63,7 @@ export default function OrderDialog({
             Icon={CloseIcon}
             tooltip="Close create order"
           />
-          <Text ml={2} flex={1} text="Create Order" />
+          <Text sx={{ml: 2, flex: 1}} text="Create Order" />
           <Box
             sx={{ width: 350, gap: 1, flexDirection: "row", display: "flex" }}
           >

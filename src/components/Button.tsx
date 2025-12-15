@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 export interface PrimaryButtonProps {
   type?: "submit" | "button" | "reset";
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
   disabled?: boolean;
   variant?: "contained" | "outlined" | "text";
   color?:
@@ -17,6 +17,10 @@ export interface PrimaryButtonProps {
   fullWidth?: boolean;
   loading?: boolean;
   Icon?: any;
+  component?: React.ElementType;
+  href?: string;
+  target?: string;
+  rel?: string;
 }
 
 export default function PrimaryButton({
@@ -41,6 +45,7 @@ export default function PrimaryButton({
       color={color}
       onClick={onClick}
       loading={loading}
+  
     >
       {label}
     </Button>

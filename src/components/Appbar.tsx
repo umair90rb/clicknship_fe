@@ -17,10 +17,8 @@ import MenuItem from "@mui/material/MenuItem";
 import { alpha, styled } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import CustomIconButton from "./IconButton";
-import Text from "./Text";
 import useAuth from "@/hooks/useAuth";
 import Logo from "./Logo";
-import PrimaryButton from "./Button";
 import { useNavigate } from "react-router";
 
 const Search = styled("div")(({ theme }) => ({

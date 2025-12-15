@@ -20,8 +20,8 @@ export default function BottomToolbar({
           alignItems: "center",
         }}
       >
-        <Text ml={1} color="textSecondary" text="Total Rows" />
-        <Text ml={1} text={table.getRowCount() || 0} />
+        <Text sx={{ml: 1}} color="textSecondary" text="Total Rows" />
+        <Text sx={{ml: 1}} text={table.getRowCount() || 0} />
         <MRT_TablePagination table={table} />
       </Box>
       {/* <MRT_ToolbarAlertBanner table={table} /> */}
