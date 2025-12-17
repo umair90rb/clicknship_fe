@@ -1,24 +1,25 @@
-import PrimaryButton, { type PrimaryButtonProps } from "./Button";
+import { Link } from "@mui/material";
 
-export interface LinkButtonProps
-  extends Omit<PrimaryButtonProps, "onClick" | "type"> {
-  href: string;
-  target?: "_blank" | "_self";
+export interface LinkButtonProps {
+    label: string;
+    onClick: () => void;
 }
 
 export default function LinkButton({
-  href,
-  target = "_blank",
-  ...buttonProps
+  label = 'Link Button',
+  onClick = () => {},
 }: LinkButtonProps) {
   return (
-    <PrimaryButton
-      {...buttonProps}
-      component="a"
-      type={undefined}
-      href={href}
-      target={target}
-      rel={target === "_blank" ? "noopener noreferrer" : undefined}
-    />
+    <Link
+      component="button"
+      type="button"
+      onClick={onClick}
+      variant="body2"
+      sx={{ alignSelf: 'center' }}
+    >
+      {label}
+    </Link>
   );
 }
+
+
