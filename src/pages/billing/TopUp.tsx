@@ -22,6 +22,9 @@ interface TPaymentOption {
 
 const PAYMENT_OPTIONS: TPaymentOption[] = [
   {
+    // https://github.com/zfhassaan/alfaPay
+    // https://www.bankalfalah.com/digital-banking/ecommerce/
+    // https://bankalfalah.gateway.mastercard.com/ma/
     label: "Credit or Debit Card",
     logo: cardIconSvg,
     size: 48,
@@ -29,6 +32,10 @@ const PAYMENT_OPTIONS: TPaymentOption[] = [
     disabled: true,
   },
   {
+    // https://sandbox.jazzcash.com.pk/SandboxDocumentation/index.html
+    // https://github.com/zfhassaan/jazzcash
+    // https://medium.com/@iamsyedalijunaid/jazzcash-credit-debit-card-payment-integration-for-ios-and-android-a-comprehensive-guide-ea63d265d8f8
+    // https://www.jazzcash.com.pk/corporate/online-payment-gateway/
     label: "Jazz Cash",
     logo: jazzcashIconPng,
     size: 48,
@@ -36,6 +43,7 @@ const PAYMENT_OPTIONS: TPaymentOption[] = [
     disabled: true,
   },
   {
+    // https://easypay.easypaisa.com.pk/easypay-merchant/faces/pg/site/Login.jsf
     label: "Easy Paisa",
     logo: easypaisaIconPng,
     size: 48,
