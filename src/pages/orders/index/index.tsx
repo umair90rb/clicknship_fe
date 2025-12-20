@@ -27,8 +27,7 @@ import { useNavigate } from "react-router";
 import { useConfirmSelect } from "@/components/ConfirmSelection";
 import { useListCourierIntegrationQuery } from "@/api/courier";
 import { useCancelBookingMutation, useCreateBookingMutation } from "@/api/booking";
-import CustomIconButton from "@/components/IconButton";
-import { OrderStatus } from "@/types/orders";
+import { OrderStatus } from "@/constants/order";
 import { useConfirm } from "material-ui-confirm";
 
 export default function Orders() {

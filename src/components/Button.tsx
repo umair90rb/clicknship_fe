@@ -19,8 +19,8 @@ export interface PrimaryButtonProps {
   Icon?: any;
   component?: React.ElementType;
   href?: string;
-  target?: string;
-  rel?: string;
+  target?: "_blank" | "_self" | "_top" | "_parent";
+  blank?: boolean
 }
 
 export default function PrimaryButton({
@@ -33,9 +33,15 @@ export default function PrimaryButton({
   fullWidth = false,
   loading = false,
   Icon,
+  href,
+  blank,
+  target
 }: PrimaryButtonProps) {
   return (
     <Button
+      href={href}
+      target={blank ? "_blank" : target}
+      rel={blank ? "noopener noreferrer" : undefined}
       size="small"
       startIcon={Icon && <Icon />}
       disabled={disabled || loading}
@@ -44,8 +50,7 @@ export default function PrimaryButton({
       variant={variant}
       color={color}
       onClick={onClick}
-      loading={loading}
-  
+      loading={loading} 
     >
       {label}
     </Button>

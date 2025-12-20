@@ -1,29 +1,21 @@
 import { Box } from "@mui/material";
-import LinkButton from "./LinkButton";
+import PrimaryButton from "./Button";
 
 export default function PrivacyPolicy() {
   return (
     <Box textAlign={"center"}>
-      <LinkButton
-        label="Terms of Use"
-        onClick={() =>
-          window.open(
-            `http://${import.meta.env.VITE_BASE_URL}/terms-of-use`,
-            "_blank",
-            "noopener"
-          )
-        }
+      <PrimaryButton
+        label="Privacy Policy"
+        href={`http://${import.meta.env.VITE_BASE_URL}/terms-of-use`}
+        blank
+        variant="text"
       />
       {"  "}|{"  "}
-      <LinkButton
+      <PrimaryButton
         label="Privacy Policy"
-        onClick={() =>
-          window.open(
-            `http://${import.meta.env.VITE_BASE_URL}/privacy-policy`,
-            "_blank",
-            "noopener"
-          )
-        }
+        href={`http://${import.meta.env.VITE_BASE_URL}/privacy-policy`}
+        blank
+        variant="text"
       />
     </Box>
   );

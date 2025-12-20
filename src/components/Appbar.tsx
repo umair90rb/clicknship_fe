@@ -154,7 +154,6 @@ export default function PrimarySearchAppBar({
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            sx={{ mr: 2 }}
             onClick={toggleDrawer}
           >
             <MenuIcon />

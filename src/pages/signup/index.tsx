@@ -20,7 +20,7 @@ export default function SignUp() {
     <>
       <CssBaseline enableColorScheme />
       <Container direction="column" justifyContent="space-between">
-        <Logo />
+        <Logo icon />
         <Card variant="outlined">
           <Text variant="h4" textAlign="center" text="Sign Up" />
           <FormInputText

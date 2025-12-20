@@ -1,6 +1,6 @@
 import Input from "@/components/Input";
 import Text from "@/components/Text";
-import { Grid, Chip, Box, Radio } from "@mui/material";
+import { Grid, Chip, Box, Radio, Link } from "@mui/material";
 import { useState } from "react";
 import cardIconSvg from "@/assets/svg/card.svg";
 import masterIconSvg from "@/assets/svg/master.svg";
@@ -235,13 +235,13 @@ export default function TopUp() {
               <Text text={`${label}: ${value}`} bold />
             ))}
           </Box>
-          <LinkButton
-            href={whatsappLink.replace("{amount}", amount.toLocaleString())}
+          <PrimaryButton
             target="_blank"
-            label="Send Screenshot"
+            fullWidth
             Icon={WhatsAppIcon}
             variant="contained"
-            fullWidth
+            label="Send Screenshot"
+            href={whatsappLink.replace("{amount}", amount.toLocaleString())}
           />
         </Box>
       </Grid>
