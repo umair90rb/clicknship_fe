@@ -129,7 +129,6 @@ export default function SalesChannel() {
     renderTopToolbar: (props) => (
       <TopToolbar
         {...props}
-        title="Sales Channel"
         actions={[
           {
             label: "Add Sale Channel",

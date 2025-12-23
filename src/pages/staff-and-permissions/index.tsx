@@ -126,7 +126,6 @@ export default function StaffAndPermissions() {
     renderTopToolbar: (props) => (
       <TopToolbar
         {...props}
-        title="Staff Accounts"
         actions={[
           {
             label: "Add New Account",

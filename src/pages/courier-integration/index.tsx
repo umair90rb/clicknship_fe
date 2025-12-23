@@ -129,7 +129,6 @@ export default function CourierServices() {
     renderTopToolbar: (props) => (
       <TopToolbar
         {...props}
-        title="Integrated Courier Services"
         actions={[
           {
             label: "Add New Integration",

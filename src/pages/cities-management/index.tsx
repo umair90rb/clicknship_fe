@@ -137,7 +137,6 @@ export default function CitiesManagement() {
     renderTopToolbar: (props) => (
       <TopToolbar
         {...props}
-        title="Cities"
         actions={[
           {
             label: "Add Missing Courier City",

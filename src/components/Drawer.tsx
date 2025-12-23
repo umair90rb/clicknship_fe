@@ -1,17 +1,29 @@
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import AddBoxIcon from "@mui/icons-material/AddBox";
-import AssessmentIcon from "@mui/icons-material/Assessment";
-import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";
-import Lan from "@mui/icons-material/Lan";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import BadgeIcon from '@mui/icons-material/Badge';
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import LocationPinIcon from "@mui/icons-material/LocationPin";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
-import StoreIcon from "@mui/icons-material/Store";
-import WidgetsIcon from "@mui/icons-material/Widgets";
+import AccountBoxIcon from "@mui/icons-material/AccountBoxOutlined";
+import AddBoxIcon from "@mui/icons-material/AddBoxOutlined";
+import AssessmentIcon from "@mui/icons-material/AssessmentOutlined";
+import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturnOutlined";
+import ExpandLess from "@mui/icons-material/ExpandLessOutlined";
+import ExpandMore from "@mui/icons-material/ExpandMoreOutlined";
+import BadgeIcon from "@mui/icons-material/BadgeOutlined";
+import LocalShippingIcon from "@mui/icons-material/LocalShippingOutlined";
+import EditLocationAltOutlinedIcon from '@mui/icons-material/EditLocationAltOutlined';
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCartOutlined";
+import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboardOutlined";
+import StoreIcon from "@mui/icons-material/StoreOutlined";
+import WidgetsIcon from "@mui/icons-material/WidgetsOutlined";
+import InventoryIcon from "@mui/icons-material/InventoryOutlined";
+import SwapHorizIcon from "@mui/icons-material/SwapHorizOutlined";
+import BusinessIcon from "@mui/icons-material/BusinessOutlined";
+import WarehouseIcon from "@mui/icons-material/WarehouseOutlined";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLongOutlined";
+import AssignmentIcon from "@mui/icons-material/AssignmentOutlined";
+import AccountTreeIcon from "@mui/icons-material/AccountTreeOutlined";
+import MenuBookIcon from "@mui/icons-material/MenuBookOutlined";
+import DescriptionIcon from "@mui/icons-material/DescriptionOutlined";
+import RequestQuoteIcon from "@mui/icons-material/RequestQuoteOutlined";
+import PaymentsIcon from "@mui/icons-material/PaymentsOutlined";
+import SyncAltIcon from "@mui/icons-material/SyncAltOutlined";
+import CategoryIcon from "@mui/icons-material/CategoryOutlined";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
@@ -91,7 +103,77 @@ const menus: MenuWithChildren[] = [
       {
         title: "Cities Management",
         url: "/cities-management",
-        Icon: LocationPinIcon,
+        Icon: EditLocationAltOutlinedIcon,
+      },
+    ],
+  },
+  {
+    title: "Inventory",
+    children: [
+      {
+        title: "Current Stock",
+        url: "/current-stock",
+        Icon: InventoryIcon,
+      },
+      {
+        title: "Stock Transfer",
+        url: "/stock-transfer",
+        Icon: SwapHorizIcon,
+      },
+      {
+        title: "Purchase Orders",
+        url: "/purchase-orders",
+        Icon: AssignmentIcon,
+      },
+      {
+        title: "Sale Orders",
+        url: "/sale-orders",
+        Icon: ReceiptLongIcon,
+      },
+      {
+        title: "Warehouses",
+        url: "/warehouses",
+        Icon: WarehouseIcon,
+      },
+      {
+        title: "Suppliers",
+        url: "/suppliers",
+        Icon: BusinessIcon,
+      },
+    ],
+  },
+  {
+    title: "Accounting",
+    children: [
+      {
+        title: "Chart of Accounts",
+        url: "/chart-of-accounts",
+        Icon: AccountTreeIcon, // account hierarchy
+      },
+      {
+        title: "General Ledger",
+        url: "/general-ledger",
+        Icon: MenuBookIcon, // ledger / book
+      },
+      {
+        title: "Invoices",
+        url: "/invoices",
+        Icon: DescriptionIcon, // sales invoices
+      },
+      {
+        title: "Bills",
+        url: "/bills",
+        Icon: RequestQuoteIcon, // vendor bills
+      },
+      {
+        title: "Payments",
+        url: "/payments",
+        Icon: PaymentsIcon, // cash / bank
+      },
+      {
+        title: "COD Reconciliation",
+        url: "/cod-reconciliation",
+        Icon: SyncAltIcon, // matching COD vs payouts
       },
     ],
   },
@@ -110,7 +192,7 @@ const menus: MenuWithChildren[] = [
       {
         title: "Categories & Brands",
         url: "/categories-and-brands",
-        Icon: Lan,
+        Icon: CategoryIcon,
       },
       {
         title: "Staff & Permissions",
@@ -118,14 +200,6 @@ const menus: MenuWithChildren[] = [
         Icon: BadgeIcon,
       },
     ],
-  },
-];
-
-const bottomMenus: MenuWithChildren[] = [
-  {
-    title: "Profile",
-    url: "/profile",
-    Icon: SpaceDashboardIcon,
   },
 ];
 
