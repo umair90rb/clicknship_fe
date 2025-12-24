@@ -95,6 +95,30 @@ export const api = createApi({
     "users",
     "couriers",
     "cities",
+    // Inventory
+    "locations",
+    "suppliers",
+    "inventory-items",
+    "inventory-movements",
+    "purchase-orders",
+    "stock-transfers",
+    // Accounting
+    "accounts",
+    "fiscal-periods",
+    "journal-entries",
+    "invoices",
+    "bills",
+    "payments",
+    "cod-remittances",
+    "tax-rates",
+    // Billing
+    "billing-balance",
+    "billing-transactions",
+    "bank-details",
+    // Support
+    "feedback",
+    "support-cases",
+    "feature-requests",
   ],
   endpoints: (build) => ({
     health: build.query({
