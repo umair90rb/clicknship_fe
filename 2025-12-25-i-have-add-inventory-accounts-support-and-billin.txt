@@ -1070,4 +1070,40 @@ type to requirement
   - All hooks are exported with both regular and lazy variants where applicable 
   - Admin endpoints for billing and support modules were skipped as requested   
   - All new files pass TypeScript checks with no errors                         
+                                                                                
+> /export                                                                       
+  ⎿  Conversation exported to:                                                  
+2025-12-25-i-have-add-inventory-accounts-support-and-billin.txt                 
+                                                                                
+> start building support module UI. support module api endpoints are in         
+@src/api/support.ts and UI page should go into @src/pages/ I follow the next    
+ js route convention every page has its own folder but modal of 1 page          
+should be inside same folder. Components are in @src/components/ folder.        
+When need to add form use react-hook-form and form components are inside        
+@src/components/form/ . I keep user on 1 level route mean if user is on         
+/product page then to create/edit product, modals are used so that user         
+should not see page loading going back and forth So keep the same               
+convention. If a component is not exist build it and use it instead of using    
+ raw mui component for better code re useability                                
+  ⎿  Read src/api/support.ts (174 lines)                                        
+  ⎿  Listed directory src/pages/                                                
+  ⎿  Listed directory src/components/                                           
+  ⎿  Listed directory src/components/form/                                      
+                                                                                
+⏺ I'll build the Support module UI. Let me first explore existing pages to      
+  understand the patterns used in the codebase.                                 
+                                                                                
+⏺ Read(src/pages/products/index.tsx)                                            
+  ⎿  Read 230 lines                                                             
+                                                                                
+⏺ Read(src/pages/customers/index.tsx)                                           
+  ⎿  Read 157 lines                                                             
+                                                                                
+⏺ Bash(ls -la /Users/mac/Dev/clicknship/client/src/pages/customers/)            
+  ⎿  total 16                                                                   
+     drwxr-xr-x@  3 mac  staff    96  2 Nov 09:05 .                             
+     drwxr-xr-x  17 mac  staff   544 15 Dec 01:43 ..                            
+     -rw-r--r--@  1 mac  staff  4506 10 Nov 09:47 index.tsx                     
+  ⎿  You've hit your limit · resets 5am (Asia/Karachi)                          
+     /upgrade or /extra-usage to finish what you're working on.                 
 
