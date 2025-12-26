@@ -1,55 +1,59 @@
 import PrimarySearchAppBar from "@/components/Appbar";
 import ClippedDrawer from "@/components/Drawer";
+import RightSidebar from "@/components/RightSidebar/index";
 import useDrawer from "@/hooks/useDrawer";
-import { Box, CssBaseline } from "@mui/material";
+import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import { Outlet } from "react-router";
 
-const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
-  width?: number;
-  open?: boolean;
-}>(({ theme, width }) => ({
-  // height: "100vh",
-  // display: "flex",
-  // flexDirection: "column",
-  flexGrow: 1,
-  padding: theme.spacing(0),
-  transition: theme.transitions.create("margin", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  marginLeft: `-${width}px`,
-  variants: [
-    {
-      props: ({ open }) => open,
-      style: {
-        transition: theme.transitions.create("margin", {
-          easing: theme.transitions.easing.easeOut,
-          duration: theme.transitions.duration.enteringScreen,
-        }),
-        marginLeft: 0,
-      },
-    },
-  ],
-}));
+const Main = styled("main", {
+  shouldForwardProp: (prop) =>
+    prop !== "miniSidebarWidth" && prop !== "isVisible",
+})<{
+  miniSidebarWidth?: number;
+  isVisible?: boolean;
+}>(({ theme, miniSidebarWidth = 0, isVisible }) => {
+  const rightSpace = isVisible ? miniSidebarWidth : 0;
+
+  return {
+    border: "1px solid",
+    marginTop: 48,
+    height: `calc(100vh - 48px)`,
+
+    flexGrow: 1,
+    minWidth: 0,
+    overflow: "auto",
+
+    marginRight: rightSpace,
+
+    transition: theme.transitions.create(["margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  };
+});
 
 export default function RootLayout() {
-  const { open, drawerWidth, toggleDrawer } = useDrawer();
+  const { open, isVisible, drawerWidth, miniSidebarWidth, toggleDrawer } =
+    useDrawer();
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
+    <Box sx={{ display: "flex", width: "100%", overflowX: "hidden" }}>
       <PrimarySearchAppBar toggleDrawer={toggleDrawer} />
+
       <ClippedDrawer
         drawerWidth={drawerWidth}
         open={open}
         toggleDrawer={toggleDrawer}
       />
-      <Main open={open} width={drawerWidth}>
+
+      <Main isVisible={isVisible} miniSidebarWidth={miniSidebarWidth}>
         <Toolbar variant="dense" />
         <Outlet />
       </Main>
+
+      <RightSidebar />
     </Box>
   );
 }

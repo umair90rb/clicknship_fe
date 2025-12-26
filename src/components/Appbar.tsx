@@ -4,7 +4,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PaymentIcon from '@mui/icons-material/Payment';
-import ViewSidebarIcon from '@mui/icons-material/ViewSidebar';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SearchIcon from "@mui/icons-material/Search";
 import AppBar from "@mui/material/AppBar";
@@ -20,6 +21,7 @@ import CustomIconButton from "./IconButton";
 import useAuth from "@/hooks/useAuth";
 import Logo from "./Logo";
 import { useNavigate } from "react-router";
+import useTheme from "@/hooks/useTheme";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -72,6 +74,7 @@ export default function PrimarySearchAppBar({
   toggleDrawer,
 }: PrimarySearchAppBarProp) {
   const { logout } = useAuth();
+  const { mode, toggleTheme } = useTheme();
   const navigate = useNavigate()
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -106,7 +109,7 @@ export default function PrimarySearchAppBar({
       <MenuItem>
         <IconButton
           size="large"
-          aria-label="show 17 new notifications"
+          aria-label="Show new notifications"
           color="inherit"
         >
           <Badge badgeContent={17} color="error">
@@ -178,6 +181,12 @@ export default function PrimarySearchAppBar({
               onClick={() => navigate('/billing')}
             />
             <CustomIconButton
+              Icon={mode === "dark" ? LightModeIcon : DarkModeIcon}
+              color="inherit"
+              tooltip="Toggle Theme"
+              onClick={toggleTheme}
+            />
+            <CustomIconButton
               Icon={NotificationsIcon}
               color="inherit"
               tooltip="Notifications"
@@ -188,12 +197,6 @@ export default function PrimarySearchAppBar({
               Icon={AccountCircle}
               color="inherit"
               tooltip="Account Management"
-              onClick={() => {}}
-            />
-            <CustomIconButton
-              Icon={ViewSidebarIcon}
-              tooltip="Show Toolbar"
-              color="inherit"
               onClick={() => {}}
             />
           </Box>

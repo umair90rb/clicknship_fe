@@ -1,5 +1,7 @@
 import PrivateRoute from "@/components/PrivateRoute";
 import AuthProvider from "@/context/auth";
+import { DrawerProvider } from "@/context/drawer";
+import { ThemeProvider } from "@/context/theme";
 import useTenant from "@/hooks/useTenant";
 import DashboardLayout from "@/layouts/dashboard";
 import { store } from "@/store";
@@ -40,6 +42,7 @@ const StaffAndPermissions = React.lazy(
   () => import("@/pages/staff-and-permissions")
 );
 const Support = React.lazy(() => import("@/pages/support"));
+const Inventory = React.lazy(() => import("@/pages/inventory"));
 
 const TenantGuard = ({ children }: PropsWithChildren) => {
   const tenant = useTenant();
@@ -53,11 +56,12 @@ const TenantGuard = ({ children }: PropsWithChildren) => {
 
 export default function App() {
   return (
-    <ConfirmSelectProvider>
-      <ConfirmProvider>
-        <Provider store={store}>
-          <BrowserRouter>
-            <AuthProvider>
+    <ThemeProvider>
+      <ConfirmSelectProvider>
+        <ConfirmProvider>
+          <Provider store={store}>
+            <BrowserRouter>
+              <AuthProvider>
               <Suspense fallback={<div>Loading...</div>}>
                 <Routes>
                   <Route
@@ -65,7 +69,9 @@ export default function App() {
                     element={
                       <TenantGuard>
                         <PrivateRoute>
-                          <DashboardLayout />
+                          <DrawerProvider>
+                            <DashboardLayout />
+                          </DrawerProvider>
                         </PrivateRoute>
                       </TenantGuard>
                     }
@@ -84,6 +90,7 @@ export default function App() {
                     </Route>
 
                     <Route path="products" element={<Products />} />
+                    <Route path="inventory" element={<Inventory />} />
                     <Route path="customers" element={<Customers />} />
 
                     <Route
@@ -130,10 +137,11 @@ export default function App() {
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>
-            </AuthProvider>
-          </BrowserRouter>
-        </Provider>
-      </ConfirmProvider>
-    </ConfirmSelectProvider>
+              </AuthProvider>
+            </BrowserRouter>
+          </Provider>
+        </ConfirmProvider>
+      </ConfirmSelectProvider>
+    </ThemeProvider>
   );
 }

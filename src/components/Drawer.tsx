@@ -110,38 +110,8 @@ const menus: MenuWithChildren[] = [
   },
   {
     title: "Inventory",
-    children: [
-      {
-        title: "Current Stock",
-        url: "/current-stock",
-        Icon: InventoryIcon,
-      },
-      {
-        title: "Stock Transfer",
-        url: "/stock-transfer",
-        Icon: SwapHorizIcon,
-      },
-      {
-        title: "Purchase Orders",
-        url: "/purchase-orders",
-        Icon: AssignmentIcon,
-      },
-      {
-        title: "Sale Orders",
-        url: "/sale-orders",
-        Icon: ReceiptLongIcon,
-      },
-      {
-        title: "Warehouses",
-        url: "/warehouses",
-        Icon: WarehouseIcon,
-      },
-      {
-        title: "Suppliers",
-        url: "/suppliers",
-        Icon: BusinessIcon,
-      },
-    ],
+    url: "/inventory",
+    Icon: InventoryIcon,
   },
   {
     title: "Accounting",
@@ -317,8 +287,15 @@ export default function ClippedDrawer({
       open={open}
       onClose={toggleDrawer}
       sx={{
-        width: drawerWidth,
+        width: open ? drawerWidth : 0,
         flexShrink: 0,
+        transition: (theme) =>
+          theme.transitions.create("width", {
+            easing: theme.transitions.easing.sharp,
+            duration: open
+              ? theme.transitions.duration.enteringScreen
+              : theme.transitions.duration.leavingScreen,
+          }),
         [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: "border-box" },
       }}
     >

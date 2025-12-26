@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useContext } from "react";
+import { DrawerContext } from "@/context/drawer";
 
-export default function useDrawer(){
-    const drawerWidth = 240;
-    const [open, setOpen] = useState(true);
+export default function useDrawer() {
+  const context = useContext(DrawerContext);
 
-    const toggleDrawer = () => setOpen(!open);
+  if (!context) {
+    throw new Error("useDrawer must be used within a DrawerProvider");
+  }
 
-
-    return {toggleDrawer, open, drawerWidth}
+  return context;
 }
