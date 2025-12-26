@@ -15,7 +15,7 @@ const ResetPassword = React.lazy(() => import("@/pages/reset-password"));
 const NotFound = React.lazy(() => import("@/pages/not-found"));
 
 const Dashboard = React.lazy(() => import("@/pages/dashboard"));
-const Reports = React.lazy(() => import("@/pages/reports"));
+const Reports = React.lazy(() => import("@/pages/reports/"));
 const Billing = React.lazy(() => import("@/pages/billing"));
 
 const Orders = React.lazy(() => import("@/pages/orders/index/"));
@@ -39,6 +39,7 @@ const CategoryAndBrands = React.lazy(
 const StaffAndPermissions = React.lazy(
   () => import("@/pages/staff-and-permissions")
 );
+const Support = React.lazy(() => import("@/pages/support"));
 
 const TenantGuard = ({ children }: PropsWithChildren) => {
   const tenant = useTenant();
@@ -103,6 +104,7 @@ export default function App() {
                       path="staff-and-permissions"
                       element={<StaffAndPermissions />}
                     />
+                    <Route path="support" element={<Support />} />
 
                     <Route path="*" element={<NotFound />} />
                   </Route>

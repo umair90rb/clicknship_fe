@@ -6,7 +6,7 @@ import ExpandLess from "@mui/icons-material/ExpandLessOutlined";
 import ExpandMore from "@mui/icons-material/ExpandMoreOutlined";
 import BadgeIcon from "@mui/icons-material/BadgeOutlined";
 import LocalShippingIcon from "@mui/icons-material/LocalShippingOutlined";
-import EditLocationAltOutlinedIcon from '@mui/icons-material/EditLocationAltOutlined';
+import EditLocationAltOutlinedIcon from "@mui/icons-material/EditLocationAltOutlined";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCartOutlined";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboardOutlined";
 import StoreIcon from "@mui/icons-material/StoreOutlined";
@@ -24,6 +24,7 @@ import RequestQuoteIcon from "@mui/icons-material/RequestQuoteOutlined";
 import PaymentsIcon from "@mui/icons-material/PaymentsOutlined";
 import SyncAltIcon from "@mui/icons-material/SyncAltOutlined";
 import CategoryIcon from "@mui/icons-material/CategoryOutlined";
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
@@ -200,6 +201,11 @@ const menus: MenuWithChildren[] = [
         Icon: BadgeIcon,
       },
     ],
+  },
+  {
+    title: "Support",
+    url: "/support",
+    Icon: SupportAgentIcon,
   },
 ];
 
