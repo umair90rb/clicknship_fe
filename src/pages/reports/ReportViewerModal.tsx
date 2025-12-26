@@ -21,6 +21,7 @@ import FormDateRangePicker, {
 import { useState } from "react";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
+import DateRangePicker from "@/components/DateRangePicker";
 
 export interface ReportColumn<T = Record<string, unknown>> {
   id: keyof T | string;
@@ -154,12 +155,21 @@ export default function ReportViewerModal({
             gap: 2,
           }}
         >
-          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+          {/* <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
             {showDateFilter && (
               <FormDateRangePicker
                 value={dateRange}
                 onChange={handleDateRangeChange}
               />
+            )}
+          </Box> */}
+          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+            {showDateFilter && (
+              <DateRangePicker                                             
+                value={dateRange}                                          
+                onChange={handleDateRangeChange}                                    
+                maxDate={dayjs()}      
+              />    
             )}
           </Box>
           <Box sx={{ display: "flex", gap: 1 }}>
